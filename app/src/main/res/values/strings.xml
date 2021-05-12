@@ -1,30 +1,34 @@
 <resources>
-    <string name="app_name">My WeChat</string>
-    <!-- Strings related to login -->
-    <string name="prompt_phone">PhoneNumber</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="App_Name">My WeChat</string>
+    <!-- Strings related to LogInActivity -->
+    <string name="LogInActivity_PromptPhoneNumber">Phone Number</string>
+    <string name="LogInActivity_PromptPassword">Password</string>
+    <string name="LogInActivity_Action_SignIn">Sign in or register</string>
+    <string name="LogInActivity_Action_SignIn_short">Sign in</string>
+    <string name="LogInActivity_Welcome">"Welcome !"</string>
+    <string name="LogInActivity_InvalidPhoneNumber">Not a valid phone number</string>
+    <string name="LogInActivity_InvalidPassword">Password must be >5 characters</string>
+    <string name="LogInActivity_LogInFailed">"Login failed"</string>
 
-    <!-- Strings related to checking -->
+    <!-- Strings related to CheckingActivity -->
 
-    <!-- Strings related to mainactivity -->
-    <string name="title_mainactivity">MainActivity</string>
+    <!-- Strings related to MainActivity -->
+    <string name="MainActivity_Title">MainActivity</string>
 
-    <!-- Strings related to chats -->
-    <string name="title_chats">Chats</string>
+    <!-- Strings related to ChatsFragment -->
+    <string name="ChatsFragment_Title">Chats</string>
 
-    <!-- Strings related to contacts -->
-    <string name="title_contacts">Contacts</string>
+    <!-- Strings related to ContactsFragment -->
+    <string name="ContactsFragment_Title">Contacts</string>
 
-    <!-- Strings related to discover -->
-    <string name="title_discover">Discover</string>
+    <!-- Strings related to DiscoverFragment -->
+    <string name="DiscoverFragment_Title">Discover</string>
 
-    <!-- Strings related to me -->
-    <string name="title_me">Me</string>
+    <!-- Strings related to MeFragment -->
+    <string name="MeFragment_Title">Me</string>
 
+    <!-- Strings related to ContactActivity -->
+    <string name="ContactActivity_Nickname">nickname</string>
+    <string name="ContactActivity_Chat">Chat!</string>
+    <string name="ContactActivity_Settings">Settings</string>
 </resources>

@@ -8,25 +8,25 @@
     <fragment
         android:id="@+id/navigation_chats"
         android:name="com.example.mywechat.ui.chats.ChatsFragment"
-        android:label="@string/title_chats"
+        android:label="@string/ChatsFragment_Title"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
         android:id="@+id/navigation_contacts"
         android:name="com.example.mywechat.ui.contacts.ContactsFragment"
-        android:label="@string/title_contacts"
+        android:label="@string/ContactsFragment_Title"
         tools:layout="@layout/fragment_contacts" />
 
     <fragment
         android:id="@+id/navigation_discover"
         android:name="com.example.mywechat.ui.discover.DiscoverFragment"
-        android:label="@string/title_discover"
+        android:label="@string/DiscoverFragment_Title"
         tools:layout="@layout/fragment_discover" />
 
     <fragment
         android:id="@+id/navigation_me"
         android:name="com.example.mywechat.ui.me.MeFragment"
-        android:label="@string/title_me"
+        android:label="@string/MeFragment_Title"
         tools:layout="@layout/fragment_me" />
 
 </navigation>
