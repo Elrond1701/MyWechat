@@ -39,10 +39,10 @@ public class LoginActivity extends AppCompatActivity {
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
 
-        final EditText phonenumberEditText = findViewById(R.id.phonenumber_login);
-        final EditText passwordEditText = findViewById(R.id.password_login);
-        final Button loginButton = findViewById(R.id.login_login);
-        final ProgressBar loadingProgressBar = findViewById(R.id.loading_login);
+        final EditText phonenumberEditText = findViewById(R.id.LoginActivity_PhoneNumber);
+        final EditText passwordEditText = findViewById(R.id.LoginActivity_Password);
+        final Button loginButton = findViewById(R.id.LoginActivity_Login);
+        final ProgressBar loadingProgressBar = findViewById(R.id.LoginActivity_Loading);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override

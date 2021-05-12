@@ -9,7 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWechat">
-        <activity android:name=".ContactActivity"></activity>
+        <activity android:name=".ContactActivity">
+            <intent-filter>
+                <action android:name="ContactActivity"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/MainActivity_Title">

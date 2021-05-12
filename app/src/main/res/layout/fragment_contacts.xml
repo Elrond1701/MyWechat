@@ -7,7 +7,7 @@
     tools:context=".ui.contacts.ContactsFragment">
 
     <TextView
-        android:id="@+id/textview_contacts"
+        android:id="@+id/ContactsFragment_TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

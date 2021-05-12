@@ -3,28 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_chats">
+    app:startDestination="@+id/Navigation_Chats">
 
     <fragment
-        android:id="@+id/navigation_chats"
+        android:id="@+id/Navigation_Chats"
         android:name="com.example.mywechat.ui.chats.ChatsFragment"
         android:label="@string/ChatsFragment_Title"
         tools:layout="@layout/fragment_chats" />
 
     <fragment
-        android:id="@+id/navigation_contacts"
+        android:id="@+id/Navigation_Contacts"
         android:name="com.example.mywechat.ui.contacts.ContactsFragment"
         android:label="@string/ContactsFragment_Title"
         tools:layout="@layout/fragment_contacts" />
 
     <fragment
-        android:id="@+id/navigation_discover"
+        android:id="@+id/Navigation_Discover"
         android:name="com.example.mywechat.ui.discover.DiscoverFragment"
         android:label="@string/DiscoverFragment_Title"
         tools:layout="@layout/fragment_discover" />
 
     <fragment
-        android:id="@+id/navigation_me"
+        android:id="@+id/Navigation_Me"
         android:name="com.example.mywechat.ui.me.MeFragment"
         android:label="@string/MeFragment_Title"
         tools:layout="@layout/fragment_me" />

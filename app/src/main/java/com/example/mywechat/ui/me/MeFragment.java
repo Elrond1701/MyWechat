@@ -26,7 +26,7 @@ public class MeFragment extends Fragment {
         meViewModel =
                 new ViewModelProvider(this).get(MeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_me, container, false);
-        final TextView textView = root.findViewById(R.id.textview_me);
+        final TextView textView = root.findViewById(R.id.MeFragment_TextView);
         meViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

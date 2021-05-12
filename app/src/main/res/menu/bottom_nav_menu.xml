@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_chats"
+        android:id="@+id/Navigation_Chats"
         android:icon="@drawable/ic_chats_blue_24dp"
         android:title="@string/ChatsFragment_Title" />
 
     <item
-        android:id="@+id/navigation_contacts"
+        android:id="@+id/Navigation_Contacts"
         android:icon="@drawable/ic_contacts_blue_24dp"
         android:title="@string/ContactsFragment_Title" />
 
     <item
-        android:id="@+id/navigation_discover"
+        android:id="@+id/Navigation_Discover"
         android:icon="@drawable/ic_discover_blue_24dp"
         android:title="@string/DiscoverFragment_Title" />
 
     <item
-        android:id="@+id/navigation_me"
+        android:id="@+id/Navigation_Me"
         android:icon="@drawable/ic_me_blue_24dp"
         android:title="@string/MeFragment_Title" />
 </menu>
