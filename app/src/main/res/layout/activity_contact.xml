@@ -47,7 +47,6 @@
             android:id="@+id/settings_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintToptoTopof="@id/chat_contact"
             android:text="@string/ContactActivity_Settings"
             android:layout_marginTop="25dp"/>
     </LinearLayout>
