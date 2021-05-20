@@ -20,6 +20,8 @@
 
     <!-- Strings related to ContactsFragment -->
     <string name="ContactsFragment_Title">Contacts</string>
+    <string name="ContactsFragment_Newfriend">New Friends</string>
+    <string name="ContactsFragment_Groups">Group Chats</string>
 
     <!-- Strings related to DiscoverFragment -->
     <string name="DiscoverFragment_Title">Discover</string>
