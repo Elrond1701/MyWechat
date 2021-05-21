@@ -1,12 +1,14 @@
 package com.example.mywechat.data;
 
+import android.graphics.Bitmap;
+
 public class GroupMember {
     private int Number;
     private String GroupName;
     private String Nickname;
-    private int Profile;
+    private Bitmap Profile;
 
-    GroupMember(int number, String groupname, String nickname, int profile) {
+    GroupMember(int number, String groupname, String nickname, Bitmap profile) {
         Number = number;
         GroupName = groupname;
         Nickname = nickname;
@@ -22,7 +24,7 @@ public class GroupMember {
     String getNickname() {
         return Nickname;
     }
-    int getProfile() {
+    Bitmap getProfile() {
         return Profile;
     }
 }

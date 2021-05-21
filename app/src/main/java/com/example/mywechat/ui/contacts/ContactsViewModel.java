@@ -1,9 +1,13 @@
 package com.example.mywechat.ui.contacts;
 
+import android.content.Context;
+import android.os.Environment;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 
 import java.util.LinkedList;
@@ -16,7 +20,7 @@ public class ContactsViewModel extends ViewModel {
 
     }
 
-    public void addFriends(Friend friend) {
+    public void addFriend(Friend friend) {
         friends.add(friend);
     }
 

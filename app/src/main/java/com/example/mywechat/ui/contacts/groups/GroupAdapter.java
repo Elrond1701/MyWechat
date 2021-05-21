@@ -44,7 +44,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @Override
     public void onBindViewHolder(@NonNull GroupAdapter.GroupViewHolder holder, int position) {
         Group group = data.get(position);
-        holder.Profile.setImageResource(group.getProfile());
+        holder.Profile.setImageBitmap(group.getProfile());
         holder.Name.setText(group.getName());
     }
 

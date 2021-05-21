@@ -43,7 +43,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public void onBindViewHolder(@NonNull ContactViewHolder holder, int position) {
         Friend friend = data.get(position);
-        holder.Profile.setImageResource(friend.getProfile());
+        holder.Profile.setImageBitmap(friend.getProfile());
         holder.Nickname.setText(friend.getNickname());
     }
 

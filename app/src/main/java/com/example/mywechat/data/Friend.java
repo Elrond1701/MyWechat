@@ -1,14 +1,16 @@
 package com.example.mywechat.data;
 
+import android.graphics.Bitmap;
+
 import java.lang.String;
 
 public class Friend {
     private int Number;
     private String Nickname;
     private String PhoneNumber;
-    private int Profile;
+    private Bitmap Profile;
 
-    public Friend(int number, String nickname, String phonenumber, int profile){
+    public Friend(int number, String nickname, String phonenumber, Bitmap profile){
         Number = number;
         Nickname = nickname;
         PhoneNumber = phonenumber;
@@ -22,5 +24,5 @@ public class Friend {
     public String getPhoneNumber() {
         return PhoneNumber;
     }
-    public int getProfile() {return Profile;}
+    public Bitmap getProfile() {return Profile;}
 }

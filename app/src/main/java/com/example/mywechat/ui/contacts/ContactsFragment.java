@@ -1,8 +1,11 @@
 package com.example.mywechat.ui.contacts;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +21,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
+import com.example.mywechat.ui.chats.ChatsViewModel;
 import com.example.mywechat.ui.contacts.groups.GroupsActivity;
 import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import static android.content.ContentValues.TAG;
 
 public class ContactsFragment extends Fragment {
 
@@ -34,15 +48,13 @@ public class ContactsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinkedList<Friend> friends = new LinkedList<>();
-        friends.add(new Friend(0, "我", "123456", R.drawable.ic_newfriend_black_60dp));
-        contactsViewModel =
-                new ViewModelProvider(this).get(ContactsViewModel.class);
-        contactsViewModel.setFriends(friends);
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        contactsViewModel =
+                new ViewModelProvider(this).get(ContactsViewModel.class);
+        get();
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
@@ -70,6 +82,140 @@ public class ContactsFragment extends Fragment {
         recyclerView.setAdapter(contactAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);
+    }
 
+    @Override
+    public void onDestroy() {
+        //save();
+        super.onDestroy();
+    }
+
+    private void get() {
+        int number = 0;
+        Friend newfriend = Singleget(number);
+        LinkedList<Friend> friends = new LinkedList<>();
+        while (newfriend != null) {
+            friends.add(newfriend);
+            number++;
+            newfriend = Singleget(number);
+        }
+        contactsViewModel.setFriends(friends);
+    }
+
+    private Friend Singleget(int number) {
+        String nickname = null;
+        String phonenumber = null;
+        Bitmap profile = null;
+
+        File BitmapFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(number) + "Bitmap");
+        File XmlFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(number) + "Xml");
+
+        try {
+            FileInputStream fileInputStream = new FileInputStream(BitmapFile);
+        } catch (IOException e) {
+            Log.d(TAG, "file input err:" + e.getMessage());
+            return null;
+        }
+        try {
+            FileInputStream fileInputStream = new FileInputStream(XmlFile);
+            try {
+                XmlPullParser parser = Xml.newPullParser();
+                parser.setInput(fileInputStream, "utf-8");
+                int eventType = parser.getEventType(); // 获得事件类型
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    String tagName = parser.getName(); // 获得当前节点的名称
+
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG: // 当前等于开始节点 <person>
+                            if (("Friend" + Integer.toString(number)).equals(tagName)) {
+
+                            }
+                            else if ("Nickname".equals(tagName)) {
+                                nickname = parser.getAttributeValue(null, "Nickname");
+                            }
+                            else if ("PhoneNumber".equals(tagName)) { // <name>
+                                phonenumber = parser.nextText();
+                            }
+                            break;
+                        case XmlPullParser.END_TAG: // </persons>
+                            if ("person".equals(tagName)) {
+                                Log.i(TAG, "Nickname---" + nickname);
+                                Log.i(TAG, "PhoneNumber---" + phonenumber);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } catch (XmlPullParserException e) {
+                Log.d(TAG, "xml pull parse err:" + e.getMessage());
+                return null;
+            }
+        } catch (IOException e) {
+            Log.d(TAG, "file input err:" + e.getMessage());
+            return null;
+        }
+
+        if (nickname != null && phonenumber != null && profile != null) {
+            Friend friend = new Friend(number, nickname, phonenumber, profile);
+            return friend;
+        }
+        else {
+            return null;
+        }
+    }
+    private void save() {
+        LinkedList<Friend> friends = contactsViewModel.getFriends();
+        for (int i = 0; i < friends.size(); i++) {
+            Singlesave(friends.get(i));
+        }
+    }
+
+    private void Singlesave(Friend friend) {
+        File BitmapFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(friend.getNumber()) + "Bitmap");
+        File XmlFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(friend.getNumber()) + "Xml");
+
+        try {
+            BitmapFile.createNewFile();
+        } catch (IOException e) {
+            Log.d( TAG, "file create err:" + e.getMessage() );
+        }
+        try {
+            XmlFile.createNewFile();
+        } catch (IOException e) {
+            Log.d(TAG, "file create err:" + e.getMessage());
+        }
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(BitmapFile);
+            boolean isSuccess = friend.getProfile().compress(Bitmap.CompressFormat.JPEG, 60, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            Log.d(TAG, "file output err:" + e.getMessage());
+        }
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(XmlFile);
+            XmlSerializer serializer = Xml.newSerializer();
+            serializer.setOutput(fileOutputStream, "utf-8");
+            serializer.startDocument("utf-8", true);
+            serializer.startTag(null, "Friend" + Integer.toString(friend.getNumber()));
+
+            serializer.startTag(null, "Nickname");
+            serializer.text(friend.getNickname());
+            serializer.endTag(null, "Nickname");
+
+            serializer.startTag(null, "PhoneNumber");
+            serializer.text(friend.getPhoneNumber());
+            serializer.endTag(null, "PhoneNumber");
+
+            serializer.endTag(null, "Friend" + Integer.toString(friend.getNumber()));
+            serializer.endDocument();
+
+            fileOutputStream.close();
+    } catch (IOException e) {
+            Log.d(TAG, "file output err:" + e.getMessage());
+        }
     }
 }
