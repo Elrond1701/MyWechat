@@ -42,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText phonenumberEditText = findViewById(R.id.LoginActivity_PhoneNumber);
         final EditText passwordEditText = findViewById(R.id.LoginActivity_Password);
         final Button loginButton = findViewById(R.id.LoginActivity_Login);
+        final Button registerButton = findViewById(R.id.LoginActivity_Register);
         final ProgressBar loadingProgressBar = findViewById(R.id.LoginActivity_Loading);
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
+                registerButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     phonenumberEditText.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -114,12 +116,24 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction("MainActivity");
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                loginViewModel.login(phonenumberEditText.getText().toString(),
+                        passwordEditText.getText().toString());
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
-                //loadingProgressBar.setVisibility(View.VISIBLE);
-                //loginViewModel.login(phonenumberEditText.getText().toString(),
-                //        passwordEditText.getText().toString());
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                loginViewModel.login(phonenumberEditText.getText().toString(),
+                        passwordEditText.getText().toString());
+
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

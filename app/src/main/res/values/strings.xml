@@ -1,13 +1,16 @@
 <resources>
     <string name="App_Name">My WeChat</string>
+    <string name="server">8.140.133.34:7541</string>
+
     <!-- Strings related to LogInActivity -->
     <string name="LogInActivity_PromptPhoneNumber">Phone Number</string>
     <string name="LogInActivity_PromptPassword">Password</string>
-    <string name="LogInActivity_Action_SignIn">Sign in or register</string>
+    <string name="LogInActivity_Action_SignIn">Sign in</string>
+    <string name="LogInActivity_Action_Register">Register</string>
     <string name="LogInActivity_Action_SignIn_short">Sign in</string>
     <string name="LogInActivity_Welcome">"Welcome !"</string>
     <string name="LogInActivity_InvalidPhoneNumber">Not a valid phone number</string>
-    <string name="LogInActivity_InvalidPassword">Password must be >5 characters</string>
+    <string name="LogInActivity_InvalidPassword">Password must be at least 8 characters and contain at least one number and one English character</string>
     <string name="LogInActivity_LogInFailed">"Login failed"</string>
 
     <!-- Strings related to CheckingActivity -->
@@ -33,4 +36,11 @@
     <string name="ContactActivity_Nickname">nickname</string>
     <string name="ContactActivity_Chat">Chat!</string>
     <string name="ContactActivity_Settings">Settings</string>
+    <string name="ContactActivity_Title">Your Contact</string>
+
+    <!-- Strings related to GroupsActivity -->
+    <string name="GroupsActivity_Title">Groups</string>
+
+    <!-- Strings related to NewfriendActivity -->
+    <string name="NewfriendActivity_Title">Add New Friend</string>
 </resources>

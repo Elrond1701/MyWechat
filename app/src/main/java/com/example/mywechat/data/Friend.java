@@ -9,6 +9,7 @@ public class Friend {
     private String Nickname;
     private String PhoneNumber;
     private Bitmap Profile;
+    private String Sex;
 
     public Friend(int number, String nickname, String phonenumber, Bitmap profile){
         Number = number;
@@ -25,4 +26,5 @@ public class Friend {
         return PhoneNumber;
     }
     public Bitmap getProfile() {return Profile;}
+    public String getSex() {return Sex;}
 }

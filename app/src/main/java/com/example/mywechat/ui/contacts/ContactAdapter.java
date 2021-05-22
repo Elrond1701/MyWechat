@@ -1,5 +1,6 @@
 package com.example.mywechat.ui.contacts;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mywechat.ContactActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
+import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
 
 import java.util.LinkedList;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder>{
     private LinkedList<Friend> data;
+    private ContactsFragment.OnItemClickListener onItemClickListener;
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         ImageView Profile;
@@ -45,6 +49,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         Friend friend = data.get(position);
         holder.Profile.setImageBitmap(friend.getProfile());
         holder.Nickname.setText(friend.getNickname());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onClick(friend);
+            }
+        });
+    }
+
+    public void setOnItemClickListener(ContactsFragment.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @Override

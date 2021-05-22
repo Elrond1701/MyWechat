@@ -2,6 +2,7 @@ package com.example.mywechat.ui.contacts;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -44,6 +45,9 @@ public class ContactsFragment extends Fragment {
     private View newfriend;
     private View groupchat;
 
+    public interface OnItemClickListener{
+        void onClick(Friend friend);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +90,6 @@ public class ContactsFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        //save();
         super.onDestroy();
     }
 
@@ -112,6 +115,7 @@ public class ContactsFragment extends Fragment {
 
         try {
             FileInputStream fileInputStream = new FileInputStream(BitmapFile);
+            profile = BitmapFactory.decodeStream(fileInputStream);
         } catch (IOException e) {
             Log.d(TAG, "file input err:" + e.getMessage());
             return null;
@@ -130,11 +134,9 @@ public class ContactsFragment extends Fragment {
                         case XmlPullParser.START_TAG: // 当前等于开始节点 <person>
                             if (("Friend" + Integer.toString(number)).equals(tagName)) {
 
-                            }
-                            else if ("Nickname".equals(tagName)) {
+                            } else if ("Nickname".equals(tagName)) {
                                 nickname = parser.getAttributeValue(null, "Nickname");
-                            }
-                            else if ("PhoneNumber".equals(tagName)) { // <name>
+                            } else if ("PhoneNumber".equals(tagName)) { // <name>
                                 phonenumber = parser.nextText();
                             }
                             break;
@@ -160,62 +162,8 @@ public class ContactsFragment extends Fragment {
         if (nickname != null && phonenumber != null && profile != null) {
             Friend friend = new Friend(number, nickname, phonenumber, profile);
             return friend;
-        }
-        else {
+        } else {
             return null;
-        }
-    }
-    private void save() {
-        LinkedList<Friend> friends = contactsViewModel.getFriends();
-        for (int i = 0; i < friends.size(); i++) {
-            Singlesave(friends.get(i));
-        }
-    }
-
-    private void Singlesave(Friend friend) {
-        File BitmapFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(friend.getNumber()) + "Bitmap");
-        File XmlFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(friend.getNumber()) + "Xml");
-
-        try {
-            BitmapFile.createNewFile();
-        } catch (IOException e) {
-            Log.d( TAG, "file create err:" + e.getMessage() );
-        }
-        try {
-            XmlFile.createNewFile();
-        } catch (IOException e) {
-            Log.d(TAG, "file create err:" + e.getMessage());
-        }
-
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(BitmapFile);
-            boolean isSuccess = friend.getProfile().compress(Bitmap.CompressFormat.JPEG, 60, fileOutputStream);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } catch (IOException e) {
-            Log.d(TAG, "file output err:" + e.getMessage());
-        }
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(XmlFile);
-            XmlSerializer serializer = Xml.newSerializer();
-            serializer.setOutput(fileOutputStream, "utf-8");
-            serializer.startDocument("utf-8", true);
-            serializer.startTag(null, "Friend" + Integer.toString(friend.getNumber()));
-
-            serializer.startTag(null, "Nickname");
-            serializer.text(friend.getNickname());
-            serializer.endTag(null, "Nickname");
-
-            serializer.startTag(null, "PhoneNumber");
-            serializer.text(friend.getPhoneNumber());
-            serializer.endTag(null, "PhoneNumber");
-
-            serializer.endTag(null, "Friend" + Integer.toString(friend.getNumber()));
-            serializer.endDocument();
-
-            fileOutputStream.close();
-    } catch (IOException e) {
-            Log.d(TAG, "file output err:" + e.getMessage());
         }
     }
 }
