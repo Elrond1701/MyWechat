@@ -1,5 +1,6 @@
 package com.example.mywechat.ui.contacts;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.ContactActivity;
+import com.example.mywechat.MainActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
@@ -19,7 +21,8 @@ import java.util.LinkedList;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder>{
     private LinkedList<Friend> data;
-    private ContactsFragment.OnItemClickListener onItemClickListener;
+    private LinkedList<Intent> intents;
+    private Context parent;
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         ImageView Profile;
@@ -35,6 +38,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public ContactAdapter(LinkedList<Friend> data) {
         this.data = data;
     }
+
+    public void setParent(Context parent) {
+        this.parent = parent;
+    }
+
 
     @NonNull
     @Override
@@ -52,14 +60,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClickListener.onClick(friend);
+                Intent intent = new Intent(parent, ContactActivity.class);
+                parent.startActivity(intent);
             }
         });
     }
 
-    public void setOnItemClickListener(ContactsFragment.OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
 
     @Override
     public int getItemCount() {

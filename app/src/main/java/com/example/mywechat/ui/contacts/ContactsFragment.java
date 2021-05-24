@@ -45,9 +45,6 @@ public class ContactsFragment extends Fragment {
     private View newfriend;
     private View groupchat;
 
-    public interface OnItemClickListener{
-        void onClick(Friend friend);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,22 +64,23 @@ public class ContactsFragment extends Fragment {
         newfriend = view.findViewById(R.id.ContactsFragment_Newfriend);
         newfriend.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                Intent NewfriendActivity_intent = new Intent(getActivity(), NewfriendActivity.class);
-                startActivity(NewfriendActivity_intent);
+                Intent intent = new Intent(getActivity(), NewfriendActivity.class);
+                startActivity(intent);
             }
         });
 
         groupchat = view.findViewById(R.id.ContactsFragment_Groupchats);
         groupchat.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                Intent GroupsActivity_intent = new Intent(getActivity(), GroupsActivity.class);
-                startActivity(GroupsActivity_intent);
+                Intent intent = new Intent(getActivity(), GroupsActivity.class);
+                startActivity(intent);
             }
         });
         
         recyclerView = view.findViewById(R.id.contacts_recylerview);
 
         ContactAdapter contactAdapter = new ContactAdapter(contactsViewModel.getFriends());
+        contactAdapter.setParent(getActivity());
         recyclerView.setAdapter(contactAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);
@@ -102,6 +100,13 @@ public class ContactsFragment extends Fragment {
             number++;
             newfriend = Singleget(number);
         }
+        Bitmap mybitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
+        Friend New = new Friend();
+        New.setNumber(number++);
+        New.setNickname("HIHI");
+        New.setPhoneNumber("12344");
+        New.setProfile(mybitmap);
+        friends.add(New);
         contactsViewModel.setFriends(friends);
     }
 
@@ -160,7 +165,11 @@ public class ContactsFragment extends Fragment {
         }
 
         if (nickname != null && phonenumber != null && profile != null) {
-            Friend friend = new Friend(number, nickname, phonenumber, profile);
+            Friend friend = new Friend();
+            friend.setNumber(number);
+            friend.setNickname(nickname);
+            friend.setPhoneNumber(phonenumber);
+            friend.setProfile(profile);
             return friend;
         } else {
             return null;

@@ -120,8 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                 loginViewModel.login(phonenumberEditText.getText().toString(),
                         passwordEditText.getText().toString());
 
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
             }
         });
 
@@ -139,8 +137,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.LogInActivity_Welcome) + model.getDisplayName();
+        String welcome = getString(R.string.LogInActivity_Welcome);
         // TODO : initiate successful logged in experience
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
 
