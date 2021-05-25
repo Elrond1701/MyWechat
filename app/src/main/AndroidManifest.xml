@@ -51,15 +51,16 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/MainActivity_Title">
+        </activity>
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="@string/App_Name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/App_Name" />
     </application>
 
 </manifest>

@@ -46,7 +46,7 @@ public class WhatsUpChangeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             this.setResult(0, intent);
-            this.finish(); // back button
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
