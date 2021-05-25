@@ -67,7 +67,9 @@ public class ProfileChangeActivity extends AppCompatActivity {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(ProfileChangeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
                 } else {
+                    //打开相册
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    //Intent.ACTION_GET_CONTENT = "android.intent.action.GET_CONTENT"
                     intent.setType("image/*");
                     startActivityForResult(intent, PICK_PHOTO);
                 }
@@ -88,7 +90,9 @@ public class ProfileChangeActivity extends AppCompatActivity {
                 }
                 image = FileProvider.getUriForFile(ProfileChangeActivity.this, "com.feige.pickphoto.fileprovider", outputImage);
 
+                //启动相机程序
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                //MediaStore.ACTION_IMAGE_CAPTURE = android.media.action.IMAGE_CAPTURE
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, image);
                 startActivityForResult(intent, TAKE_CAMERA);
             }
@@ -109,12 +113,13 @@ public class ProfileChangeActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case PICK_PHOTO:
-                if (resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) { // 判断手机系统版本号
                     handleImageOnKitKat(data);
                 }
             case TAKE_CAMERA:
                 if (resultCode == RESULT_OK) {
                     try {
+                        // 将拍摄的照片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(image));
                         profile.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
@@ -133,9 +138,11 @@ public class ProfileChangeActivity extends AppCompatActivity {
         String imagePath = null;
         Uri uri = data.getData();
         if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
             String docId = DocumentsContract.getDocumentId(uri);
             if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
+                // 解析出数字格式的id
                 String selection = MediaStore.Images.Media._ID + "=" + id;
                 imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
@@ -143,15 +150,19 @@ public class ProfileChangeActivity extends AppCompatActivity {
                 imagePath = getImagePath(contentUri, null);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
             imagePath = getImagePath(uri, null);
         } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
             imagePath = uri.getPath();
         }
+        // 根据图片路径显示图片
         displayImage(imagePath);
     }
 
     private String getImagePath(Uri uri, String selection) {
         String path = null;
+        // 通过Uri和selection来获取真实的图片路径
         Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
