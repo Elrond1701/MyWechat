@@ -57,7 +57,7 @@ public class MeFragment extends Fragment {
         File file = new File(getContext().getFilesDir(), "UserBitmap");
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fileOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
             try {
                 fileOutputStream.close();
             } catch (IOException e) {

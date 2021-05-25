@@ -84,6 +84,12 @@ public class GroupsActivity extends AppCompatActivity {
             number++;
             group = Singleget(number);
         }
+        Group newGroup = new Group();
+        newGroup.setNumber(number);
+        newGroup.setName("Group");
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
+        newGroup.setProfile(bitmap);
+        groups.add(newGroup);
     }
 
     private Group Singleget(int number) {
@@ -138,7 +144,11 @@ public class GroupsActivity extends AppCompatActivity {
         }
 
         if (name != null && profile != null) {
-            Group group = new Group(number, name, profile, null);
+            Group group = new Group();
+            group.setNumber(number);
+            group.setName(name);
+            group.setProfile(profile);
+            group.setGroupmembers(null);
             return group;
         }
         else {

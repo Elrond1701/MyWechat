@@ -41,9 +41,13 @@
     <string name="ContactActivity_Region">Region:</string>
     <string name="ContactActivity_WhatsUp">What\'s Up</string>
     <string name="ContactActivity_WhatsUpText">Empty</string>
-    <string name="ContactActivity_Chat">Chat!</string>
+    <string name="ContactActivity_Chat">Messages</string>
     <string name="ContactActivity_Settings">Settings</string>
     <string name="ContactActivity_Title">Your Contact</string>
+
+    <!-- Strings related to ContactSettingActivity -->
+    <string name="ContactSettingActivity_Title">Settings</string>
+    <string name="ContactSettingActivity_Delete">Delete</string>
 
     <!-- Strings related to GroupsActivity -->
     <string name="GroupsActivity_Title">Groups</string>

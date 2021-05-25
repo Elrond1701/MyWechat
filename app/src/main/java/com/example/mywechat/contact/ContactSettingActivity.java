@@ -1,37 +1,33 @@
-package com.example.mywechat.ui.me.myprofile.change;
+package com.example.mywechat.contact;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.mywechat.R;
 
-public class RegionChangeActivity extends AppCompatActivity {
-    private ActionBar actionBar;
+public class ContactSettingActivity extends AppCompatActivity {
 
-    Intent intent;
+    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_region_change);
+        setContentView(R.layout.activity_contact_setting);
 
         actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        intent = getIntent();
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                this.setResult(0, intent);
                 this.finish(); // back button
                 return true;
         }

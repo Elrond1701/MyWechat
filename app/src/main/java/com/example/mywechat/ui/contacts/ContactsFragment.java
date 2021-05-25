@@ -106,6 +106,9 @@ public class ContactsFragment extends Fragment {
         New.setNickname("HIHI");
         New.setPhoneNumber("12344");
         New.setProfile(mybitmap);
+        New.setGender("male");
+        New.setRegion("Beijing");
+        New.setWhatsUp("Good");
         friends.add(New);
         contactsViewModel.setFriends(friends);
     }

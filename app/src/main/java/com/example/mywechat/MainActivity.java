@@ -36,4 +36,27 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LinkedList<Friend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(LinkedList<Friend> friends) {
+        this.friends = friends;
+    }
+
+    public LinkedList<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(LinkedList<Group> groups) {
+        this.groups = groups;
+    }
 }

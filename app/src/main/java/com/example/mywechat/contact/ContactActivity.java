@@ -1,4 +1,4 @@
-package com.example.mywechat;
+package com.example.mywechat.contact;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,22 +8,30 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 
 public class ContactActivity extends AppCompatActivity {
 
-    ActionBar actionBar;
-    Friend friend;
+    private ActionBar actionBar;
 
-    ImageView profile;
-    ImageView gender;
-    TextView nickname;
-    TextView phonenumber;
-    TextView region;
-    TextView WhatsUp;
+    private Friend friend;
+
+    private Intent intent;
+
+    private ImageView profile;
+    private ImageView gender;
+    private TextView nickname;
+    private TextView phonenumber;
+    private TextView region;
+    private TextView WhatsUp;
+    private Button messages;
+    private Button settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +44,15 @@ public class ContactActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Intent intent = getIntent();
+        intent = getIntent();
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
         friend = new Friend();
-        friend.setNumber(0);
-        friend.setNickname("HIHI");
-        friend.setPhoneNumber("12344");
+        friend.setNickname(intent.getStringExtra("Nickname"));
+        friend.setPhoneNumber(intent.getStringExtra("ID"));
         friend.setProfile(bitmap);
-        friend.setGender("male");
+        friend.setGender(intent.getStringExtra("Gender"));
+        friend.setRegion(intent.getStringExtra("Region"));
+        friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
         profile = findViewById(R.id.ContactActivity_Profile);
         profile.setImageBitmap(friend.getProfile());
@@ -67,6 +76,24 @@ public class ContactActivity extends AppCompatActivity {
 
         WhatsUp = findViewById(R.id.ContactActivity_WhatsUpText);
         WhatsUp.setText(friend.getWhatsUp());
+
+        messages = findViewById(R.id.ContactActivity_Messages);
+        messages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ContactActivity.this, ContactActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        settings = findViewById(R.id.ContactActivity_Settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ContactActivity.this, ContactSettingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

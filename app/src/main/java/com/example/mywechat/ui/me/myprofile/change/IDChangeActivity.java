@@ -36,6 +36,7 @@ public class IDChangeActivity extends AppCompatActivity {
         editText = findViewById(R.id.IDChangeActivity_EditText);
         editText.setText(intent.getStringExtra("ID"));
 
+        done =findViewById(R.id.IDChangeActivity_Done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

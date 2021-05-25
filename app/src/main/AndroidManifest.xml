@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -16,23 +16,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWechat">
         <activity
+            android:name=".contact.ContactSettingActivity"
+            android:label="@string/ContactSettingActivity_Title"/>
+        <activity
             android:name=".ui.me.myprofile.change.WhatsUpChangeActivity"
             android:label="@string/WhatsUpChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.RegionChangeActivity"
-            android:label="@string/RegionChangeActivity_Title"/>
+            android:label="@string/RegionChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.GenderChangeActivity"
-            android:label="@string/GenderChangeActivity_Title"/>
+            android:label="@string/GenderChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.IDChangeActivity"
-            android:label="@string/IDChangeActivity_Title"/>
+            android:label="@string/IDChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.NicknameChangeActivity"
-            android:label="@string/NicknameChangeActivity_Title"/>
+            android:label="@string/NicknameChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.ProfileChangeActivity"
-            android:label="@string/ProfileChangeActivity_Title"/>
+            android:label="@string/ProfileChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.MyprofileActivity"
             android:label="@string/MyprofileActivity_Title" />
@@ -43,7 +46,7 @@
             android:name=".ui.contacts.newfriend.NewfriendActivity"
             android:label="@string/NewfriendActivity_Title" />
         <activity
-            android:name=".ContactActivity"
+            android:name=".contact.ContactActivity"
             android:label="@string/ContactActivity_Title" />
         <activity
             android:name=".MainActivity"
