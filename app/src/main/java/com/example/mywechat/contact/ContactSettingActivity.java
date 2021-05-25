@@ -10,14 +10,12 @@ import com.example.mywechat.R;
 
 public class ContactSettingActivity extends AppCompatActivity {
 
-    private ActionBar actionBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_setting);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -26,10 +24,9 @@ public class ContactSettingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

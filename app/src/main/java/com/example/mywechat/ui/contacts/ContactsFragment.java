@@ -4,35 +4,29 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
-import com.example.mywechat.ui.chats.ChatsViewModel;
 import com.example.mywechat.ui.contacts.groups.GroupsActivity;
 import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -41,9 +35,6 @@ import static android.content.ContentValues.TAG;
 public class ContactsFragment extends Fragment {
 
     private ContactsViewModel contactsViewModel;
-    private RecyclerView recyclerView;
-    private View newfriend;
-    private View groupchat;
 
 
     @Override
@@ -61,23 +52,19 @@ public class ContactsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        newfriend = view.findViewById(R.id.ContactsFragment_Newfriend);
-        newfriend.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                Intent intent = new Intent(getActivity(), NewfriendActivity.class);
-                startActivity(intent);
-            }
+        View newfriend = view.findViewById(R.id.ContactsFragment_Newfriend);
+        newfriend.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), NewfriendActivity.class);
+            startActivity(intent);
         });
 
-        groupchat = view.findViewById(R.id.ContactsFragment_Groupchats);
-        groupchat.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                Intent intent = new Intent(getActivity(), GroupsActivity.class);
-                startActivity(intent);
-            }
+        View groupchat = view.findViewById(R.id.ContactsFragment_Groupchats);
+        groupchat.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), GroupsActivity.class);
+            startActivity(intent);
         });
-        
-        recyclerView = view.findViewById(R.id.contacts_recylerview);
+
+        RecyclerView recyclerView = view.findViewById(R.id.contacts_recylerview);
 
         ContactAdapter contactAdapter = new ContactAdapter(contactsViewModel.getFriends());
         contactAdapter.setParent(getActivity());

@@ -1,50 +1,40 @@
 package com.example.mywechat.ui.contacts.groups;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Xml;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.example.mywechat.R;
-import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Group;
-import com.example.mywechat.ui.contacts.ContactAdapter;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 
 import static android.content.ContentValues.TAG;
 
 public class GroupsActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
     private LinkedList<Group> groups;
     private GroupAdapter groupAdapter;
-    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groups);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -52,7 +42,7 @@ public class GroupsActivity extends AppCompatActivity {
 
         get();
 
-        recyclerView = findViewById(R.id.groups_recylerview);
+        RecyclerView recyclerView = findViewById(R.id.groups_recylerview);
 
         GroupAdapter groupAdapter = new GroupAdapter(groups);
         recyclerView.setAdapter(groupAdapter);
@@ -62,10 +52,9 @@ public class GroupsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -94,13 +83,14 @@ public class GroupsActivity extends AppCompatActivity {
 
     private Group Singleget(int number) {
         String name = null;
-        Bitmap profile = null;
+        Bitmap profile;
 
-        File BitmapFile = new File(getFilesDir(), "Group" + Integer.toString(number) + "Bitmap");
-        File XmlFile = new File(getFilesDir(), "Group" + Integer.toString(number) + "Xml");
+        File BitmapFile = new File(getFilesDir(), "Group" + number + "Bitmap");
+        File XmlFile = new File(getFilesDir(), "Group" + number + "Xml");
 
         try {
-            FileInputStream fileInputStream = new FileInputStream(BitmapFile);
+            FileInputStream fileInputStream;
+            fileInputStream = new FileInputStream(BitmapFile);
             profile = BitmapFactory.decodeStream(fileInputStream);
         } catch (IOException e) {
             Log.d(TAG, "file input err:" + e.getMessage());
@@ -111,9 +101,10 @@ public class GroupsActivity extends AppCompatActivity {
             try {
                 XmlPullParser parser = Xml.newPullParser();
                 parser.setInput(fileInputStream, "utf-8");
-                int eventType = parser.getEventType(); // 获得事件类型
+                // 获得事件类型
+                int eventType = parser.getEventType();
 
-                while (eventType != XmlPullParser.END_DOCUMENT) {
+                while (!(XmlPullParser.END_DOCUMENT == eventType)) {
                     String tagName = parser.getName(); // 获得当前节点的名称
 
                     switch (eventType) {

@@ -18,35 +18,20 @@ import com.example.mywechat.data.Friend;
 
 public class ContactActivity extends AppCompatActivity {
 
-    private ActionBar actionBar;
-
-    private Friend friend;
-
-    private Intent intent;
-
-    private ImageView profile;
-    private ImageView gender;
-    private TextView nickname;
-    private TextView phonenumber;
-    private TextView region;
-    private TextView WhatsUp;
-    private Button messages;
-    private Button settings;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        intent = getIntent();
+        Intent intent = getIntent();
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
-        friend = new Friend();
+        Friend friend = new Friend();
         friend.setNickname(intent.getStringExtra("Nickname"));
         friend.setPhoneNumber(intent.getStringExtra("ID"));
         friend.setProfile(bitmap);
@@ -54,10 +39,10 @@ public class ContactActivity extends AppCompatActivity {
         friend.setRegion(intent.getStringExtra("Region"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
-        profile = findViewById(R.id.ContactActivity_Profile);
+        ImageView profile = findViewById(R.id.ContactActivity_Profile);
         profile.setImageBitmap(friend.getProfile());
 
-        gender = findViewById(R.id.ContactActivity_Gender);
+        ImageView gender = findViewById(R.id.ContactActivity_Gender);
         if (friend.getGender().equals("male")) {
             gender.setImageResource(R.drawable.ic_male_blue_25dp);
         }
@@ -65,43 +50,36 @@ public class ContactActivity extends AppCompatActivity {
             gender.setImageResource(R.drawable.ic_female_blue_25dp);
         }
 
-        nickname = findViewById(R.id.ContactActivity_Nickname);
+        TextView nickname = findViewById(R.id.ContactActivity_Nickname);
         nickname.setText(friend.getNickname());
 
-        phonenumber = findViewById(R.id.ContactActivity_PhoneNumber);
+        TextView phonenumber = findViewById(R.id.ContactActivity_PhoneNumber);
         phonenumber.setText(friend.getPhoneNumber());
 
-        region = findViewById(R.id.ContactActivity_Region);
+        TextView region = findViewById(R.id.ContactActivity_Region);
         region.setText(friend.getRegion());
 
-        WhatsUp = findViewById(R.id.ContactActivity_WhatsUpText);
-        WhatsUp.setText(friend.getWhatsUp());
+        TextView whatsUp = findViewById(R.id.ContactActivity_WhatsUpText);
+        whatsUp.setText(friend.getWhatsUp());
 
-        messages = findViewById(R.id.ContactActivity_Messages);
-        messages.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ContactActivity.this, ContactActivity.class);
-                startActivity(intent);
-            }
+        Button messages = findViewById(R.id.ContactActivity_Messages);
+        messages.setOnClickListener(v -> {
+            Intent intent1 = new Intent(ContactActivity.this, ContactActivity.class);
+            startActivity(intent1);
         });
 
-        settings = findViewById(R.id.ContactActivity_Settings);
-        settings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ContactActivity.this, ContactSettingActivity.class);
-                startActivity(intent);
-            }
+        Button settings = findViewById(R.id.ContactActivity_Settings);
+        settings.setOnClickListener(v -> {
+            Intent intent12 = new Intent(ContactActivity.this, ContactSettingActivity.class);
+            startActivity(intent12);
         });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

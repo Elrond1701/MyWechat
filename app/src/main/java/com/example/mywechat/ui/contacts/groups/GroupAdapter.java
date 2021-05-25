@@ -44,8 +44,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @Override
     public GroupAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_group, parent,false);
-        GroupAdapter.GroupViewHolder holder = new GroupAdapter.GroupViewHolder(itemView);
-        return holder;
+        return new GroupViewHolder(itemView);
     }
 
     @Override
@@ -53,12 +52,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         Group group = data.get(position);
         holder.Profile.setImageBitmap(group.getProfile());
         holder.Name.setText(group.getName());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(parent, ContactActivity.class);
-                parent.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(parent, ContactActivity.class);
+            parent.startActivity(intent);
         });
     }
 

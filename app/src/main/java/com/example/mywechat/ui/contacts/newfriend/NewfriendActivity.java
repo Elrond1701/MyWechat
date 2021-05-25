@@ -71,9 +71,7 @@ public class NewfriendActivity extends AppCompatActivity {
                 connection.setConnectTimeout(10000);
                 int code = connection.getResponseCode();
                 if (code == 200) {
-                    String string;
                     InputStream inputStream = connection.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     Message msg = new Message();
                     msg.what = SUCCESS;
                     handler.sendEmptyMessage(SUCCESS);
@@ -89,39 +87,19 @@ public class NewfriendActivity extends AppCompatActivity {
         }).start();
     }
 
-    private Handler handler = new Handler() {
+    private final static Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == SUCCESS)
-            {
+            if (msg.what == SUCCESS) {
 
-            }
-            else if (msg.what == NETWORK_ERROR)
-            {
-                AlertDialog.Builder NetworkAlert = new AlertDialog.Builder(NewfriendActivity.this).
-                        setTitle("alert").setMessage("NETWORK ERROR").setIcon(R.mipmap.ic_launcher).
-                        setPositiveButton("确定", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialogInterface, int i){
+            } else if (msg.what == NETWORK_ERROR) {
 
-                            }
-                        });
-                NetworkAlert.show();
-            }
-            else if (msg.what == SERVER_ERROR)
-            {
-                AlertDialog.Builder NetworkAlert = new AlertDialog.Builder(NewfriendActivity.this).
-                        setTitle("alert").setMessage("SEVER ERROR").setIcon(R.mipmap.ic_launcher).
-                        setPositiveButton("确定", new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialogInterface, int i){
+            } else if (msg.what == SERVER_ERROR) {
 
-                            }
-                        });
-                NetworkAlert.show();
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException("Unkonown Wrong");
             }
         }
     };
+
 }

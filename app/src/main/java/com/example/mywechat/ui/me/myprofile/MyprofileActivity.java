@@ -23,32 +23,21 @@ import com.example.mywechat.ui.me.myprofile.change.ProfileChangeActivity;
 import com.example.mywechat.ui.me.myprofile.change.RegionChangeActivity;
 import com.example.mywechat.ui.me.myprofile.change.WhatsUpChangeActivity;
 
-import org.w3c.dom.Text;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class MyprofileActivity extends AppCompatActivity {
-    private ActionBar actionBar;
 
     Intent intent;
 
     private Friend friend;
     private ImageView profile;
-    private View profileLayout;
     private TextView nickname;
-    private View nicknameLayout;
     private TextView id;
-    private View idLayout;
     private TextView gender;
-    private View genderLayout;
     private TextView region;
-    private View regionLayout;
     private TextView whatsup;
-    private View whatsupLayout;
 
     public static final int PROFILE = 101;
     public static final int NICKNAME = 102;
@@ -62,7 +51,7 @@ public class MyprofileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myprofile);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -88,88 +77,69 @@ public class MyprofileActivity extends AppCompatActivity {
 
         profile = findViewById(R.id.MyprofileActivity_Profile);
         profile.setImageBitmap(friend.getProfile());
-        profileLayout = findViewById(R.id.MyprofileActivity_Layout1);
-        profileLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyprofileActivity.this, ProfileChangeActivity.class);
-                intent.putExtra("ProfileDir", friend.getProfileDir());
-                startActivityForResult(intent, PROFILE);
-            }
+        View profileLayout = findViewById(R.id.MyprofileActivity_Layout1);
+        profileLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(MyprofileActivity.this, ProfileChangeActivity.class);
+            intent.putExtra("ProfileDir", friend.getProfileDir());
+            startActivityForResult(intent, PROFILE);
         });
 
         nickname = findViewById(R.id.MyprofileActivity_Nickname);
         nickname.setText(friend.getNickname());
-        nicknameLayout = findViewById(R.id.MyprofileActivity_Layout2);
-        nicknameLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyprofileActivity.this, NicknameChangeActivity.class);
-                intent.putExtra("Nickname", friend.getNickname());
-                startActivityForResult(intent, NICKNAME);
-            }
+        View nicknameLayout = findViewById(R.id.MyprofileActivity_Layout2);
+        nicknameLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(MyprofileActivity.this, NicknameChangeActivity.class);
+            intent.putExtra("Nickname", friend.getNickname());
+            startActivityForResult(intent, NICKNAME);
         });
 
         id = findViewById(R.id.MyprofileActivity_PhoneNumber);
         id.setText(friend.getPhoneNumber());
-        idLayout = findViewById(R.id.MyprofileActivity_Layout3);
-        idLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyprofileActivity.this, IDChangeActivity.class);
-                intent.putExtra("ID", friend.getPhoneNumber());
-                startActivityForResult(intent, ID);
-            }
+        View idLayout = findViewById(R.id.MyprofileActivity_Layout3);
+        idLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(MyprofileActivity.this, IDChangeActivity.class);
+            intent.putExtra("ID", friend.getPhoneNumber());
+            startActivityForResult(intent, ID);
         });
 
         gender = findViewById(R.id.MyprofileActivity_Gender);
         gender.setText(friend.getGender());
-        genderLayout = findViewById(R.id.MyprofileActivity_Layout4);
-        genderLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyprofileActivity.this, GenderChangeActivity.class);
-                intent.putExtra("Gender", friend.getGender());
-                startActivityForResult(intent, GENDER);
-            }
+        View genderLayout = findViewById(R.id.MyprofileActivity_Layout4);
+        genderLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(MyprofileActivity.this, GenderChangeActivity.class);
+            intent.putExtra("Gender", friend.getGender());
+            startActivityForResult(intent, GENDER);
         });
 
         region = findViewById(R.id.MyprofileActivity_Region);
         region.setText(friend.getRegion());
-        regionLayout = findViewById(R.id.MyprofileActivity_Layout5);
-        regionLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyprofileActivity.this, RegionChangeActivity.class);
-                intent.putExtra("Region", friend.getRegion());
-                startActivityForResult(intent, REGION);
-            }
+        View regionLayout = findViewById(R.id.MyprofileActivity_Layout5);
+        regionLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(MyprofileActivity.this, RegionChangeActivity.class);
+            intent.putExtra("Region", friend.getRegion());
+            startActivityForResult(intent, REGION);
         });
 
         whatsup = findViewById(R.id.MyprofileActivity_WhatsUp);
         whatsup.setText(friend.getWhatsUp());
-        whatsupLayout = findViewById(R.id.MyprofileActivity_Layout6);
-        whatsupLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MyprofileActivity.this, WhatsUpChangeActivity.class);
-                intent.putExtra("WhatsUp", friend.getWhatsUp());
-                startActivityForResult(intent, WHATSUP);
-            }
+        View whatsupLayout = findViewById(R.id.MyprofileActivity_Layout6);
+        whatsupLayout.setOnClickListener(v -> {
+            Intent intent = new Intent(MyprofileActivity.this, WhatsUpChangeActivity.class);
+            intent.putExtra("WhatsUp", friend.getWhatsUp());
+            startActivityForResult(intent, WHATSUP);
         });
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                intent.putExtra("Nickname", friend.getNickname());
-                intent.putExtra("ID", friend.getPhoneNumber());
-                intent.putExtra("Gender", friend.getGender());
-                intent.putExtra("Region", friend.getRegion());
-                intent.putExtra("WhatsUp", friend.getWhatsUp());
-                this.setResult(0, intent);
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            intent.putExtra("Nickname", friend.getNickname());
+            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("Gender", friend.getGender());
+            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("WhatsUp", friend.getWhatsUp());
+            this.setResult(0, intent);
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -1,7 +1,5 @@
 package com.example.mywechat.ui.me;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,17 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.ui.login.LoginActivity;
 import com.example.mywechat.ui.me.myprofile.MyprofileActivity;
-import com.example.mywechat.ui.me.myprofile.MyprofileFragment;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,9 +29,6 @@ import java.io.IOException;
 public class MeFragment extends Fragment {
 
     private Friend friend;
-
-    private FrameLayout myprofile;
-    private Button logout;
 
     public static final int MYPROFILE = 101;
 
@@ -76,58 +68,42 @@ public class MeFragment extends Fragment {
         friend.setRegion("北京");
         friend.setWhatsUp("Very Good");
 
-        myprofile = view.findViewById(R.id.MeFragment_MyProfile);
-        myprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyprofileActivity.class);
-                intent.putExtra("ProfileDir", friend.getProfileDir());
-                intent.putExtra("Nickname", friend.getNickname());
-                intent.putExtra("ID", friend.getPhoneNumber());
-                intent.putExtra("Gender", friend.getGender());
-                intent.putExtra("Region", friend.getRegion());
-                intent.putExtra("WhatsUp", friend.getWhatsUp());
-                startActivityForResult(intent, MYPROFILE);
-            }
+        FrameLayout myprofile = view.findViewById(R.id.MeFragment_MyProfile);
+        myprofile.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), MyprofileActivity.class);
+            intent.putExtra("ProfileDir", friend.getProfileDir());
+            intent.putExtra("Nickname", friend.getNickname());
+            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("Gender", friend.getGender());
+            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("WhatsUp", friend.getWhatsUp());
+            startActivityForResult(intent, MYPROFILE);
         });
 
-        logout = view.findViewById(R.id.MeFragment_LogOut);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            }
+        Button logout = view.findViewById(R.id.MeFragment_LogOut);
+        logout.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
         });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 101:
-                switch (resultCode) {
-                    case 0:
-                        Bitmap bitmap = BitmapFactory.decodeFile(getContext().getFilesDir().toString() + "/UserBitmap");
-                        friend.setProfile(bitmap);
-                        friend.setNickname(data.getStringExtra("Nickname"));
-                        friend.setPhoneNumber(data.getStringExtra("ID"));
-                        friend.setGender(data.getStringExtra("Gender"));
-                        friend.setRegion(data.getStringExtra("Region"));
-                        friend.setWhatsUp(data.getStringExtra("WhatsUp"));
-                        updateProfile(friend.getProfile(), friend.getNickname(), friend.getPhoneNumber(), friend.getGender());
-                        break;
-                    default:
-                        Toast.makeText(getActivity(), "Myprofile Wrong set", Toast.LENGTH_LONG).show();
-                }
-                break;
-            default:
+        if (requestCode == 101) {
+            if (resultCode == 0) {
+                Bitmap bitmap = BitmapFactory.decodeFile(getContext().getFilesDir().toString() + "/UserBitmap");
+                friend.setProfile(bitmap);
+                friend.setNickname(data.getStringExtra("Nickname"));
+                friend.setPhoneNumber(data.getStringExtra("ID"));
+                friend.setGender(data.getStringExtra("Gender"));
+                friend.setRegion(data.getStringExtra("Region"));
+                friend.setWhatsUp(data.getStringExtra("WhatsUp"));
+            } else {
                 Toast.makeText(getActivity(), "Myprofile Wrong set", Toast.LENGTH_LONG).show();
-                break;
+            }
+        } else {
+            Toast.makeText(getActivity(), "Myprofile Wrong set", Toast.LENGTH_LONG).show();
         }
-    }
-
-    private void updateProfile(Bitmap profile, String nickname, String id, String gender) {
-
     }
 }

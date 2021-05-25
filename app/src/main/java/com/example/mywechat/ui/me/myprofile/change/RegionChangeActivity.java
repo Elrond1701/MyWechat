@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import com.example.mywechat.R;
 
 public class RegionChangeActivity extends AppCompatActivity {
-    private ActionBar actionBar;
 
     Intent intent;
 
@@ -19,7 +18,7 @@ public class RegionChangeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_region_change);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -29,11 +28,10 @@ public class RegionChangeActivity extends AppCompatActivity {
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.setResult(0, intent);
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.setResult(0, intent);
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
