@@ -4,27 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.mywechat.data.Chat;
-
-import java.util.LinkedList;
-
 public class ChatsViewModel extends ViewModel {
 
-    private LinkedList<Chat> chats;
+    private MutableLiveData<String> mText;
 
     public ChatsViewModel() {
-
+        mText = new MutableLiveData<>();
+        mText.setValue("This is chats fragment");
     }
 
-    public void addChats(Chat chat) {
-         chats.add(chat);
-    }
-
-    public void setChats(LinkedList<Chat> chats) {
-        this.chats = chats;
-    }
-
-    public LinkedList<Chat> getChats() {
-        return chats;
+    public LiveData<String> getText() {
+        return mText;
     }
 }
