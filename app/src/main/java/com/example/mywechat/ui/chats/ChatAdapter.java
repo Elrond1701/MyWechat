@@ -18,14 +18,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     private LinkedList<Chat> data;
 
     public static class ChatViewHolder extends RecyclerView.ViewHolder {
-        ImageView Profile;
+//        ImageView Profile;
         TextView Nickname;
         TextView LastSpeak;
         TextView LastSpeakTime;
 
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
-            Profile = itemView.findViewById(R.id.item_recycle_chat_Profile);
+//            Profile = itemView.findViewById(R.id.item_recycle_chat_Profile);
             Nickname = itemView.findViewById(R.id.item_recycle_chat_Nickname);
             LastSpeak = itemView.findViewById(R.id.item_recycle_chat_LastSpeak);
             LastSpeakTime = itemView.findViewById(R.id.item_recycle_chat_LastSpeakTime);
@@ -47,7 +47,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
     @Override
     public void onBindViewHolder(@NonNull ChatViewHolder holder, int position) {
         Chat chat = data.get(position);
-        holder.Profile.setImageResource(chat.getProfile());
+//        holder.Profile.setImageResource(chat.getProfile());
         holder.Nickname.setText(chat.getNickname());
         holder.LastSpeak.setText(chat.getLastSpeak());
         holder.LastSpeakTime.setText((chat.getLastSpeakTime()));

@@ -30,15 +30,17 @@ public class ChatsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LinkedList<Chat> chats=new LinkedList<>();
+        Chat chat = new Chat("FXL",1,"Hello World!","10:00");
+        chats.add(chat);
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         chatsViewModel.setChats(chats);
     }
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class ChatsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.chats_recyclerview);
         ChatAdapter chatAdapter = new ChatAdapter(chatsViewModel.getChats());
         recyclerView.setAdapter(chatAdapter);
-//        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-//        recyclerView.setLayoutManager(linearlayoutmanager);
+        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(linearlayoutmanager);
     }
 }
