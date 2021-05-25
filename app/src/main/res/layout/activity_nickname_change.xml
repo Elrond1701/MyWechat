@@ -6,4 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.me.myprofile.change.NicknameChangeActivity">
 
+    <TextView
+        android:id="@+id/NicknameChangeActivity_TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="@string/NicknameChangeActivity_Nickname"
+        android:textSize="25sp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="25dp" />
+
+    <EditText
+        android:id="@+id/NicknameChangeActivity_EditText"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:text="@string/NicknameChangeActivity_Nickname"
+        android:textSize="25sp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toRightOf="@id/NicknameChangeActivity_TextView" />
+
+    <Button
+        android:id="@+id/NicknameChangeActivity_Done"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/NicknameChangeActivity_Done"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@id/NicknameChangeActivity_TextView"
+        android:layout_marginTop="50dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

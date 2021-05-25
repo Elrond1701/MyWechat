@@ -9,6 +9,7 @@ public class Friend {
     private String Nickname;
     private String PhoneNumber;
     private Bitmap Profile;
+    private String ProfileDir;
     private String Gender;
     private String Region;
     private String WhatsUp;
@@ -47,6 +48,12 @@ public class Friend {
     }
     public void setProfile(Bitmap Profile) {
         this.Profile = Profile;
+    }
+    public String getProfileDir() {
+        return ProfileDir;
+    }
+    public void setProfileDir(String ProfileDir) {
+        this.ProfileDir = ProfileDir;
     }
     public String getGender() {
         return Gender;

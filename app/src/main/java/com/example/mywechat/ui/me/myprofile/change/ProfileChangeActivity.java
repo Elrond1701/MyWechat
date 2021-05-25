@@ -30,10 +30,13 @@ import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ProfileChangeActivity extends AppCompatActivity {
     private ActionBar actionBar;
+
+    Intent intent;
 
     private Friend friend;
     private ImageView profile;
@@ -55,8 +58,16 @@ public class ProfileChangeActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
+        intent = getIntent();
         profile = findViewById(R.id.ProfileChangeActivity_Profile);
+        Bitmap bitmap = null;
+        File file = new File(this.getFilesDir(), intent.getStringExtra("ProfileDir"));
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            bitmap = BitmapFactory.decodeStream(fileInputStream);
+        } catch (FileNotFoundException e) {
+            Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
         profile.setImageBitmap(bitmap);
 
         album = findViewById(R.id.ProfileChangeActivity_Album);
@@ -98,6 +109,7 @@ public class ProfileChangeActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                this.setResult(0, intent);
                 this.finish(); // back button
                 return true;
         }

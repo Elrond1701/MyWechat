@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.me.MeFragment">
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/MeFragment_MyProfile"
         android:name="com.example.mywechat.ui.me.myprofile.MyprofileFragment"
         android:layout_width="match_parent"

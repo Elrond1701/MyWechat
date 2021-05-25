@@ -49,10 +49,10 @@ public class ContactActivity extends AppCompatActivity {
         profile.setImageBitmap(friend.getProfile());
 
         gender = findViewById(R.id.ContactActivity_Gender);
-        if (friend.getGender() == "male") {
+        if (friend.getGender().equals("male")) {
             gender.setImageResource(R.drawable.ic_male_blue_25dp);
         }
-        else if (friend.getGender() == "female"){
+        else if (friend.getGender().equals("female")){
             gender.setImageResource(R.drawable.ic_female_blue_25dp);
         }
 
