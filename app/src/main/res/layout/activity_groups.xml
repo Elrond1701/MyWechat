@@ -4,13 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.chats.ChatsFragment">
+    tools:context=".ui.contacts.groups.GroupsActivity">
 
-    <TextView
-        android:id="@+id/ChatsFragment_TextView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groups_recylerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="@string/ChatsFragment_Title"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent" >
+    </androidx.recyclerview.widget.RecyclerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

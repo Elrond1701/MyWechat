@@ -18,6 +18,12 @@ public class ChatsFragment extends Fragment {
 
     private ChatsViewModel chatsViewModel;
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         chatsViewModel =
