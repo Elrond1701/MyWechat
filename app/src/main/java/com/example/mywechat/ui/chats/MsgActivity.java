@@ -1,4 +1,4 @@
-package com.example.mywechat;
+package com.example.mywechat.ui.chats;
 
 import android.app.Activity;
 import android.os.Bundle;

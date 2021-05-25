@@ -5,21 +5,28 @@ import java.util.ArrayList;
 
 
 public class Discover {
-    private int avatarIcon;
-    private String nickname;
-    private String text;
-    private String publishedTime;
-    private ArrayList<Integer> images;
+//    private int Profile;
+    private String Nickname;
+    private String Text;
+    private String PublishedTime;
+    private ArrayList<Integer> Images;
 
-    public String getNickname() { return nickname; }
+    public Discover(String Nickname, int Profile, String Text, String PublishedTime) {
+        this.Nickname = Nickname;
+//        this.Profile = Profile;
+        this.Text = Text;
+        this.PublishedTime = PublishedTime;
+    }
 
-    public int getAvatarIcon() { return avatarIcon; }
+    public String getNickname() { return Nickname; }
 
-    public ArrayList<Integer> getImages() { return images; }
+//    public int getAvatarIcon() { return avatarIcon; }
 
-    public String getPublishedTime() { return publishedTime; }
+//    public ArrayList<Integer> getImages() { return images; }
 
-    public String getText() { return text; }
+    public String getPublishedTime() { return PublishedTime; }
 
-    public int getImageCount() { return images.size(); }
+    public String getText() { return Text; }
+
+//    public int getImageCount() { return images.size(); }
 }

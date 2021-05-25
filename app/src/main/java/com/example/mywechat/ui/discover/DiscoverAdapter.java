@@ -19,12 +19,16 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
 
     public static class DiscoverViewHolder extends RecyclerView.ViewHolder {
 //        ImageView Profile;
-//        TextView Nickname;
+        TextView Nickname;
+        TextView Text;
+        TextView PublishedTime;
 
         public DiscoverViewHolder(@NonNull View itemView) {
             super(itemView);
 //            Profile = itemView.findViewById(R.id.item_recycle_contact_Profile);
-//            Nickname = itemView.findViewById(R.id.item_recycle_contact_Nickname);
+            Nickname = itemView.findViewById(R.id.item_recycle_discover_Nickname);
+            Text = itemView.findViewById(R.id.item_recycle_discover_Text);
+            PublishedTime = itemView.findViewById(R.id.item_recycle_discover_Published_time);
         }
     }
 
@@ -45,6 +49,10 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
 //        Friend friend = data.get(position);
 //        holder.Profile.setImageResource(friend.getProfile());
 //        holder.Nickname.setText(friend.getNickname());
+        Discover discover = data.get(position);
+        holder.Nickname.setText(discover.getNickname());
+        holder.Text.setText(discover.getText());
+        holder.PublishedTime.setText(discover.getPublishedTime());
     }
 
     @Override

@@ -30,8 +30,10 @@ public class ChatsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LinkedList<Chat> chats=new LinkedList<>();
-        Chat chat = new Chat("FXL",1,"Hello World!","10:00");
-        chats.add(chat);
+        Chat chat1 = new Chat("FXL",1,"Hello World!","10:00");
+        Chat chat2 = new Chat("XLF",1,"So tired!","9:00");
+        chats.add(chat1);
+        chats.add(chat2);
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         chatsViewModel.setChats(chats);
     }
