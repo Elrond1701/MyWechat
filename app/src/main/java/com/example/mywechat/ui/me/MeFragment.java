@@ -1,8 +1,8 @@
 package com.example.mywechat.ui.me;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,47 +15,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.mywechat.R;
-import com.example.mywechat.ui.login.LoginActivity;
-import com.example.mywechat.ui.me.myprofile.MyprofileActivity;
+import com.example.mywechat.ui.chats.ChatsViewModel;
 
 public class MeFragment extends Fragment {
 
     private MeViewModel meViewModel;
 
-    private View myprofile;
-    private View logout;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         meViewModel =
                 new ViewModelProvider(this).get(MeViewModel.class);
-        return inflater.inflate(R.layout.fragment_me, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        myprofile = view.findViewById(R.id.MeFragment_MyProfile);
-        myprofile.setOnClickListener(new View.OnClickListener() {
+        View root = inflater.inflate(R.layout.fragment_me, container, false);
+        final TextView textView = root.findViewById(R.id.MeFragment_TextView);
+        meViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), MyprofileActivity.class);
-                startActivity(intent);
+            public void onChanged(@Nullable String s) {
+                textView.setText(s);
             }
         });
-
-        logout = view.findViewById(R.id.MeFragment_LogOut);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        return root;
     }
 
 }

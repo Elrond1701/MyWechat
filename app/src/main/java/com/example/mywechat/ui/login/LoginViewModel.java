@@ -65,22 +65,6 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        char letter1 = 'a' - 1, letter2 = 'A' - 1;
-        boolean answer = password != null && password.trim().length() > 7, temp1 = false, temp2 = false;
-        for (int i = 0; i < 9; i++) {
-            if (password.contains(Integer.toString(i))) {
-                temp1 = true;
-            }
-        }
-        for (int i = 0; i < 26; i++) {
-            letter1++;
-            letter2++;
-            if (password.contains(Character.toString(letter1))
-                    || password.contains(Character.toString(letter2))) {
-                temp2 = true;
-            }
-        }
-        answer = answer && temp1 && temp2;
-        return answer;
+        return password != null && password.trim().length() > 5;
     }
 }

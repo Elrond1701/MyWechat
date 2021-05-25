@@ -1,16 +1,13 @@
 <resources>
     <string name="App_Name">My WeChat</string>
-    <string name="server">8.140.133.34:7541</string>
-
     <!-- Strings related to LogInActivity -->
     <string name="LogInActivity_PromptPhoneNumber">Phone Number</string>
     <string name="LogInActivity_PromptPassword">Password</string>
-    <string name="LogInActivity_Action_SignIn">Sign in</string>
-    <string name="LogInActivity_Action_Register">Register</string>
+    <string name="LogInActivity_Action_SignIn">Sign in or register</string>
     <string name="LogInActivity_Action_SignIn_short">Sign in</string>
-    <string name="LogInActivity_Welcome">"Welcome to MyWechat!"</string>
+    <string name="LogInActivity_Welcome">"Welcome !"</string>
     <string name="LogInActivity_InvalidPhoneNumber">Not a valid phone number</string>
-    <string name="LogInActivity_InvalidPassword">Password must be at least 8 characters and contain at least one number and one English character</string>
+    <string name="LogInActivity_InvalidPassword">Password must be >5 characters</string>
     <string name="LogInActivity_LogInFailed">"Login failed"</string>
 
     <!-- Strings related to CheckingActivity -->
@@ -23,60 +20,15 @@
 
     <!-- Strings related to ContactsFragment -->
     <string name="ContactsFragment_Title">Contacts</string>
-    <string name="ContactsFragment_Newfriend">New Friends</string>
-    <string name="ContactsFragment_Groups">Group Chats</string>
 
     <!-- Strings related to DiscoverFragment -->
     <string name="DiscoverFragment_Title">Discover</string>
 
     <!-- Strings related to MeFragment -->
     <string name="MeFragment_Title">Me</string>
-    <string name="MeFragment_Nickname">Nickname</string>
-    <string name="MeFragment_PhoneNumber">Phone Number:</string>
-    <string name="MeFragment_LogOut">Log Out</string>
 
     <!-- Strings related to ContactActivity -->
     <string name="ContactActivity_Nickname">nickname</string>
-    <string name="ContactActivity_PhoneNumber">Phone Number:</string>
-    <string name="ContactActivity_Region">Region:</string>
-    <string name="ContactActivity_WhatsUp">What\'s Up</string>
-    <string name="ContactActivity_WhatsUpText">Empty</string>
     <string name="ContactActivity_Chat">Chat!</string>
     <string name="ContactActivity_Settings">Settings</string>
-    <string name="ContactActivity_Title">Your Contact</string>
-
-    <!-- Strings related to GroupsActivity -->
-    <string name="GroupsActivity_Title">Groups</string>
-
-    <!-- Strings related to NewfriendActivity -->
-    <string name="NewfriendActivity_Title">Add New Friend</string>
-
-    <!-- Strings related to MyprofileActivity -->
-    <string name="MyprofileActivity_Title">My Profile</string>
-    <string name="MyprofileActivity_Profile">Profile Photo</string>
-    <string name="MyprofileActivity_Nickname">Nickname</string>
-    <string name="MyprofileActivity_PhoneNumber">My WeChat ID</string>
-    <string name="MyprofileActivity_Gender">Gender</string>
-    <string name="MyprofileActivity_Region">Region</string>
-    <string name="MyprofileActivity_WhatsUp">What\'s Up</string>
-
-    <!-- Strings related to ProfileChangeActivity -->
-    <string name="ProfileChangeActivity_Title">Change Your Profile Photo</string>
-    <string name="ProfileChangeActivity_Album">Choose from Album</string>
-    <string name="ProfileChangeActivity_Camera">Take Photo</string>
-
-    <!-- Strings related to NicknameChangeActivity -->
-    <string name="NicknameChangeActivity_Title">Change Your Nickname</string>
-
-    <!-- Strings related to IDChangeActivity -->
-    <string name="IDChangeActivity_Title">Change My WeChat ID</string>
-
-    <!-- Strings related to GenderChangeActivity -->
-    <string name="GenderChangeActivity_Title">Set Gender</string>
-
-    <!-- Strings related to RegionChangeActivity -->
-    <string name="RegionChangeActivity_Title">Change Your Region</string>
-
-    <!-- Strings related to WhatsUpChangeActivity -->
-    <string name="WhatsUpChangeActivity_Title">Set What\'s up</string>
 </resources>

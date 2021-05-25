@@ -6,26 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.me.MeFragment">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/MeFragment_MyProfile"
-        android:name="com.example.mywechat.ui.me.myprofile.MyprofileFragment"
+    <TextView
+        android:id="@+id/MeFragment_TextView"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textSize="20sp"
+        android:text="@string/MeFragment_Title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/MeFragment_Line1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@id/MeFragment_MyProfile"
-        android:layout_marginTop="10dp"
-        android:background="#dfdfdf"/>
-
-    <Button
-        android:id="@+id/MeFragment_LogOut"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@id/MeFragment_Line1"
-        android:layout_marginTop="50dp"
-        android:text="@string/MeFragment_LogOut"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,115 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".ContactActivity">
 
-    <ImageView
-        android:id="@+id/ContactActivity_Profile"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="50dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="25dp"
-        android:scaleType="centerCrop"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="100dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/ContactActivity_Nickname"
+        <ImageView
+            android:id="@+id/ContactActivity_Profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher"/>
+
+        <TextView
+            android:id="@+id/ContactActivity_Nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ContactActivity_Nickname"/>
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/ContactActivity_Nickname"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="50dp"
-        app:layout_constraintLeft_toRightOf="@id/ContactActivity_Profile"
-        android:layout_marginLeft="25dp"
-        android:textSize="35sp"
-        android:gravity="center_horizontal"/>
-
-    <ImageView
-        android:id="@+id/ContactActivity_Gender"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="50dp"
-        app:layout_constraintLeft_toRightOf="@id/ContactActivity_Nickname"
-        android:layout_marginLeft="25dp" />
-
-    <TextView
-        android:id="@+id/ContactActivity_PhoneNumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ContactActivity_PhoneNumber"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_Nickname"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@id/ContactActivity_Profile"
-        android:layout_marginLeft="25dp"
-        android:textSize="15sp"
-        android:gravity="center_horizontal" />
-
-    <TextView
-        android:id="@+id/ContactActivity_Region"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ContactActivity_Region"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_PhoneNumber"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toRightOf="@id/ContactActivity_Profile"
-        android:layout_marginLeft="25dp"
-        android:textSize="15sp"
-        android:gravity="center_horizontal" />
-
-    <View
-        android:id="@+id/ContactActivity_Line1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_Profile"
-        android:layout_marginTop="25dp"
-        android:background="#dfdfdf"/>
-
-    <TextView
-        android:id="@+id/ContactActivity_WhatsUp"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:text="@string/ContactActivity_WhatsUp"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_Line1"
-        android:layout_marginTop="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginLeft="25dp"
-        android:textSize="20sp"
-        android:gravity="center_vertical"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="600dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/ContactActivity_WhatsUpText"
-        android:layout_width="400dp"
-        android:layout_height="50dp"
-        android:text="@string/ContactActivity_WhatsUpText"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_Line1"
-        android:layout_marginTop="25dp"
-        app:layout_constraintLeft_toRightOf="@id/ContactActivity_WhatsUp"
-        android:layout_marginLeft="25dp"
-        android:textSize="20sp"
-        android:gravity="center_vertical" />
-
-    <View
-        android:id="@+id/ContactActivity_Line2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_WhatsUp"
-        android:layout_marginTop="25dp"
-        android:background="#dfdfdf"/>
-
-    <Button
-        android:id="@+id/ContactActivity_Chat"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="@string/ContactActivity_Chat"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_Line1"
-        android:layout_marginTop="150dp"/>
-
-    <Button
-        android:id="@+id/ContactActivity_Settings"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="@string/ContactActivity_Settings"
-        app:layout_constraintTop_toBottomOf="@id/ContactActivity_Chat"
-        android:layout_marginTop="50dp"/>
-
+        <Button
+            android:id="@+id/ContactActivity_Chat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ContactActivity_Chat"/>
+        <Button
+            android:id="@+id/ContactActivity_Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ContactActivity_Settings"
+            android:layout_marginTop="25dp"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
