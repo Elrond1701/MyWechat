@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.MenuItem;
@@ -29,6 +30,8 @@ import com.example.mywechat.R;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ProfileChangeActivity extends AppCompatActivity {
 
@@ -65,14 +68,16 @@ public class ProfileChangeActivity extends AppCompatActivity {
 
         Button album = findViewById(R.id.ProfileChangeActivity_Album);
         album.setOnClickListener(v -> {
+
             if (ContextCompat.checkSelfPermission(ProfileChangeActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(ProfileChangeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-            } else {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(intent, PICK_PHOTO);
             }
+
+            Intent intent = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PICK_PHOTO);
         });
 
         Button camera = findViewById(R.id.ProfileChangeActivity_Camera);
@@ -95,8 +100,9 @@ public class ProfileChangeActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            intent.putExtra("ProfileDir", "UserBitmap");
             this.setResult(0, intent);
-            this.finish(); // back button
+            this.finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -106,66 +112,39 @@ public class ProfileChangeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
+            case TAKE_CAMERA:
+                break;
             case PICK_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    handleImageOnKitKat(data);
+                    Uri uri = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                    Cursor cursor = getContentResolver().query(uri,
+                            filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                    Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+
+                    new Thread(() -> {
+                        try {
+                            File file = new File(ProfileChangeActivity.this.getFilesDir(), "UserBitmap");
+                            FileOutputStream fileOutputStream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                            try {
+                                fileOutputStream.close();
+                            } catch (IOException e) {
+                                Toast.makeText(ProfileChangeActivity.this, "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        } catch (FileNotFoundException e) {
+                            Toast.makeText(ProfileChangeActivity.this, "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }).start();
+                    profile.setImageBitmap(bitmap);
                 }
-            case TAKE_CAMERA:
-                if (resultCode == RESULT_OK) {
-                    try {
-                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(image));
-                        profile.setImageBitmap(bitmap);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-
                 break;
-            default:
-                break;
-        }
-    }
-
-    @TargetApi(19)
-    private void handleImageOnKitKat(Intent data) {
-        String imagePath = null;
-        Uri uri = data.getData();
-        if (DocumentsContract.isDocumentUri(this, uri)) {
-            String docId = DocumentsContract.getDocumentId(uri);
-            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
-                String id = docId.split(":")[1];
-                String selection = MediaStore.Images.Media._ID + "=" + id;
-                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
-            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content: //downloads/public_downloads"), Long.parseLong(docId));
-                imagePath = getImagePath(contentUri, null);
-            }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-            imagePath = getImagePath(uri, null);
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            imagePath = uri.getPath();
-        }
-        displayImage(imagePath);
-    }
-
-    private String getImagePath(Uri uri, String selection) {
-        String path = null;
-        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
-            }
-            cursor.close();
-        }
-        return path;
-    }
-
-    private void displayImage(String imagePath) {
-        if (imagePath != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            profile.setImageBitmap(bitmap);
-        } else {
-            Toast.makeText(this, "获取相册图片失败", Toast.LENGTH_SHORT).show();
         }
     }
 }

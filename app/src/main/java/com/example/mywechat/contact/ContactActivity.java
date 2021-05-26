@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mywechat.ChatActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 
@@ -64,14 +65,14 @@ public class ContactActivity extends AppCompatActivity {
 
         Button messages = findViewById(R.id.ContactActivity_Messages);
         messages.setOnClickListener(v -> {
-            Intent intent1 = new Intent(ContactActivity.this, ContactActivity.class);
-            startActivity(intent1);
+            Intent newIntent = new Intent(ContactActivity.this, ChatActivity.class);
+            startActivity(newIntent);
         });
 
         Button settings = findViewById(R.id.ContactActivity_Settings);
         settings.setOnClickListener(v -> {
-            Intent intent12 = new Intent(ContactActivity.this, ContactSettingActivity.class);
-            startActivity(intent12);
+            Intent newIntent = new Intent(ContactActivity.this, ContactSettingActivity.class);
+            startActivity(newIntent);
         });
     }
 

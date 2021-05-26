@@ -8,33 +8,42 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
+import com.example.mywechat.data.User;
 import com.example.mywechat.ui.login.LoginActivity;
 import com.example.mywechat.ui.me.myprofile.MyprofileActivity;
+import com.example.mywechat.ui.me.myprofile.MyprofileFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class MeFragment extends Fragment {
 
-    private Friend friend;
+    private User user;
+
+    MyprofileFragment myprofileFragment;
 
     public static final int MYPROFILE = 101;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myprofileFragment = new MyprofileFragment();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,37 +55,42 @@ public class MeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
-        File file = new File(getContext().getFilesDir(), "UserBitmap");
+        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg2);
+        File file = new File(requireContext().getFilesDir(), "UserBitmap");
+        MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), bitmap2, "title", "description");
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
             try {
                 fileOutputStream.close();
             } catch (IOException e) {
-
+                Toast.makeText(getActivity(), "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         } catch (FileNotFoundException e) {
-
+            Toast.makeText(getActivity(), "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
-        friend = new Friend();
-        friend.setProfile(bitmap);
-        friend.setProfileDir("UserBitmap");
-        friend.setGender("male");
-        friend.setNickname("HIHI");
-        friend.setNumber(0);
-        friend.setPhoneNumber("12344");
-        friend.setRegion("北京");
-        friend.setWhatsUp("Very Good");
+        user = new User();
+        user.setProfile(bitmap);
+        user.setProfileDir("UserBitmap");
+        user.setGender("male");
+        user.setNickname("HIHI");
+        user.setPhoneNumber("12344");
+        user.setRegion("北京");
+        user.setWhatsUp("Very Good");
 
-        FrameLayout myprofile = view.findViewById(R.id.MeFragment_MyProfile);
+        FragmentContainerView myprofile = view.findViewById(R.id.MeFragment_MyProfile);
+        requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.MeFragment_MyProfile,
+                MyprofileFragment.newInstance(user.getProfileDir(), user.getNickname(), user.getGender(),
+                        user.getPhoneNumber())).commit();
+
         myprofile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MyprofileActivity.class);
-            intent.putExtra("ProfileDir", friend.getProfileDir());
-            intent.putExtra("Nickname", friend.getNickname());
-            intent.putExtra("ID", friend.getPhoneNumber());
-            intent.putExtra("Gender", friend.getGender());
-            intent.putExtra("Region", friend.getRegion());
-            intent.putExtra("WhatsUp", friend.getWhatsUp());
+            intent.putExtra("ProfileDir", user.getProfileDir());
+            intent.putExtra("Nickname", user.getNickname());
+            intent.putExtra("ID", user.getPhoneNumber());
+            intent.putExtra("Gender", user.getGender());
+            intent.putExtra("Region", user.getRegion());
+            intent.putExtra("WhatsUp", user.getWhatsUp());
             startActivityForResult(intent, MYPROFILE);
         });
 
@@ -92,13 +106,17 @@ public class MeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101) {
             if (resultCode == 0) {
-                Bitmap bitmap = BitmapFactory.decodeFile(getContext().getFilesDir().toString() + "/UserBitmap");
-                friend.setProfile(bitmap);
-                friend.setNickname(data.getStringExtra("Nickname"));
-                friend.setPhoneNumber(data.getStringExtra("ID"));
-                friend.setGender(data.getStringExtra("Gender"));
-                friend.setRegion(data.getStringExtra("Region"));
-                friend.setWhatsUp(data.getStringExtra("WhatsUp"));
+                Bitmap bitmap = BitmapFactory.decodeFile(requireContext().getFilesDir().toString() + "/UserBitmap");
+                user.setProfile(bitmap);
+                assert data != null;
+                user.setNickname(data.getStringExtra("Nickname"));
+                user.setPhoneNumber(data.getStringExtra("ID"));
+                user.setGender(data.getStringExtra("Gender"));
+                user.setRegion(data.getStringExtra("Region"));
+                user.setWhatsUp(data.getStringExtra("WhatsUp"));
+                requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.MeFragment_MyProfile,
+                        MyprofileFragment.newInstance(user.getProfileDir(), user.getNickname(),
+                                user.getPhoneNumber(), user.getGender()));
             } else {
                 Toast.makeText(getActivity(), "Myprofile Wrong set", Toast.LENGTH_LONG).show();
             }

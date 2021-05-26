@@ -132,6 +132,7 @@ public class MyprofileActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            intent.putExtra("ProfileDir", friend.getProfileDir());
             intent.putExtra("Nickname", friend.getNickname());
             intent.putExtra("ID", friend.getPhoneNumber());
             intent.putExtra("Gender", friend.getGender());
@@ -150,20 +151,25 @@ public class MyprofileActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case PROFILE:
-                switch (resultCode) {
-                    case 0:
-                        break;
-                    case 1:
-                        if (data.getByteArrayExtra("Profile") != null) {
-                            byte[] temp = data.getByteArrayExtra("Profile");
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);
-                            friend.setProfile(bitmap);
-                            profile.setImageBitmap(bitmap);
-                        }
-                    default:
+                if (resultCode == 0) {
+                    Bitmap bitmap = null;
+                    File file = null;
+                    try {
+                        assert data != null;
+                        file = new File(this.getFilesDir(), data.getStringExtra("ProfileDir"));
+                    } catch (NullPointerException e) {
+                        Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream(file);
+                        bitmap = BitmapFactory.decodeStream(fileInputStream);
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    profile.setImageBitmap(bitmap);
+                } else {
                         Toast.makeText(this, "Profile Wrong set", Toast.LENGTH_LONG).show();
-                        break;
-                }
+                    }
                 break;
             case NICKNAME:
                 switch (resultCode) {
