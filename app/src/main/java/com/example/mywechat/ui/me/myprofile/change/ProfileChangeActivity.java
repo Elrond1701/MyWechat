@@ -16,29 +16,25 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mywechat.R;
-import com.example.mywechat.data.Friend;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ProfileChangeActivity extends AppCompatActivity {
-    private ActionBar actionBar;
 
-    private Friend friend;
+    Intent intent;
+
     private ImageView profile;
-    private Button album;
-    private Button camera;
 
     private Uri image;
     public static final int TAKE_CAMERA = 101;
@@ -49,57 +45,59 @@ public class ProfileChangeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_change);
 
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
+        intent = getIntent();
         profile = findViewById(R.id.ProfileChangeActivity_Profile);
+        Bitmap bitmap = null;
+        File file = new File(this.getFilesDir(), intent.getStringExtra("ProfileDir"));
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            bitmap = BitmapFactory.decodeStream(fileInputStream);
+        } catch (FileNotFoundException e) {
+            Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
         profile.setImageBitmap(bitmap);
 
-        album = findViewById(R.id.ProfileChangeActivity_Album);
-        album.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(ProfileChangeActivity.this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ProfileChangeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/*");
-                    startActivityForResult(intent, PICK_PHOTO);
-                }
+        Button album = findViewById(R.id.ProfileChangeActivity_Album);
+        album.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(ProfileChangeActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(ProfileChangeActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, PICK_PHOTO);
             }
         });
 
-        camera = findViewById(R.id.ProfileChangeActivity_Camera);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
-                try {
-                    if (outputImage.exists()) {
-                        outputImage.delete();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+        Button camera = findViewById(R.id.ProfileChangeActivity_Camera);
+        camera.setOnClickListener(v -> {
+            File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
+            try {
+                if (outputImage.exists()) {
+                    outputImage.delete();
                 }
-                image = FileProvider.getUriForFile(ProfileChangeActivity.this, "com.feige.pickphoto.fileprovider", outputImage);
-
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, image);
-                startActivityForResult(intent, TAKE_CAMERA);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            image = FileProvider.getUriForFile(ProfileChangeActivity.this, "com.feige.pickphoto.fileprovider", outputImage);
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, image);
+            startActivityForResult(intent, TAKE_CAMERA);
         });
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                this.finish(); // back button
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            this.setResult(0, intent);
+            this.finish(); // back button
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -139,7 +137,7 @@ public class ProfileChangeActivity extends AppCompatActivity {
                 String selection = MediaStore.Images.Media._ID + "=" + id;
                 imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
             } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content: //downloads/public_downloads"), Long.valueOf(docId));
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content: //downloads/public_downloads"), Long.parseLong(docId));
                 imagePath = getImagePath(contentUri, null);
             }
         } else if ("content".equalsIgnoreCase(uri.getScheme())) {

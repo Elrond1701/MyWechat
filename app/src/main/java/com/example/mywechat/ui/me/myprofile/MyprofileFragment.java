@@ -1,46 +1,37 @@
 package com.example.mywechat.ui.me.myprofile;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mywechat.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyprofileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MyprofileFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    Intent intent;
 
-    private String mParam1;
-    private String mParam2;
+    ImageView profile;
+    ImageView gender;
+    TextView nickname;
+    TextView id;
 
     public MyprofileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyprofileFragment.
-     */
-    public static MyprofileFragment newInstance(String param1, String param2) {
+    public static MyprofileFragment newInstance() {
         MyprofileFragment fragment = new MyprofileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,10 +39,6 @@ public class MyprofileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -59,5 +46,35 @@ public class MyprofileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_myprofile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        profile = getActivity().findViewById(R.id.MyprofileFragment_Profile);
+        gender = getActivity().findViewById(R.id.MyprofileFragment_Gender);
+        nickname = getActivity().findViewById(R.id.MyprofileFragment_Nickname);
+        id = getActivity().findViewById(R.id.MyprofileFragment_PhoneNumber);
+    }
+
+    public void setProfile(Bitmap profile) {
+        this.profile.setImageBitmap(profile);
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname.setText(nickname);
+    }
+
+    public void setID(String id) {
+        this.id.setText(id);
+    }
+
+    public void setGender(String gender) {
+        if (gender.equals("male")) {
+            this.gender.setImageResource(R.drawable.ic_male_blue_25dp);
+        } else if (gender.equals("female")) {
+            this.gender.setImageResource(R.drawable.ic_female_blue_25dp);
+        }
     }
 }

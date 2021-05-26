@@ -2,6 +2,9 @@ package com.example.mywechat;
 
 import android.os.Bundle;
 
+import com.example.mywechat.data.Friend;
+import com.example.mywechat.data.Group;
+import com.example.mywechat.data.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +13,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.LinkedList;
+
 public class MainActivity extends AppCompatActivity {
+
+    private User user;
+    private LinkedList<Friend> friends;
+    private LinkedList<Group> groups;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,4 +36,27 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LinkedList<Friend> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(LinkedList<Friend> friends) {
+        this.friends = friends;
+    }
+
+    public LinkedList<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(LinkedList<Group> groups) {
+        this.groups = groups;
+    }
 }

@@ -6,4 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.me.myprofile.change.IDChangeActivity">
 
+    <TextView
+        android:id="@+id/IDChangeActivity_TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:text="@string/IDChangeActivity_ID"
+        android:textSize="25sp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="25dp" />
+
+    <EditText
+        android:id="@+id/IDChangeActivity_EditText"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:text="@string/IDChangeActivity_ID"
+        android:textSize="25sp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp"
+        app:layout_constraintLeft_toRightOf="@id/IDChangeActivity_TextView" />
+
+    <Button
+        android:id="@+id/IDChangeActivity_Done"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/IDChangeActivity_Done"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@id/IDChangeActivity_TextView"
+        android:layout_marginTop="50dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

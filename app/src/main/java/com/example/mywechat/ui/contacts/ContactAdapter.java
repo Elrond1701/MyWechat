@@ -11,17 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mywechat.ContactActivity;
-import com.example.mywechat.MainActivity;
+import com.example.mywechat.contact.ContactActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
-import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
 
 import java.util.LinkedList;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder>{
     private LinkedList<Friend> data;
-    private LinkedList<Intent> intents;
     private Context parent;
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -48,8 +45,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public ContactAdapter.ContactViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_contact, parent,false);
-        ContactViewHolder holder = new ContactViewHolder(itemView);
-        return holder;
+        return new ContactViewHolder(itemView);
     }
 
     @Override
@@ -57,12 +53,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         Friend friend = data.get(position);
         holder.Profile.setImageBitmap(friend.getProfile());
         holder.Nickname.setText(friend.getNickname());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(parent, ContactActivity.class);
-                parent.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(parent, ContactActivity.class);
+            intent.putExtra("ProfileDir", friend.getProfileDir());
+            intent.putExtra("Nickname", friend.getNickname());
+            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("Gender", friend.getGender());
+            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("WhatsUp", friend.getWhatsUp());
+            parent.startActivity(intent);
         });
     }
 

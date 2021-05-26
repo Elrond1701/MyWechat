@@ -41,9 +41,13 @@
     <string name="ContactActivity_Region">Region:</string>
     <string name="ContactActivity_WhatsUp">What\'s Up</string>
     <string name="ContactActivity_WhatsUpText">Empty</string>
-    <string name="ContactActivity_Chat">Chat!</string>
+    <string name="ContactActivity_Chat">Messages</string>
     <string name="ContactActivity_Settings">Settings</string>
     <string name="ContactActivity_Title">Your Contact</string>
+
+    <!-- Strings related to ContactSettingActivity -->
+    <string name="ContactSettingActivity_Title">Settings</string>
+    <string name="ContactSettingActivity_Delete">Delete</string>
 
     <!-- Strings related to GroupsActivity -->
     <string name="GroupsActivity_Title">Groups</string>
@@ -67,16 +71,26 @@
 
     <!-- Strings related to NicknameChangeActivity -->
     <string name="NicknameChangeActivity_Title">Change Your Nickname</string>
+    <string name="NicknameChangeActivity_Nickname">Nickname:</string>
+    <string name="NicknameChangeActivity_Done">Done</string>
 
     <!-- Strings related to IDChangeActivity -->
     <string name="IDChangeActivity_Title">Change My WeChat ID</string>
+    <string name="IDChangeActivity_ID">ID:</string>
+    <string name="IDChangeActivity_Done">Done</string>
 
     <!-- Strings related to GenderChangeActivity -->
     <string name="GenderChangeActivity_Title">Set Gender</string>
+    <string name="GenderChangeActivity_Done">Done</string>
+    <string name="GenderChangeActivity_Male">Male</string>
+    <string name="GenderChangeActivity_Female">Female</string>
+    <string name="GenderChangeActivity_Invisible">Invisible</string>
 
     <!-- Strings related to RegionChangeActivity -->
     <string name="RegionChangeActivity_Title">Change Your Region</string>
+    <string name="RegionChangeActivity_Done">Done</string>
 
     <!-- Strings related to WhatsUpChangeActivity -->
     <string name="WhatsUpChangeActivity_Title">Set What\'s up</string>
+    <string name="WhatsUpChangeActivity_Done">Done</string>
 </resources>
