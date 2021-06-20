@@ -8,7 +8,7 @@ import java.lang.String;
 public class Friend {
     private int number;
     private String nickname;
-    private String phonenumber;
+    private String id;
     private Bitmap profile;
     private String profiledir;
     private String gender;
@@ -19,7 +19,7 @@ public class Friend {
     public Friend(){
         number = -1;
         nickname = null;
-        phonenumber = null;
+        id = null;
         profile = null;
         profiledir = null;
         gender = null;
@@ -43,12 +43,12 @@ public class Friend {
         this.nickname = nickname;
     }
 
-    public String getPhoneNumber() {
-        return phonenumber;
+    public String getID() {
+        return id;
     }
 
-    public void setPhoneNumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setID(String idr) {
+        this.id = id;
     }
 
     public Bitmap getProfile() {

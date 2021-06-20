@@ -34,7 +34,7 @@ public class ContactActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
         Friend friend = new Friend();
         friend.setNickname(intent.getStringExtra("Nickname"));
-        friend.setPhoneNumber(intent.getStringExtra("ID"));
+        friend.setID(intent.getStringExtra("ID"));
         friend.setProfile(bitmap);
         friend.setGender(intent.getStringExtra("Gender"));
         friend.setRegion(intent.getStringExtra("Region"));
@@ -55,7 +55,7 @@ public class ContactActivity extends AppCompatActivity {
         nickname.setText(friend.getNickname());
 
         TextView phonenumber = findViewById(R.id.ContactActivity_PhoneNumber);
-        phonenumber.setText(friend.getPhoneNumber());
+        phonenumber.setText(friend.getID());
 
         TextView region = findViewById(R.id.ContactActivity_Region);
         region.setText(friend.getRegion());

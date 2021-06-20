@@ -71,7 +71,7 @@ public class MyprofileActivity extends AppCompatActivity {
         friend.setProfileDir(intent.getStringExtra("ProfileDir"));
         friend.setGender(intent.getStringExtra("Gender"));
         friend.setNickname(intent.getStringExtra("Nickname"));
-        friend.setPhoneNumber(intent.getStringExtra("ID"));
+        friend.setID(intent.getStringExtra("ID"));
         friend.setRegion(intent.getStringExtra("Region"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
@@ -94,11 +94,11 @@ public class MyprofileActivity extends AppCompatActivity {
         });
 
         id = findViewById(R.id.MyprofileActivity_PhoneNumber);
-        id.setText(friend.getPhoneNumber());
+        id.setText(friend.getID());
         View idLayout = findViewById(R.id.MyprofileActivity_Layout3);
         idLayout.setOnClickListener(v -> {
             Intent intent = new Intent(MyprofileActivity.this, IDChangeActivity.class);
-            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("ID", friend.getID());
             startActivityForResult(intent, ID);
         });
 
@@ -134,7 +134,7 @@ public class MyprofileActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             intent.putExtra("ProfileDir", friend.getProfileDir());
             intent.putExtra("Nickname", friend.getNickname());
-            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("ID", friend.getID());
             intent.putExtra("Gender", friend.getGender());
             intent.putExtra("Region", friend.getRegion());
             intent.putExtra("WhatsUp", friend.getWhatsUp());
@@ -189,8 +189,9 @@ public class MyprofileActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        friend.setPhoneNumber(data.getStringExtra("ID"));
-                        id.setText(friend.getPhoneNumber());
+                        assert data != null;
+                        friend.setID(data.getStringExtra("ID"));
+                        id.setText(friend.getID());
                         break;
                     default:
                         Toast.makeText(this, "ID Wrong set", Toast.LENGTH_LONG).show();

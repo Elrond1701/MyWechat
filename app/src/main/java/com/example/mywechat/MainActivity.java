@@ -1,10 +1,18 @@
 package com.example.mywechat;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.widget.Toast;
 
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Group;
 import com.example.mywechat.data.User;
+import com.example.mywechat.ui.chats.ChatsFragment;
+import com.example.mywechat.ui.contacts.ContactsFragment;
+import com.example.mywechat.ui.discover.DiscoverFragment;
+import com.example.mywechat.ui.me.MeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,13 +21,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private User user;
-    private LinkedList<Friend> friends;
-    private LinkedList<Group> groups;
+    ChatsFragment chatsFragment;
+    ContactsFragment contactsFragment;
+    DiscoverFragment discoverFragment;
+    MeFragment meFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,29 +47,5 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.MainActivity_NavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public LinkedList<Friend> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(LinkedList<Friend> friends) {
-        this.friends = friends;
-    }
-
-    public LinkedList<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(LinkedList<Group> groups) {
-        this.groups = groups;
     }
 }

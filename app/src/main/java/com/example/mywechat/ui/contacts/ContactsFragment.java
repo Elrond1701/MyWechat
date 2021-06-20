@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
@@ -91,7 +92,7 @@ public class ContactsFragment extends Fragment {
         Friend New = new Friend();
         New.setNumber(number++);
         New.setNickname("HIHI");
-        New.setPhoneNumber("12344");
+        New.setID("12344");
         New.setProfile(mybitmap);
         New.setGender("male");
         New.setRegion("Beijing");
@@ -105,8 +106,8 @@ public class ContactsFragment extends Fragment {
         String phonenumber = null;
         Bitmap profile = null;
 
-        File BitmapFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(number) + "Bitmap");
-        File XmlFile = new File(getContext().getFilesDir(), "Friend" + Integer.toString(number) + "Xml");
+        File BitmapFile = new File(requireContext().getFilesDir(), "Friend" + Integer.toString(number) + "Bitmap");
+        File XmlFile = new File(requireContext().getFilesDir(), "Friend" + Integer.toString(number) + "Xml");
 
         try {
             FileInputStream fileInputStream = new FileInputStream(BitmapFile);
@@ -154,15 +155,6 @@ public class ContactsFragment extends Fragment {
             return null;
         }
 
-        if (nickname != null && phonenumber != null && profile != null) {
-            Friend friend = new Friend();
-            friend.setNumber(number);
-            friend.setNickname(nickname);
-            friend.setPhoneNumber(phonenumber);
-            friend.setProfile(profile);
-            return friend;
-        } else {
-            return null;
-        }
+        return null;
     }
 }

@@ -40,6 +40,20 @@ public class MeFragment extends Fragment {
 
     public static final int MYPROFILE = 101;
 
+    public static MeFragment newInstance(User user) {
+        MeFragment fragment = new MeFragment();
+        Bundle args = new Bundle();
+        args.putString("Gender", user.getGender());
+        args.putString("Nickname", user.getNickname());
+        args.putString("ProfileDir", user.getProfileDir());
+        args.putString("Password", user.getPassword());
+        args.putString("ID", user.getID());
+        args.putString("Region", user.getRegion());
+        args.putString("WhatsUp", user.getWhatsUp());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +74,12 @@ public class MeFragment extends Fragment {
         MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), bitmap2, "title", "description");
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                }
+            }).start();
             try {
                 fileOutputStream.close();
             } catch (IOException e) {
@@ -74,20 +93,20 @@ public class MeFragment extends Fragment {
         user.setProfileDir("UserBitmap");
         user.setGender("male");
         user.setNickname("HIHI");
-        user.setPhoneNumber("12344");
+        user.setID("12344");
         user.setRegion("北京");
         user.setWhatsUp("Very Good");
 
         FragmentContainerView myprofile = view.findViewById(R.id.MeFragment_MyProfile);
         requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.MeFragment_MyProfile,
                 MyprofileFragment.newInstance(user.getProfileDir(), user.getNickname(), user.getGender(),
-                        user.getPhoneNumber())).commit();
+                        user.getID())).commit();
 
         myprofile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MyprofileActivity.class);
             intent.putExtra("ProfileDir", user.getProfileDir());
             intent.putExtra("Nickname", user.getNickname());
-            intent.putExtra("ID", user.getPhoneNumber());
+            intent.putExtra("ID", user.getID());
             intent.putExtra("Gender", user.getGender());
             intent.putExtra("Region", user.getRegion());
             intent.putExtra("WhatsUp", user.getWhatsUp());
@@ -110,13 +129,13 @@ public class MeFragment extends Fragment {
                 user.setProfile(bitmap);
                 assert data != null;
                 user.setNickname(data.getStringExtra("Nickname"));
-                user.setPhoneNumber(data.getStringExtra("ID"));
+                user.setID(data.getStringExtra("ID"));
                 user.setGender(data.getStringExtra("Gender"));
                 user.setRegion(data.getStringExtra("Region"));
                 user.setWhatsUp(data.getStringExtra("WhatsUp"));
-                requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.MeFragment_MyProfile,
+                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.MeFragment_MyProfile,
                         MyprofileFragment.newInstance(user.getProfileDir(), user.getNickname(),
-                                user.getPhoneNumber(), user.getGender()));
+                                user.getGender(), user.getID())).commit();
             } else {
                 Toast.makeText(getActivity(), "Myprofile Wrong set", Toast.LENGTH_LONG).show();
             }
