@@ -3,9 +3,7 @@ package com.example.mywechat.ui.me;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.IpSecManager;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,9 +40,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okhttp3.WebSocket;
-import okhttp3.WebSocketListener;
-import okio.ByteString;
 
 public class MeFragment extends Fragment {
 
@@ -51,7 +47,6 @@ public class MeFragment extends Fragment {
 
     MyprofileFragment myprofileFragment;
 
-    WebSocket webSocket;
 
     public static final int MYPROFILE = 101;
 
@@ -70,6 +65,7 @@ public class MeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
+        //File file = null;
         //new Thread(new Runnable() {
         //    @Override
         //    public void run() {
@@ -88,13 +84,77 @@ public class MeFragment extends Fragment {
         //    }
         //}).start();
         user = new User();
-        user.setProfile(bitmap);
+
+        File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
+        FileInputStream in;
+        String JsonData;
+        JSONObject user_get;
+        try {
+            in = new FileInputStream(UserJsonFile);
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            JsonData = new String(bytes);
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundERROR", e.getMessage());
+            JsonData = null;
+        } catch (IOException e) {
+            Log.d("IOERROR", e.getMessage());
+            JsonData = null;
+        }
+        if (JsonData != null) {
+            try {
+                user_get = new JSONObject(JsonData);
+            } catch (JSONException e) {
+                user_get = null;
+                Log.d("JSONERROR", e.getMessage());
+            }
+            if (user_get == null) {
+                user.setProfileDir("");
+                user.setGender("");
+                user.setNickname("");
+                user.setID("");
+                user.setBirthDate("");
+                user.setWhatsUp("");
+            } else {
+                try {
+                    String Nickname = user_get.getString("Nickname");
+                    user.setNickname(Nickname);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    user.setNickname("");
+                }
+                try {
+                    String Gender = user_get.getString("Gender");
+                    user.setGender(Gender);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    user.setGender("");
+                }
+                try {
+                    String WhatsUp = user_get.getString("WhatsUp");
+                    user.setWhatsUp(WhatsUp);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    user.setWhatsUp("");
+                }
+                try {
+                    String BirthDate = user_get.getString("BirthDate");
+                    user.setBirthDate(BirthDate);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    user.setBirthDate("");
+                }
+                try {
+                    String UserName = user_get.getString("UserName");
+                    user.setID(UserName);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    user.setID("");
+                }
+            }
+        }
         user.setProfileDir("UserBitmap");
-        user.setGender("male");
-        user.setNickname("HIHI");
-        user.setID("12344");
-        user.setBirthDate("2021/6/21");
-        user.setWhatsUp("Very Good");
+        user.setProfile(bitmap);
 
         FragmentContainerView myprofile = view.findViewById(R.id.MeFragment_MyProfile);
         requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.MeFragment_MyProfile,
@@ -117,60 +177,6 @@ public class MeFragment extends Fragment {
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
         });
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
-        Request request = new Request.Builder().url("wss://" + "8.140.133.34:7542" + "/").build();
-        webSocket = okHttpClient.newWebSocket(request, new WebSocketListener() {
-            @Override
-            public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-                super.onClosed(webSocket, code, reason);
-            }
-
-            @Override
-            public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-                super.onClosing(webSocket, code, reason);
-            }
-
-            @Override
-            public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @org.jetbrains.annotations.Nullable Response response) {
-                super.onFailure(webSocket, t, response);
-            }
-
-            @Override
-            public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-                super.onMessage(webSocket, text);
-                requireActivity().runOnUiThread(() -> Toast.makeText(requireActivity().getApplicationContext(), "onMessage:" + text, Toast.LENGTH_LONG).show());
-            }
-
-            @Override
-            public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
-                super.onMessage(webSocket, bytes);
-                requireActivity().runOnUiThread(() -> Toast.makeText(requireActivity().getApplicationContext(), "onMessage:" + bytes.toString(), Toast.LENGTH_LONG).show());
-            }
-
-            @Override
-            public void onOpen(@NotNull WebSocket webSocket, @NotNull Response response) {
-                super.onOpen(webSocket, response);
-                requireActivity().runOnUiThread(() -> {
-                    try {
-                        Toast.makeText(requireActivity().getApplicationContext(), "onOpen:" + Objects.requireNonNull(response.body()).string(), Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        Toast.makeText(requireActivity().getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("bizType", "USER_LOGIN");
-            jsonObject.put("username", user.getID());
-            jsonObject.put("password", user.getPassword());
-            Log.d("Response:", jsonObject.toString());
-        } catch (JSONException e) {
-            Toast.makeText(requireActivity().getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-        webSocket.send(jsonObject.toString());
     }
 
     @Override
