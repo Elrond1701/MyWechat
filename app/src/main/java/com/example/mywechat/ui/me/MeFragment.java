@@ -4,23 +4,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.mywechat.R;
-import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.User;
 import com.example.mywechat.ui.login.LoginActivity;
 import com.example.mywechat.ui.me.myprofile.MyprofileActivity;
@@ -30,7 +26,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 
 public class MeFragment extends Fragment {
 
@@ -39,20 +34,6 @@ public class MeFragment extends Fragment {
     MyprofileFragment myprofileFragment;
 
     public static final int MYPROFILE = 101;
-
-    public static MeFragment newInstance(User user) {
-        MeFragment fragment = new MeFragment();
-        Bundle args = new Bundle();
-        args.putString("Gender", user.getGender());
-        args.putString("Nickname", user.getNickname());
-        args.putString("ProfileDir", user.getProfileDir());
-        args.putString("Password", user.getPassword());
-        args.putString("ID", user.getID());
-        args.putString("Region", user.getRegion());
-        args.putString("WhatsUp", user.getWhatsUp());
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,12 +55,7 @@ public class MeFragment extends Fragment {
         MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), bitmap2, "title", "description");
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                }
-            }).start();
+            new Thread(() -> bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)).start();
             try {
                 fileOutputStream.close();
             } catch (IOException e) {

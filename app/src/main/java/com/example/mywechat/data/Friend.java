@@ -1,9 +1,6 @@
 package com.example.mywechat.data;
 
 import android.graphics.Bitmap;
-import android.provider.ContactsContract;
-
-import java.lang.String;
 
 public class Friend {
     private int number;
@@ -47,7 +44,7 @@ public class Friend {
         return id;
     }
 
-    public void setID(String idr) {
+    public void setID(String id) {
         this.id = id;
     }
 

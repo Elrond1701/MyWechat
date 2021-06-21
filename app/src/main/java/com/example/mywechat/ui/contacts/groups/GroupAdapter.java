@@ -18,7 +18,7 @@ import com.example.mywechat.data.Group;
 import java.util.LinkedList;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private LinkedList<Group> data;
+    private final LinkedList<Group> data;
     private Context parent;
 
     public static class GroupViewHolder extends RecyclerView.ViewHolder {

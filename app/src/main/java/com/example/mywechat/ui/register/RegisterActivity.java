@@ -2,6 +2,7 @@ package com.example.mywechat.ui.register;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,8 +14,11 @@ import com.example.mywechat.MainActivity;
 import com.example.mywechat.R;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -63,18 +67,24 @@ public class RegisterActivity extends AppCompatActivity {
                     runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());
                 }
                 @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) {
-                    if (response.isSuccessful()) {
-                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "VerifyCode has been sent.", Toast.LENGTH_LONG).show());
-                    } else {
-                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Cannot send VerifyCode", Toast.LENGTH_LONG).show());
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseData = Objects.requireNonNull(response.body()).string();
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        if (jsonObject.getBoolean("success")) {
+                            runOnUiThread(() -> Toast.makeText(getApplicationContext(), "VerifyCode has been sent.", Toast.LENGTH_LONG).show());
+                        } else {
+                            runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Cannot send VerifyCode", Toast.LENGTH_LONG).show());
+                        }
+                    } catch (JSONException e) {
+                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
                     }
                 }
             });
         });
 
         registerButton.setOnClickListener(v -> {
-            RequestBody requestBody = new FormBody.Builder().add("username", usernameEditText.getText().toString())
+            RequestBody requestBody = new FormBody.Builder().add("uname", usernameEditText.getText().toString())
                                                             .add("password", passwordEditText.getText().toString())
                                                             .add("email", emailEditText.getText().toString())
                                                             .add("verifyCode", verifycodeEditText.getText().toString())
@@ -90,15 +100,31 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) {
-                    if (response.isSuccessful()) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(getApplicationContext(), "Successfully Register!", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        });
-                    } else {
-                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Cannot Register!", Toast.LENGTH_LONG).show());
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String responseData = Objects.requireNonNull(response.body()).string();
+                    Log.d("Response", responseData);
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        if (jsonObject.getBoolean("success")) {
+                            runOnUiThread(() -> {
+                                Toast.makeText(getApplicationContext(), "Register and Login!", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                                intent.putExtra("Username", usernameEditText.getText().toString());
+                                intent.putExtra("Password", passwordEditText.getText().toString());
+                                intent.putExtra("Nickname", nicknameEditText.getText().toString());
+                                startActivity(intent);
+                            });
+                        } else {
+                            runOnUiThread(() -> {
+                                try {
+                                    Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
+                                } catch (JSONException e) {
+                                    Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    } catch (JSONException e) {
+                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
                     }
                 }
             });
