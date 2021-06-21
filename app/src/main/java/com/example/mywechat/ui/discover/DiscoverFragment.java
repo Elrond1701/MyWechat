@@ -1,9 +1,13 @@
 package com.example.mywechat.ui.discover;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,6 +28,8 @@ import java.util.LinkedList;
 public class DiscoverFragment extends Fragment {
 
 //    private ChatsViewModel discoViewModel;
+    ImageView discover_type;
+    TextView discover_video;
     private DiscoverViewModel discoViewModel;
     private RecyclerView recyclerView;
 
@@ -46,7 +52,29 @@ public class DiscoverFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
+        discover_type = view.findViewById(R.id.discover_type_choose);
+        discover_type.setOnClickListener(v -> {
+//            Intent intent = new Intent(getActivity(),DiscoverReleaseActivity.class);
+//            getActivity().startActivity(intent);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("选择动态发布类型");
+            builder.setSingleChoiceItems(new String[]{"图文动态", "视频动态"}, 0,
+                    (dialog, which) -> {
+                        switch (which) {
+                            case 0: {
+                                Intent intent = new Intent(getActivity(), DiscoverReleaseActivity.class);
+                                getActivity().startActivity(intent);
+
+                            }
+                            case 1: {
+
+                            }
+                        }
+                        dialog.dismiss();
+                        });
+            builder.show();
+        });
+//        discover_video = view.findViewById(R.id.discover_type_video);
         recyclerView = view.findViewById(R.id.discover_recyclerview);
         DiscoverAdapter discoverAdapter = new DiscoverAdapter(discoViewModel.getDiscovers());
         recyclerView.setAdapter(discoverAdapter);

@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.discover.DiscoverFragment">
+    tools:context=".ui.discover.DiscoverFragment"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="动态"
+            android:textSize="13dp" />
+
+        <ImageView
+            android:id="@+id/discover_type_choose"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:src="@mipmap/ic_choose"/>
+
+<!--        <TextView-->
+<!--            android:id="@+id/discover_type_video"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="视频动态"-->
+<!--            android:textSize="13dp"-->
+<!--            tools:ignore="MissingConstraints" />-->
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/discover_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

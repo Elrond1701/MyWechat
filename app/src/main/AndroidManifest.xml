@@ -15,6 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWechat">
+        <activity android:name=".ui.chats.MsgActivity"
+            android:label="Chatting"/>
+        <activity android:name=".ui.discover.DiscoverReleaseActivity"
+            android:label="Release Your Discover"/>
         <activity
             android:name=".contact.ContactSettingActivity"
             android:label="@string/ContactSettingActivity_Title"/>

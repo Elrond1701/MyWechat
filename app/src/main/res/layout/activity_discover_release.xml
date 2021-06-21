@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/discover_release_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textSize="14dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+
+        <Button
+            android:id="@+id/discover_release_send"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="发表"
+            android:textSize="14dp"
+            android:background="#669966"
+            android:textColor="@color/white"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/discover_release_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="这一刻的想法……"
+        android:textSize="13sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@null"/>
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/publish_photos"-->
+<!--        android:paddingTop="15dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        tools:ignore="MissingConstraints" />-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <ImageView
+            android:id="@+id/discover_img_chosen1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/discover_img_chosen2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/discover_img_chosen3"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/discover_img_add"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_add"/>
+
+    </LinearLayout>
+
+</LinearLayout>

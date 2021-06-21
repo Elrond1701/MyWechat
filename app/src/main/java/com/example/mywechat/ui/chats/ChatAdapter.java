@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.ChatActivity;
 import com.example.mywechat.R;
+import com.example.mywechat.contact.ContactActivity;
 import com.example.mywechat.data.Chat;
 
 import java.util.LinkedList;
@@ -58,14 +59,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         holder.Nickname.setText(chat.getNickname());
         holder.LastSpeak.setText(chat.getLastSpeak());
         holder.LastSpeakTime.setText((chat.getLastSpeakTime()));
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(parent, MsgActivity.class);
-                parent.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(parent, MsgActivity.class);
+            // Add more information to intent
+            intent.putExtra("Nickname",chat.getNickname());
+            parent.startActivity(intent);
         });
-
     }
 
     @Override

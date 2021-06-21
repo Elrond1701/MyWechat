@@ -11,12 +11,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.R;
+import com.example.mywechat.data.Chat;
+
+import java.util.LinkedList;
 
 public class ChatsFragment extends Fragment {
 
     private ChatsViewModel chatsViewModel;
+    private RecyclerView recyclerView;
 
 
     @Override
@@ -33,8 +39,20 @@ public class ChatsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        chatsViewModel =
-                new ViewModelProvider(this).get(ChatsViewModel.class);
+//        chatsViewModel =
+//                new ViewModelProvider(this).get(ChatsViewModel.class);
         return inflater.inflate(R.layout.fragment_chats, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+        recyclerView = view.findViewById(R.id.chats_recyclerview);
+        ChatAdapter chatAdapter = new ChatAdapter(chatsViewModel.getChats());
+        chatAdapter.setParent(getActivity());
+//        System.out.println();
+        recyclerView.setAdapter(chatAdapter);
+        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(linearlayoutmanager);
     }
 }
