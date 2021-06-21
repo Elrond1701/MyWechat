@@ -25,3 +25,9 @@ java文件中Fragment和Activity的命名均采用"特征"+"Fragment/Activity"�
 ## 注意
 
 目前登陆界面可以随意登录，但是必须在密码中输入大于5的字符串，因此接下来开发时，可以修改manifest中的intent-filter的位置以避免浪费时间。
+
+
+
+## 文件存储
+
+目前我的文件均使用xml格式进行存储。

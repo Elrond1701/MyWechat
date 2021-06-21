@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -20,8 +19,11 @@
         <activity android:name=".ui.discover.DiscoverReleaseActivity"
             android:label="Release Your Discover"/>
         <activity
+            android:name=".ui.register.RegisterActivity"
+            android:label="@string/ReigsterActivity_Title" />
+        <activity
             android:name=".contact.ContactSettingActivity"
-            android:label="@string/ContactSettingActivity_Title"/>
+            android:label="@string/ContactSettingActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.WhatsUpChangeActivity"
             android:label="@string/WhatsUpChangeActivity_Title" />
@@ -53,12 +55,20 @@
             android:name=".contact.ContactActivity"
             android:label="@string/ContactActivity_Title" />
         <activity
+            android:name=".ChatActivity"
+            android:label="" />
+        <activity
+            android:name=".DiscoverActivity"
+            android:label="" />
+        <activity
+            android:name=".MsgActivity"
+            android:label="" />
+        <activity
             android:name=".MainActivity"
-            android:label="@string/MainActivity_Title">
-        </activity>
+            android:label="@string/MainActivity_Title" />
         <activity
             android:name=".ui.login.LoginActivity"
-            android:label="@string/App_Name" >
+            android:label="@string/App_Name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -19,14 +19,17 @@
             android:text="@string/MyprofileActivity_Profile"
             android:textSize="25sp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="25dp"/>
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
 
         <ImageView
             android:id="@+id/MyprofileActivity_Profile"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="100dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:layout_marginStart="100dp"
+            android:contentDescription="TODO" />
     </LinearLayout>
 
     <View
@@ -50,7 +53,8 @@
             android:text="@string/MyprofileActivity_Nickname"
             android:textSize="25sp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="25dp"/>
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
 
         <TextView
             android:id="@+id/MyprofileActivity_Nickname"
@@ -58,7 +62,8 @@
             android:layout_height="80dp"
             android:textSize="25sp"
             android:gravity="center_vertical"
-            android:layout_marginLeft="130dp" />
+            android:layout_marginLeft="130dp"
+            android:layout_marginStart="130dp" />
 
     </LinearLayout>
 

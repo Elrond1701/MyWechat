@@ -1,18 +1,18 @@
 package com.example.mywechat.contact;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.mywechat.ChatActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 
@@ -33,10 +33,10 @@ public class ContactActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
         Friend friend = new Friend();
         friend.setNickname(intent.getStringExtra("Nickname"));
-        friend.setPhoneNumber(intent.getStringExtra("ID"));
+        friend.setID(intent.getStringExtra("ID"));
         friend.setProfile(bitmap);
         friend.setGender(intent.getStringExtra("Gender"));
-        friend.setRegion(intent.getStringExtra("Region"));
+        friend.setBirthDate(intent.getStringExtra("BirthDate"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
         ImageView profile = findViewById(R.id.ContactActivity_Profile);
@@ -54,24 +54,24 @@ public class ContactActivity extends AppCompatActivity {
         nickname.setText(friend.getNickname());
 
         TextView phonenumber = findViewById(R.id.ContactActivity_PhoneNumber);
-        phonenumber.setText(friend.getPhoneNumber());
+        phonenumber.setText(friend.getID());
 
         TextView region = findViewById(R.id.ContactActivity_Region);
-        region.setText(friend.getRegion());
+        region.setText(friend.getBirthDate());
 
         TextView whatsUp = findViewById(R.id.ContactActivity_WhatsUpText);
         whatsUp.setText(friend.getWhatsUp());
 
         Button messages = findViewById(R.id.ContactActivity_Messages);
         messages.setOnClickListener(v -> {
-            Intent intent1 = new Intent(ContactActivity.this, ContactActivity.class);
-            startActivity(intent1);
+            Intent newIntent = new Intent(ContactActivity.this, ChatActivity.class);
+            startActivity(newIntent);
         });
 
         Button settings = findViewById(R.id.ContactActivity_Settings);
         settings.setOnClickListener(v -> {
-            Intent intent12 = new Intent(ContactActivity.this, ContactSettingActivity.class);
-            startActivity(intent12);
+            Intent newIntent = new Intent(ContactActivity.this, ContactSettingActivity.class);
+            startActivity(newIntent);
         });
     }
 

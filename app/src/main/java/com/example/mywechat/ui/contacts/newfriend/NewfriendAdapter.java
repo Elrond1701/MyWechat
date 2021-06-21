@@ -1,4 +1,4 @@
-package com.example.mywechat.ui.contacts.groups;
+package com.example.mywechat.ui.contacts.newfriend;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,26 +13,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.contact.ContactActivity;
 import com.example.mywechat.R;
+import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Group;
 
 import java.util.LinkedList;
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private final LinkedList<Group> data;
+public class NewfriendAdapter extends RecyclerView.Adapter<com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder> {
+    private final LinkedList<Friend> data;
     private Context parent;
 
-    public static class GroupViewHolder extends RecyclerView.ViewHolder {
+    public static class NewfriendViewHolder extends RecyclerView.ViewHolder {
         ImageView Profile;
         TextView Name;
 
-        public GroupViewHolder(@NonNull View itemView) {
+        public NewfriendViewHolder(@NonNull View itemView) {
             super(itemView);
             Profile = itemView.findViewById(R.id.item_recycle_group_Profile);
             Name = itemView.findViewById(R.id.item_recycle_group_Name);
         }
     }
 
-    public GroupAdapter(LinkedList<Group> data) {
+    public NewfriendAdapter(LinkedList<Friend> data) {
         this.data = data;
     }
 
@@ -42,16 +43,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     @NonNull
     @Override
-    public GroupAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_group, parent,false);
-        return new GroupViewHolder(itemView);
+        return new com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupAdapter.GroupViewHolder holder, int position) {
-        Group group = data.get(position);
-        holder.Profile.setImageBitmap(group.getProfile());
-        holder.Name.setText(group.getName());
+    public void onBindViewHolder(@NonNull com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder holder, int position) {
+        Friend friend = data.get(position);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(parent, ContactActivity.class);
             parent.startActivity(intent);
@@ -63,3 +62,4 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         return data.size();
     }
 }
+

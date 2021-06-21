@@ -1,29 +1,26 @@
 package com.example.mywechat.data;
 
 import android.graphics.Bitmap;
-import android.provider.ContactsContract;
-
-import java.lang.String;
 
 public class Friend {
     private int number;
     private String nickname;
-    private String phonenumber;
+    private String id;
     private Bitmap profile;
     private String profiledir;
     private String gender;
-    private String region;
+    private String birthdate;
     private String whatsup;
 
 
     public Friend(){
         number = -1;
         nickname = null;
-        phonenumber = null;
+        id = null;
         profile = null;
         profiledir = null;
         gender = null;
-        region = null;
+        birthdate = null;
         whatsup = null;
     }
 
@@ -43,12 +40,12 @@ public class Friend {
         this.nickname = nickname;
     }
 
-    public String getPhoneNumber() {
-        return phonenumber;
+    public String getID() {
+        return id;
     }
 
-    public void setPhoneNumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setID(String id) {
+        this.id = id;
     }
 
     public Bitmap getProfile() {
@@ -75,12 +72,12 @@ public class Friend {
         this.gender = gender;
     }
 
-    public String getRegion() {
-        return region;
+    public String getBirthDate() {
+        return birthdate;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setBirthDate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getWhatsUp() {

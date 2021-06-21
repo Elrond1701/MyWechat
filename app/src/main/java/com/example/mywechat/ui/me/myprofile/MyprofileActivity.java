@@ -71,8 +71,8 @@ public class MyprofileActivity extends AppCompatActivity {
         friend.setProfileDir(intent.getStringExtra("ProfileDir"));
         friend.setGender(intent.getStringExtra("Gender"));
         friend.setNickname(intent.getStringExtra("Nickname"));
-        friend.setPhoneNumber(intent.getStringExtra("ID"));
-        friend.setRegion(intent.getStringExtra("Region"));
+        friend.setID(intent.getStringExtra("ID"));
+        friend.setBirthDate(intent.getStringExtra("Region"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
         profile = findViewById(R.id.MyprofileActivity_Profile);
@@ -94,11 +94,11 @@ public class MyprofileActivity extends AppCompatActivity {
         });
 
         id = findViewById(R.id.MyprofileActivity_PhoneNumber);
-        id.setText(friend.getPhoneNumber());
+        id.setText(friend.getID());
         View idLayout = findViewById(R.id.MyprofileActivity_Layout3);
         idLayout.setOnClickListener(v -> {
             Intent intent = new Intent(MyprofileActivity.this, IDChangeActivity.class);
-            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("ID", friend.getID());
             startActivityForResult(intent, ID);
         });
 
@@ -112,11 +112,11 @@ public class MyprofileActivity extends AppCompatActivity {
         });
 
         region = findViewById(R.id.MyprofileActivity_Region);
-        region.setText(friend.getRegion());
+        region.setText(friend.getBirthDate());
         View regionLayout = findViewById(R.id.MyprofileActivity_Layout5);
         regionLayout.setOnClickListener(v -> {
             Intent intent = new Intent(MyprofileActivity.this, RegionChangeActivity.class);
-            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("Region", friend.getBirthDate());
             startActivityForResult(intent, REGION);
         });
 
@@ -132,10 +132,11 @@ public class MyprofileActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            intent.putExtra("ProfileDir", friend.getProfileDir());
             intent.putExtra("Nickname", friend.getNickname());
-            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("ID", friend.getID());
             intent.putExtra("Gender", friend.getGender());
-            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("BirthDate", friend.getBirthDate());
             intent.putExtra("WhatsUp", friend.getWhatsUp());
             this.setResult(0, intent);
             this.finish(); // back button
@@ -150,20 +151,25 @@ public class MyprofileActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case PROFILE:
-                switch (resultCode) {
-                    case 0:
-                        break;
-                    case 1:
-                        if (data.getByteArrayExtra("Profile") != null) {
-                            byte[] temp = data.getByteArrayExtra("Profile");
-                            Bitmap bitmap = BitmapFactory.decodeByteArray(temp, 0, temp.length);
-                            friend.setProfile(bitmap);
-                            profile.setImageBitmap(bitmap);
-                        }
-                    default:
+                if (resultCode == 0) {
+                    Bitmap bitmap = null;
+                    File file = null;
+                    try {
+                        assert data != null;
+                        file = new File(this.getFilesDir(), data.getStringExtra("ProfileDir"));
+                    } catch (NullPointerException e) {
+                        Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    try {
+                        FileInputStream fileInputStream = new FileInputStream(file);
+                        bitmap = BitmapFactory.decodeStream(fileInputStream);
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                    profile.setImageBitmap(bitmap);
+                } else {
                         Toast.makeText(this, "Profile Wrong set", Toast.LENGTH_LONG).show();
-                        break;
-                }
+                    }
                 break;
             case NICKNAME:
                 switch (resultCode) {
@@ -183,8 +189,9 @@ public class MyprofileActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        friend.setPhoneNumber(data.getStringExtra("ID"));
-                        id.setText(friend.getPhoneNumber());
+                        assert data != null;
+                        friend.setID(data.getStringExtra("ID"));
+                        id.setText(friend.getID());
                         break;
                     default:
                         Toast.makeText(this, "ID Wrong set", Toast.LENGTH_LONG).show();
@@ -209,8 +216,8 @@ public class MyprofileActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        friend.setRegion(data.getStringExtra("Region"));
-                        region.setText(friend.getRegion());
+                        friend.setBirthDate(data.getStringExtra("BirthDate"));
+                        region.setText(friend.getBirthDate());
                         break;
                     default:
                         Toast.makeText(this, "Region Wrong set", Toast.LENGTH_LONG).show();

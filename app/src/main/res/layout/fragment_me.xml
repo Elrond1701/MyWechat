@@ -8,9 +8,8 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/MeFragment_MyProfile"
-        android:name="com.example.mywechat.ui.me.myprofile.MyprofileFragment"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View

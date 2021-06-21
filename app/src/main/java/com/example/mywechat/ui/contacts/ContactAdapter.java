@@ -57,9 +57,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             Intent intent = new Intent(parent, ContactActivity.class);
             intent.putExtra("ProfileDir", friend.getProfileDir());
             intent.putExtra("Nickname", friend.getNickname());
-            intent.putExtra("ID", friend.getPhoneNumber());
+            intent.putExtra("ID", friend.getID());
             intent.putExtra("Gender", friend.getGender());
-            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("Region", friend.getBirthDate());
             intent.putExtra("WhatsUp", friend.getWhatsUp());
             parent.startActivity(intent);
         });

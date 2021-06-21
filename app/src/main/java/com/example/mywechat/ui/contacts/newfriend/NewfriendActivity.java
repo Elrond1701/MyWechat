@@ -1,33 +1,30 @@
 package com.example.mywechat.ui.contacts.newfriend;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.MenuItem;
-import android.widget.EditText;
-
 import com.example.mywechat.R;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import static android.content.ContentValues.TAG;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class NewfriendActivity extends AppCompatActivity {
-    public static final int SUCCESS = 1;
-    public static final int NETWORK_ERROR = 2;
-    public static final int SERVER_ERROR = 3;
 
     private EditText editText;
 
@@ -55,51 +52,39 @@ public class NewfriendActivity extends AppCompatActivity {
     }
 
     public void searchFriend(android.view.View View) {
-        String phonenumber = editText.toString();
-        new Thread(() -> {
-            URL url;
-            try {
-                String string = "http://" + getString(R.string.server) + "/user/get?username=" + phonenumber;
-                url = new URL(string);
-            } catch (MalformedURLException e) {
-                Log.d(TAG, "Malformed URL err:" + e.getMessage());
-                return;
-            }
-            try {
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setConnectTimeout(10000);
-                int code = connection.getResponseCode();
-                if (code == 200) {
-                    InputStream inputStream = connection.getInputStream();
-                    Message msg = new Message();
-                    msg.what = SUCCESS;
-                    handler.sendEmptyMessage(SUCCESS);
+        String Username = editText.toString();
+        RequestBody requestBody = new FormBody.Builder().add("uname", Username).build();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user").post(requestBody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
 
-                    inputStream.close();
-                } else {
-                    handler.sendEmptyMessage(SERVER_ERROR);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = response.body().string();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    if (jsonObject.getBoolean("success")) {
+
+                    } else {
+                        runOnUiThread(() -> {
+                            try {
+                                Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
                 }
-            } catch (IOException e) {
-                Log.d(TAG, "HTTP IO err:" + e.getMessage());
-                handler.sendEmptyMessage(NETWORK_ERROR);
             }
-        }).start();
+        });
     }
-
-    private final static Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == SUCCESS) {
-
-            } else if (msg.what == NETWORK_ERROR) {
-
-            } else if (msg.what == SERVER_ERROR) {
-
-            } else {
-                throw new RuntimeException("Unkonown Wrong");
-            }
-        }
-    };
 
 }
