@@ -3,12 +3,14 @@ package com.example.mywechat.ui.me.myprofile;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +73,7 @@ public class MyprofileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         profile = getActivity().findViewById(R.id.MyprofileFragment_Profile);
-        Bitmap bitmap = null;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
         File file = new File(getContext().getFilesDir(), ProfileDir);
         try {
             FileInputStream fileInputStream = new FileInputStream(file);

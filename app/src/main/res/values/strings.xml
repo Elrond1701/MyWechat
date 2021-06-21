@@ -64,6 +64,7 @@
 
     <!-- Strings related to NewfriendActivity -->
     <string name="NewfriendActivity_Title">Add New Friend</string>
+    <string name="NewfriendActivity_Button">SEARCH FRIEND</string>
 
     <!-- Strings related to MyprofileActivity -->
     <string name="MyprofileActivity_Title">My Profile</string>

@@ -69,21 +69,24 @@ public class MeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
-        Bitmap bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg2);
-        File file = new File(requireContext().getFilesDir(), "UserBitmap");
-        MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), bitmap2, "title", "description");
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            new Thread(() -> bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)).start();
-            try {
-                fileOutputStream.close();
-            } catch (IOException e) {
-                Toast.makeText(getActivity(), "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        } catch (FileNotFoundException e) {
-            Toast.makeText(getActivity(), "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
+        //new Thread(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        File file = new File(requireContext().getFilesDir(), "UserBitmap");
+        //        try {
+        //            FileOutputStream fileOutputStream = new FileOutputStream(file);
+        //            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+        //            try {
+        //                fileOutputStream.close();
+        //            } catch (IOException e) {
+        //                Toast.makeText(getActivity(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+        //            }
+        //        } catch (FileNotFoundException e) {
+        //            Toast.makeText(getActivity(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+        //        }
+        //    }
+        //}).start();
         user = new User();
         user.setProfile(bitmap);
         user.setProfileDir("UserBitmap");
