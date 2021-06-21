@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="10dp">
 
@@ -11,47 +11,44 @@
         android:id="@+id/chat_msg_layout_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        tools:ignore="MissingConstraints">
+        android:orientation="horizontal"
+        android:layout_gravity="left">
 
         <ImageView
             android:id="@+id/chat_msg_profile_left"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_weight="0"/>
+            android:src="@drawable/avatar1"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/chat_msg_text_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textSize="20sp"
-            android:layout_marginRight="10dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:textColor="#fff"
+            android:layout_marginLeft="10dp"
+            android:textSize="20sp"
             android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/chat_msg_voice_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/chat_msg_photo_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
-<!--        //视频-->
-<!--        -->
-<!--        <ImageView-->
-<!--            android:id="@+id/chat_msg_voice_left"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:visibility="gone"/>-->
+        <!--        //视频-->
+        <!--        -->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/chat_msg_voice_left"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:visibility="gone"/>-->
 
     </LinearLayout>
 
@@ -59,40 +56,43 @@
         android:id="@+id/chat_msg_layout_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        tools:ignore="MissingConstraints">
+        android:layout_gravity="right"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/chat_msg_text_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
             android:textSize="20sp"
-            android:layout_marginLeft="10dp"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:visibility="gone"/>
+            android:layout_marginRight="10dp"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/chat_msg_voice_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/chat_msg_photo_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/chat_msg_profile_right"
             android:layout_width="40dp"
-            android:layout_height="40dp"/>
+            android:layout_height="40dp"
+            android:src="@drawable/avatar1"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -29,10 +29,11 @@ public class ChatsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LinkedList<Chat> chats=new LinkedList<>();
-        Chat chat1 = new Chat("FXL",1,"Hello World!","10:00");
-        Chat chat2 = new Chat("XLF",1,"So tired!","9:00");
-        chats.add(chat1);
-        chats.add(chat2);
+//        Chat chat1 = new Chat("FXL",1,"Hello World!","10:00");
+//        Chat chat2 = new Chat("XLF",1,"So tired!","9:00");
+//        chats.add(chat1);
+//        chats.add(chat2);
+
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         chatsViewModel.setChats(chats);
     }
@@ -50,7 +51,6 @@ public class ChatsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.chats_recyclerview);
         ChatAdapter chatAdapter = new ChatAdapter(chatsViewModel.getChats());
         chatAdapter.setParent(getActivity());
-//        System.out.println();
         recyclerView.setAdapter(chatAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);
