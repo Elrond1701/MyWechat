@@ -2,6 +2,7 @@ package com.example.mywechat.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -17,11 +18,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Cookie;
 import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -57,18 +62,58 @@ public class LoginActivity extends AppCompatActivity {
                     String responseData = Objects.requireNonNull(response.body()).string();
                     try {
                         JSONObject jsonObject= new JSONObject(responseData);
+                        Log.d("Login", responseData);
                         if (jsonObject.getBoolean("success")) {
+                            Headers headers = response.headers();
+                            HttpUrl loginUrl = request.url();
+                            List<Cookie> cookies = Cookie.parseAll(loginUrl, headers);
+                            StringBuilder cookieStr = new StringBuilder();
+                            for (int i = 0; i < cookies.size(); i++) {
+                                Cookie cookie = cookies.get(i);
+                                cookieStr.append(cookie.name()).append("=").append(cookie.value()).append(";");
+                            }
+                            String result = cookieStr.toString();
                             runOnUiThread(() -> {
                                 Toast.makeText(getApplicationContext(), "Login!", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("Username", usernameEditText.getText().toString());
-                                intent.putExtra("Password", passwordEditText.getText().toString());
+
                                 try {
-                                    intent.putExtra("Nickname", jsonObject.getString("nickname"));
+                                    String Nickname = jsonObject.getString("nickname");
+                                    intent.putExtra("Nickname", Nickname);
                                 } catch (JSONException e) {
+                                    Log.d("LoginActivity ERROR", e.getMessage());
                                     intent.putExtra("Nickname", "");
-                                    Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
+                                try {
+                                    String Gender = jsonObject.getString("sex");
+                                    intent.putExtra("Gender", Gender);
+                                } catch (JSONException e) {
+                                    Log.d("LoginActivity ERROR", e.getMessage());
+                                    intent.putExtra("Gender", "");
+                                }
+                                try {
+                                    String WhatsUp = jsonObject.getString("sign");
+                                    intent.putExtra("WhatsUp", WhatsUp);
+                                } catch (JSONException e) {
+                                    Log.d("LoginActivity ERROR", e.getMessage());
+                                    intent.putExtra("WhatsUp", "");
+                                }
+                                try {
+                                    String BirthDate = jsonObject.getString("birthdate");
+                                    intent.putExtra("BirthDate", BirthDate);
+                                } catch (JSONException e) {
+                                    Log.d("LoginActivity ERROR", e.getMessage());
+                                    intent.putExtra("BirthDate", "");
+                                }
+                                try {
+                                    String UserName = jsonObject.getString("username");
+                                    intent.putExtra("UserName", UserName);
+                                } catch (JSONException e) {
+                                    Log.d("LoginActivity ERROR", e.getMessage());
+                                    intent.putExtra("UserName", "");
+                                }
+                                intent.putExtra("Password", passwordEditText.getText().toString());
+                                intent.putExtra("COOKIE", result);
                                 startActivity(intent);
                             });
                         } else {
@@ -76,12 +121,12 @@ public class LoginActivity extends AppCompatActivity {
                                 try {
                                     Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
                                 } catch (JSONException e) {
-                                    Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Log.d("LoginActivity ERROR", e.getMessage());
                                 }
                             });
                         }
                     } catch (JSONException e) {
-                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+                        Log.d("LoginActivity ERROR", e.getMessage());
                     }
 
                 }

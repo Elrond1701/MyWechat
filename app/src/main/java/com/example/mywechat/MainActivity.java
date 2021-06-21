@@ -1,6 +1,8 @@
 package com.example.mywechat;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,7 +25,11 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Objects;
 
@@ -65,9 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
         intent = getIntent();
         User user = new User();
-        user.setID(intent.getStringExtra("Username"));
+        user.setID(intent.getStringExtra("UserName"));
         user.setPassword(intent.getStringExtra("Password"));
         user.setNickname(intent.getStringExtra("Nickname"));
+        user.setBirthDate(intent.getStringExtra("BirthDate"));
+        user.setGender(intent.getStringExtra("Gender"));
+        user.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         Request request = new Request.Builder().url("wss://test.extern.azusa.one:7542/ws").build();
@@ -75,13 +84,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                 super.onClosed(webSocket, code, reason);
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "onClosed" + reason, Toast.LENGTH_LONG).show());
+                Log.d("onClosed:", reason);
             }
 
             @Override
             public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                 super.onClosing(webSocket, code, reason);
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "onClosing" + reason, Toast.LENGTH_LONG).show());
+                Log.d("onClosed:", reason);
             }
 
             @Override
@@ -89,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
                 super.onFailure(webSocket, t, response);
                 runOnUiThread(() -> {
                     try {
-                        Toast.makeText(getApplicationContext(), "onFailure" + response.body().string(), Toast.LENGTH_LONG).show();
+                        Log.d("onFailure", response.body().string());
                     } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.d("onFailure", e.getMessage());
                     }
                 });
             }
@@ -99,14 +108,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
                 super.onMessage(webSocket, text);
-                Log.d("Response", text);
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "onMessage:" + text, Toast.LENGTH_LONG).show());
+                try {
+                    JSONObject jsonObject = new JSONObject(text);
+                    Log.d("onMessage", jsonObject.toString());
+                } catch (JSONException e) {
+                    Log.d("onMessage", e.getMessage());
+                }
             }
 
             @Override
             public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
                 super.onMessage(webSocket, bytes);
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "onMessage:" + bytes.toString(), Toast.LENGTH_LONG).show());
+                Log.d("onMessage", String.valueOf(bytes));
             }
 
             @Override
@@ -117,54 +130,21 @@ public class MainActivity extends AppCompatActivity {
                     jsonObject.put("bizType", "USER_LOGIN");
                     jsonObject.put("username", user.getID());
                     jsonObject.put("password", user.getPassword());
-                    Log.d("Response:", jsonObject.toString());
+                    Log.d("onOpen", jsonObject.toString());
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("onOpen", e.getMessage());
                 }
                 webSocket.send(jsonObject.toString());
-                runOnUiThread(() -> {
-                    try {
-                        Toast.makeText(getApplicationContext(), "onOpen:" + Objects.requireNonNull(response.body()).string(), Toast.LENGTH_LONG).show();
-                    } catch (IOException e) {
-                        Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
             }
         });
 
-
-        RequestBody requestBody = new FormBody.Builder().add("nickname", user.getNickname())
-                .add("sex", "male").add("birthdate", "2021/6/21")
-                .add("sign", "Hello World").build();
-        final Request request2 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/info").post(requestBody).build();
-        OkHttpClient okHttpClient2 = new OkHttpClient();
-        Call call1 = okHttpClient2.newCall(request2);
-
-        call1.enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String responseData = Objects.requireNonNull(response.body()).string();
-                Log.d("Response:HELLO", responseData);
-                try {
-                    JSONObject jsonObject = new JSONObject(responseData);
-                } catch (JSONException e) {
-                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
-                }
-            }
-        });
-
-        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar").build();
+        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar").get().build();
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Call call = okHttpClient1.newCall(request1);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+                Log.d("onFailureDownloadAvatar", e.getMessage());
             }
 
             @Override
@@ -172,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 String responseData = Objects.requireNonNull(response.body()).string();
                 try {
                     JSONObject jsonObject = new JSONObject(responseData);
+                    Log.d("DOWN", jsonObject.toString());
                     if (jsonObject.getBoolean("success")) {
                         runOnUiThread(() -> {
                             try {
@@ -190,9 +171,33 @@ public class MainActivity extends AppCompatActivity {
                         });
                     }
                 } catch (JSONException e) {
-                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+                    Log.d("onResponse", e.getMessage());
                 }
             }
         });
+
+        user.setProfileDir("");
+        JSONObject user_save = new JSONObject();
+        try {
+            user_save.put("UserName", user.getID());
+            user_save.put("Password", user.getPassword());
+            user_save.put("Nickname", user.getNickname());
+            user_save.put("Gender", user.getGender());
+            user_save.put("BirthDate", user.getBirthDate());
+            user_save.put("WhatsUp", user.getWhatsUp());
+            user_save.put("ProfileDir", user.getProfileDir());
+        } catch (JSONException e) {
+            Log.d("User Save ERROR", e.getMessage());
+        }
+        final File UserJsonFile = new File(getFilesDir(), "UserJson");
+        final FileOutputStream out;
+        try {
+            out = new FileOutputStream(UserJsonFile);
+            out.write(user_save.toString().getBytes());
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFound ERROR", e.getMessage());
+        } catch (IOException e) {
+            Log.d("IO ERROR", e.getMessage());
+        }
     }
 }
