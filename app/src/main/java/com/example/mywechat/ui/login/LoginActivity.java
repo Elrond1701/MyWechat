@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 Toast.makeText(getApplicationContext(), "Login!", Toast.LENGTH_LONG).show();
                                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.putExtra("ID", usernameEditText.getText().toString());
+                                intent.putExtra("Username", usernameEditText.getText().toString());
                                 intent.putExtra("Password", passwordEditText.getText().toString());
                                 try {
                                     intent.putExtra("Nickname", jsonObject.getString("nickname"));

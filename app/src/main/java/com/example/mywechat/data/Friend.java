@@ -9,7 +9,7 @@ public class Friend {
     private Bitmap profile;
     private String profiledir;
     private String gender;
-    private String region;
+    private String birthdate;
     private String whatsup;
 
 
@@ -20,7 +20,7 @@ public class Friend {
         profile = null;
         profiledir = null;
         gender = null;
-        region = null;
+        birthdate = null;
         whatsup = null;
     }
 
@@ -72,12 +72,12 @@ public class Friend {
         this.gender = gender;
     }
 
-    public String getRegion() {
-        return region;
+    public String getBirthDate() {
+        return birthdate;
     }
 
-    public void setRegion(String region) {
-        this.region = region;
+    public void setBirthDate(String birthdate) {
+        this.birthdate = birthdate;
     }
 
     public String getWhatsUp() {

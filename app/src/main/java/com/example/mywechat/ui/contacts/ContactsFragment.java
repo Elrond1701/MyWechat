@@ -95,7 +95,7 @@ public class ContactsFragment extends Fragment {
         New.setID("12344");
         New.setProfile(mybitmap);
         New.setGender("male");
-        New.setRegion("Beijing");
+        New.setBirthDate("2021/6/21");
         New.setWhatsUp("Good");
         friends.add(New);
         contactsViewModel.setFriends(friends);

@@ -72,7 +72,7 @@ public class MyprofileActivity extends AppCompatActivity {
         friend.setGender(intent.getStringExtra("Gender"));
         friend.setNickname(intent.getStringExtra("Nickname"));
         friend.setID(intent.getStringExtra("ID"));
-        friend.setRegion(intent.getStringExtra("Region"));
+        friend.setBirthDate(intent.getStringExtra("Region"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
         profile = findViewById(R.id.MyprofileActivity_Profile);
@@ -112,11 +112,11 @@ public class MyprofileActivity extends AppCompatActivity {
         });
 
         region = findViewById(R.id.MyprofileActivity_Region);
-        region.setText(friend.getRegion());
+        region.setText(friend.getBirthDate());
         View regionLayout = findViewById(R.id.MyprofileActivity_Layout5);
         regionLayout.setOnClickListener(v -> {
             Intent intent = new Intent(MyprofileActivity.this, RegionChangeActivity.class);
-            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("Region", friend.getBirthDate());
             startActivityForResult(intent, REGION);
         });
 
@@ -136,7 +136,7 @@ public class MyprofileActivity extends AppCompatActivity {
             intent.putExtra("Nickname", friend.getNickname());
             intent.putExtra("ID", friend.getID());
             intent.putExtra("Gender", friend.getGender());
-            intent.putExtra("Region", friend.getRegion());
+            intent.putExtra("BirthDate", friend.getBirthDate());
             intent.putExtra("WhatsUp", friend.getWhatsUp());
             this.setResult(0, intent);
             this.finish(); // back button
@@ -216,8 +216,8 @@ public class MyprofileActivity extends AppCompatActivity {
                     case 0:
                         break;
                     case 1:
-                        friend.setRegion(data.getStringExtra("Region"));
-                        region.setText(friend.getRegion());
+                        friend.setBirthDate(data.getStringExtra("BirthDate"));
+                        region.setText(friend.getBirthDate());
                         break;
                     default:
                         Toast.makeText(this, "Region Wrong set", Toast.LENGTH_LONG).show();

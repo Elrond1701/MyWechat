@@ -36,7 +36,7 @@ public class ContactActivity extends AppCompatActivity {
         friend.setID(intent.getStringExtra("ID"));
         friend.setProfile(bitmap);
         friend.setGender(intent.getStringExtra("Gender"));
-        friend.setRegion(intent.getStringExtra("Region"));
+        friend.setBirthDate(intent.getStringExtra("BirthDate"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
 
         ImageView profile = findViewById(R.id.ContactActivity_Profile);
@@ -57,7 +57,7 @@ public class ContactActivity extends AppCompatActivity {
         phonenumber.setText(friend.getID());
 
         TextView region = findViewById(R.id.ContactActivity_Region);
-        region.setText(friend.getRegion());
+        region.setText(friend.getBirthDate());
 
         TextView whatsUp = findViewById(R.id.ContactActivity_WhatsUpText);
         whatsUp.setText(friend.getWhatsUp());
