@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,12 +21,32 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
 
     public static class DiscoverViewHolder extends RecyclerView.ViewHolder {
 //        ImageView Profile;
-//        TextView Nickname;
+        TextView Nickname;
+        TextView Text;
+        TextView PublishedTime;
+        TextView Like;
+        TextView Comment;
+        LinearLayout InputLayout;
+        TextView LikeList;
+        ListView CommentList;
 
         public DiscoverViewHolder(@NonNull View itemView) {
             super(itemView);
 //            Profile = itemView.findViewById(R.id.item_recycle_contact_Profile);
-//            Nickname = itemView.findViewById(R.id.item_recycle_contact_Nickname);
+            Nickname = itemView.findViewById(R.id.item_recycle_discover_Nickname);
+            Text = itemView.findViewById(R.id.item_recycle_discover_Text);
+            PublishedTime = itemView.findViewById(R.id.item_recycle_discover_Published_time);
+            InputLayout = itemView.findViewById(R.id.comment_input_layout);
+            Like = itemView.findViewById(R.id.discover_like);
+            Comment = itemView.findViewById(R.id.discover_comment);
+            LikeList = itemView.findViewById(R.id.discover_like_list);
+            CommentList = itemView.findViewById(R.id.discover_comment_list);
+            Like.setOnClickListener(v -> {
+                LikeList.setVisibility(View.VISIBLE);
+            });
+//            Comment.setOnClickListener(v -> {
+//                InputLayout.setVisibility(View.VISIBLE);
+//            });
         }
     }
 
@@ -42,9 +64,11 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
 
     @Override
     public void onBindViewHolder(@NonNull DiscoverViewHolder holder, int position) {
-//        Friend friend = data.get(position);
-//        holder.Profile.setImageResource(friend.getProfile());
-//        holder.Nickname.setText(friend.getNickname());
+        Discover discover = data.get(position);
+        holder.Nickname.setText(discover.getNickname());
+        holder.Text.setText(discover.getText());
+        holder.PublishedTime.setText(discover.getPublishedTime());
+        holder.LikeList.setText("&#10084;HELLO");
     }
 
     @Override

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/chat_photo_more"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:ignore="Suspicious0dp">
+
+            <ImageView
+                android:id="@+id/chat_photo_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/ic_photo"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chat_photo_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="相册"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat_video_more"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:ignore="Suspicious0dp">
+
+            <ImageView
+                android:id="@+id/chat_video_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/ic_video"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chat_video_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="视频"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/chat_location_more"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            tools:ignore="Suspicious0dp">
+
+            <ImageView
+                android:id="@+id/chat_location_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/ic_location"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/chat_location_image"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="位置"
+                android:textSize="12sp"/>
+
+        </RelativeLayout>
+
+
+</LinearLayout>
