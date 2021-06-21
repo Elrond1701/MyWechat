@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
         user.setBirthDate(intent.getStringExtra("BirthDate"));
         user.setGender(intent.getStringExtra("Gender"));
         user.setWhatsUp(intent.getStringExtra("WhatsUp"));
+        user.setCookie(intent.getStringExtra("Cookie"));
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder().build();
         Request request = new Request.Builder().url("wss://test.extern.azusa.one:7542/ws").build();
@@ -138,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar").get().build();
+        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar")
+                .header("Cookie", user.getCookie()).get().build();
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Call call = okHttpClient1.newCall(request1);
         call.enqueue(new Callback() {
@@ -186,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
             user_save.put("BirthDate", user.getBirthDate());
             user_save.put("WhatsUp", user.getWhatsUp());
             user_save.put("ProfileDir", user.getProfileDir());
+            user_save.put("Cookie", user.getCookie());
         } catch (JSONException e) {
             Log.d("User Save ERROR", e.getMessage());
         }
