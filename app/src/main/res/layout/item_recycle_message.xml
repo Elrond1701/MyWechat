@@ -42,13 +42,11 @@
             android:layout_height="wrap_content"
             android:visibility="gone" />
 
-        <!--        //视频-->
-        <!--        -->
-        <!--        <ImageView-->
-        <!--            android:id="@+id/chat_msg_voice_left"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:visibility="gone"/>-->
+        <VideoView
+            android:id="@+id/chat_msg_video_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
@@ -82,6 +80,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
+            android:visibility="gone"/>
+
+        <VideoView
+            android:id="@+id/chat_msg_video_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:visibility="gone"/>
 
         <ImageView

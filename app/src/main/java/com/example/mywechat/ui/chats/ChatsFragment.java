@@ -23,12 +23,13 @@ public class ChatsFragment extends Fragment {
 
     private ChatsViewModel chatsViewModel;
     private RecyclerView recyclerView;
+    private LinkedList<Chat> chats;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LinkedList<Chat> chats=new LinkedList<>();
+        chats = new LinkedList<>();
 //        Chat chat1 = new Chat("FXL",1,"Hello World!","10:00");
 //        Chat chat2 = new Chat("XLF",1,"So tired!","9:00");
 //        chats.add(chat1);
@@ -37,6 +38,10 @@ public class ChatsFragment extends Fragment {
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         chatsViewModel.setChats(chats);
     }
+
+//    public void getData() {
+//
+//    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
