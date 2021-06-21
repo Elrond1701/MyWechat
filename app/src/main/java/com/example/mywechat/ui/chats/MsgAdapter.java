@@ -36,27 +36,28 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.MsgViewHolder> {
     public void onBindViewHolder(@NonNull MsgAdapter.MsgViewHolder holder, int position) {
         Message message = data.get(position);
         int type = message.getAsgType();
-        switch (type) {
-            case 0:{
-                holder.text_left.setVisibility(View.VISIBLE);
-            }
-            case 1:{
-                holder.text_left.setVisibility(View.VISIBLE);
-            }
-            case 2:{
-                holder.voice_left.setVisibility(View.VISIBLE);
-            }
-            case 3:{
-                holder.voice_right.setVisibility(View.VISIBLE);
-            }
-            case 4:{
-                holder.photo_left.setVisibility(View.VISIBLE);
-            }
-            case 5:{
-                holder.photo_right.setVisibility(View.VISIBLE);
-            }
+        if (type == 101){
+            holder.profile_left.setVisibility(View.VISIBLE);
+            holder.text_left.setVisibility(View.VISIBLE);
+            holder.text_left.setText(message.getText());
         }
-
+        else if (type == 102){
+            holder.profile_right.setVisibility(View.VISIBLE);
+            holder.text_right.setVisibility(View.VISIBLE);
+            holder.text_right.setText(message.getText());
+        }
+        else if (type == 201){
+            holder.voice_left.setVisibility(View.VISIBLE);
+        }
+        else if (type == 202){
+            holder.voice_right.setVisibility(View.VISIBLE);
+        }
+        else if (type == 301){
+            holder.photo_left.setVisibility(View.VISIBLE);
+        }
+        else if (type == 302){
+            holder.photo_right.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

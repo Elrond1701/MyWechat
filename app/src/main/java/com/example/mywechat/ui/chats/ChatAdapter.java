@@ -63,6 +63,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             Intent intent = new Intent(parent, MsgActivity.class);
             // Add more information to intent
             intent.putExtra("Nickname",chat.getNickname());
+
             parent.startActivity(intent);
         });
     }
