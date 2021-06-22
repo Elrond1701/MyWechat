@@ -128,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         Log.d("LoginActivity ERROR", e.getMessage());
                     }
-
                 }
             });
         });

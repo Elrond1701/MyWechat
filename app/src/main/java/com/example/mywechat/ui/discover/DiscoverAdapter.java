@@ -1,12 +1,17 @@
 package com.example.mywechat.ui.discover;
 
+import android.annotation.SuppressLint;
+import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,7 +19,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Discover;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.DiscoverViewHolder> {
     private LinkedList<Discover> data;
@@ -28,7 +47,9 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
         TextView Comment;
         LinearLayout InputLayout;
         TextView LikeList;
-        ListView CommentList;
+        TextView CommentList;
+        EditText CommentText;
+        ImageView CommentSend;
 
         public DiscoverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -41,12 +62,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             Comment = itemView.findViewById(R.id.discover_comment);
             LikeList = itemView.findViewById(R.id.discover_like_list);
             CommentList = itemView.findViewById(R.id.discover_comment_list);
-            Like.setOnClickListener(v -> {
-                LikeList.setVisibility(View.VISIBLE);
-            });
-//            Comment.setOnClickListener(v -> {
-//                InputLayout.setVisibility(View.VISIBLE);
-//            });
+            CommentText = itemView.findViewById(R.id.comment_input);
+            CommentSend = itemView.findViewById(R.id.comment_send);
         }
     }
 
@@ -68,8 +85,67 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
         holder.Nickname.setText(discover.getNickname());
         holder.Text.setText(discover.getText());
         holder.PublishedTime.setText(discover.getPublishedTime());
-        holder.LikeList.setText("&#10084;HELLO");
+        holder.Like.setOnClickListener(v -> {
+//            holder.LikeList.setText();
+            holder.LikeList.setVisibility(View.VISIBLE);
+
+        });
+//        holder.LikeList.setText(discover.getLikeList());
+        holder.Comment.setOnClickListener(v -> {
+            holder.InputLayout.setVisibility(View.VISIBLE);
+        });
+        holder.CommentSend.setOnClickListener(v -> {
+
+            String CommentList = (String) holder.CommentList.getText();
+            holder.CommentText.getText();
+            holder.CommentList.setText((String) holder.CommentList.getText()+'\n'+holder.CommentText.getText());
+            holder.CommentList.setVisibility(View.VISIBLE);
+            holder.InputLayout.setVisibility(View.GONE);
+        });
     }
+
+    public void discoverLike(String Id) {
+        RequestBody requestBody = new FormBody.Builder().add("momentId", Id).build();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").post(requestBody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = Objects.requireNonNull(response.body()).string();
+                try {
+                    JSONObject jsonObject= new JSONObject(responseData);
+                    Log.d("Login", responseData);
+                    if (jsonObject.getBoolean("success")) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(getApplicationContext(), "Release your discover!", Toast.LENGTH_LONG).show();
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            try {
+                                Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void discoverComment()
+
+
 
     @Override
     public int getItemCount() {
