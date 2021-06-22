@@ -1,5 +1,6 @@
 package com.example.mywechat;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     ContactsFragment contactsFragment;
     DiscoverFragment discoverFragment;
     MeFragment meFragment;
+    SQLiteDatabase db;
 
     Intent intent;
 
@@ -68,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.MainActivity_NavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        db = openOrCreateDatabase("test", Context.MODE_PRIVATE,null);
+        String sql="CREATE TABLE IF NOT EXISTS chatlist (Nickname VARCHAR(32),LastSpeak VARCHAR(1024),LastSpeakTime VARCHAR(1024),chatId VARCHAR(128), isGroupChat Integer)";
+        db.execSQL(sql);
 
         intent = getIntent();
         User user = new User();
@@ -111,6 +117,26 @@ public class MainActivity extends AppCompatActivity {
                 super.onMessage(webSocket, text);
                 try {
                     JSONObject jsonObject = new JSONObject(text);
+                    if (jsonObject.getString("messageType").equals("chat")){
+                        JSONObject message = jsonObject.getJSONObject("message");
+                        String chatId = message.getString("chatId");
+                        String delete_sql = "DELETE FROM chatlist where chatId = " + chatId;
+                        db.execSQL(delete_sql);
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("LastSpeak",jsonObject.getString("content"));
+                        contentValues.put("LastSpeakTime",message.getString("time"));
+                        contentValues.put("chatId",chatId);
+                        String groupchatName = jsonObject.getString("groupchatName");
+                        if (groupchatName == null){
+                            contentValues.put("Nickname",message.getString("speaker"));
+                            contentValues.put("isGroupChat",0);
+                        }
+                        else{
+                            contentValues.put("Nickname",groupchatName);
+                            contentValues.put("isGroupChat",1);
+                        }
+                        db.insert("chatlist",null,contentValues);
+                    }
                     Log.d("onMessage", jsonObject.toString());
                 } catch (JSONException e) {
                     Log.d("onMessage", e.getMessage());
