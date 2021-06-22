@@ -7,11 +7,13 @@ public class Chat {
     private String Nickname; // 昵称
     private String LastSpeak; //最后聊天内容
     private String LastSpeakTime; //最后联络时间
-    private boolean isGroupChat; //是否为群聊
+    private int isGroupChat; //是否为群聊
+    private String chatId;
 
-    public Chat(String Nickname, int Profile, String LastSpeak, String LastSpeakTime, Boolean isGroupChat) {
+    public Chat(String Nickname, String chatId, String LastSpeak, String LastSpeakTime, int isGroupChat) {
         this.Nickname = Nickname;
 //        this.Profile = Profile;
+        this.chatId = chatId;
         this.LastSpeak = LastSpeak;
         this.LastSpeakTime = LastSpeakTime;
         this.isGroupChat = isGroupChat;
