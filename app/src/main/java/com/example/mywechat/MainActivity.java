@@ -1,5 +1,6 @@
 package com.example.mywechat;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -39,6 +40,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.Objects;
+import java.util.TimerTask;
 
 import javax.net.SocketFactory;
 
@@ -55,11 +57,11 @@ import okio.ByteString;
 
 public class MainActivity extends AppCompatActivity {
 
-//    public static User user;
     ChatsFragment chatsFragment;
     ContactsFragment contactsFragment;
     DiscoverFragment discoverFragment;
     MeFragment meFragment;
+    SQLiteDatabase db;
 
     Intent intent;
 
@@ -80,6 +82,10 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.MainActivity_NavHostFragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        db = openOrCreateDatabase("test", Context.MODE_PRIVATE,null);
+        String sql="CREATE TABLE IF NOT EXISTS chatlist (Nickname VARCHAR(32),LastSpeak VARCHAR(1024),LastSpeakTime VARCHAR(1024),chatId VARCHAR(128), isGroupChat Integer)";
+        db.execSQL(sql);
 
         intent = getIntent();
         User user = new User();
@@ -124,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONArray jsonArray = new JSONArray(text);
                     JSONObject jsonObject = (JSONObject) jsonArray.get(0);
-                    if (jsonObject.getString("contactApply") != null) {
+                    if (jsonObject.getString("messageType").equals("contact_apply")) {
                         Newfriend newfriend = new Newfriend();
                         String contactApply = jsonObject.getString("contactApply");
                         JSONObject contactApplyData = new JSONObject(contactApply);
@@ -182,6 +188,25 @@ public class MainActivity extends AppCompatActivity {
                             });
                         }
 
+                    }
+                    if (jsonObject.getString("messageType").equals("chat")) {
+                        JSONObject message = jsonObject.getJSONObject("message");
+                        String chatId = message.getString("chatId");
+                        String delete_sql = "DELETE FROM chatlist where chatId = " + chatId;
+                        db.execSQL(delete_sql);
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("LastSpeak", jsonObject.getString("content"));
+                        contentValues.put("LastSpeakTime", message.getString("time"));
+                        contentValues.put("chatId", chatId);
+                        String groupchatName = jsonObject.getString("groupchatName");
+                        if (groupchatName == null) {
+                            contentValues.put("Nickname", message.getString("speaker"));
+                            contentValues.put("isGroupChat", 0);
+                        } else {
+                            contentValues.put("Nickname", groupchatName);
+                            contentValues.put("isGroupChat", 1);
+                        }
+                        db.insert("chatlist", null, contentValues);
                     }
                     Log.d("onMessage", jsonArray.toString());
                 } catch (JSONException e) {
