@@ -2,6 +2,7 @@ package com.example.mywechat.ui.contacts.newfriend;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,12 @@ public class NewfriendAdapter extends RecyclerView.Adapter<NewfriendAdapter.Newf
 
     public static class NewfriendViewHolder extends RecyclerView.ViewHolder {
         ImageView Profile;
-        TextView Name;
+        TextView NickName;
 
         public NewfriendViewHolder(@NonNull View itemView) {
             super(itemView);
-            Profile = itemView.findViewById(R.id.item_recycle_group_Profile);
-            Name = itemView.findViewById(R.id.item_recycle_group_Name);
+            Profile = itemView.findViewById(R.id.item_recycle_newfriend_Profile);
+            NickName = itemView.findViewById(R.id.item_recycle_newfriend_Nickname);
         }
     }
 
@@ -45,15 +46,18 @@ public class NewfriendAdapter extends RecyclerView.Adapter<NewfriendAdapter.Newf
     @NonNull
     @Override
     public NewfriendAdapter.NewfriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_group, parent,false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_newfriend, parent,false);
         return new NewfriendAdapter.NewfriendViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewfriendAdapter.NewfriendViewHolder holder, int position) {
-        Friend friend = data.get(position);
+        Newfriend newfriend = data.get(position);
+        holder.NickName.setText(newfriend.getNickname());
+        //holder.Profile.setImageBitmap(newfriend.getProfile());
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(parent, ContactActivity.class);
+            Intent intent = new Intent(parent, AcceptNewfriendActivity.class);
+            intent.putExtra("number", position);
             parent.startActivity(intent);
         });
     }

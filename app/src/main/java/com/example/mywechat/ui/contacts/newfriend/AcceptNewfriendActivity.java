@@ -12,6 +12,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mywechat.R;
+import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Newfriend;
 import com.example.mywechat.data.User;
 
@@ -59,7 +60,7 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
         }
 
         intent = getIntent();
-        intent.getIntExtra("number", 0);
+        number = intent.getIntExtra("number", 0);
 
         username = findViewById(R.id.AcceptNewfriendActivity_Username);
         profile = findViewById(R.id.AcceptNewfriendActivity_Profile);
@@ -71,6 +72,12 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
         File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
         newfriend = new Newfriend();
         newfriend.get(NewfriendJsonFile);
+
+        username.setText(newfriend.getID());
+        nickname.setText(newfriend.getNickname());
+        gender.setText(newfriend.getGender());
+        birthdate.setText(newfriend.getBirthDate());
+        whatsup.setText(newfriend.getWhatsUp());
 
         File UserJsonFile = new File(getFilesDir(), "UserJson");
         user = new User();
@@ -95,7 +102,31 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    Log.d("onResponse", response.body().string());
+                    String responseData = response.body().string();
+                    Log.d("onResponse", responseData);
+                    File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
+                    if (NewfriendJsonFile.exists()) {
+                        deleteFile(NewfriendJsonFile.toString());
+                    }
+
+                    File FriendJsonFile = null;
+                    for (int i = 0; ; i++) {
+                        FriendJsonFile = new File(getFilesDir(), "FriendJson" + i);
+                        if (!FriendJsonFile.exists()) {
+                            Friend friend = new Friend();
+                            friend.setBirthDate(newfriend.getBirthDate());
+                            friend.setID(newfriend.getID());
+                            friend.setNickname(newfriend.getNickname());
+                            friend.setGender(newfriend.getGender());
+                            friend.setWhatsUp(newfriend.getWhatsUp());
+                            friend.setProfileDir(newfriend.getProfileDir());
+                            friend.setProfile(newfriend.getProfile());
+                            friend.setContactapplyId(newfriend.getContactapplyId());
+                            friend.setNumber(i);
+                            friend.save(FriendJsonFile);
+                            break;
+                        }
+                    }
                 }
             });
             AcceptNewfriendActivity.this.finish();
@@ -119,7 +150,12 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    Log.d("onResponse", response.body().string());
+                    String responseData = response.body().string();
+                    Log.d("onResponse", responseData);
+                    File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
+                    if (NewfriendJsonFile.exists()) {
+                        deleteFile(NewfriendJsonFile.toString());
+                    }
                 }
             });
             AcceptNewfriendActivity.this.finish();

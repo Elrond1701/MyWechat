@@ -14,6 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWechat">
+        <activity android:name=".ui.contacts.newfriend.AddyouActivity"
+            android:label="AddYou" />
+        <activity android:name=".ui.contacts.newfriend.AcceptNewfriendActivity"
+            android:label="Addyou" />
+        <activity android:name=".ui.contacts.newfriend.AddNewfriendActivity"
+            android:label="Addyou" />
         <activity android:name=".ui.chats.MsgActivity"
             android:label="Chatting"/>
         <activity android:name=".ui.discover.DiscoverReleaseActivity"

@@ -36,7 +36,7 @@ public class Friend {
         contactapplyId = null;
     }
 
-    public void save(File JsonFriend) {
+    public void get(File JsonFriend) {
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
@@ -114,7 +114,7 @@ public class Friend {
         setProfileDir("UserBitmap");
     }
 
-    public void get(File JsonFriend) {
+    public void save(File JsonFriend) {
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());

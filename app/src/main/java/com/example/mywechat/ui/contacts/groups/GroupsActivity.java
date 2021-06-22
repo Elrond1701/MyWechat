@@ -44,7 +44,7 @@ public class GroupsActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.groups_recylerview);
 
-        GroupAdapter groupAdapter = new GroupAdapter(groups);
+        groupAdapter = new GroupAdapter(groups);
         recyclerView.setAdapter(groupAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);
