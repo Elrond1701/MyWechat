@@ -22,7 +22,7 @@ public class Newfriend extends Friend{
         return  note;
     }
 
-    public void save(File JsonNewfriendFile) {
+    public void get(File JsonNewfriendFile) {
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
@@ -107,7 +107,7 @@ public class Newfriend extends Friend{
         setProfileDir("UserBitmap");
     }
 
-    public void get(File JsonNewfriendFile) {
+    public void save(File JsonNewfriendFile) {
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());

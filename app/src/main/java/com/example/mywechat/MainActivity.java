@@ -172,6 +172,10 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             }
                                             newfriend.save(JsonNewfriendFile);
+                                            Newfriend Good = new Newfriend();
+                                            Good.get(JsonNewfriendFile);
+                                            Log.d("GOOOD", Good.getNickname());
+                                            Log.d("GOOD", JsonNewfriendFile.getName());
                                         } else {
                                             runOnUiThread(() -> {
                                                 try {

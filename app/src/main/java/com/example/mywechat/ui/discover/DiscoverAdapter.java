@@ -1,7 +1,6 @@
 package com.example.mywechat.ui.discover;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;

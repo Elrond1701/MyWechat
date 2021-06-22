@@ -17,6 +17,8 @@ import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.ui.chats.MsgActivity;
 
+import java.io.File;
+
 public class ContactActivity extends AppCompatActivity {
 
     @Override
@@ -39,6 +41,9 @@ public class ContactActivity extends AppCompatActivity {
         friend.setGender(intent.getStringExtra("Gender"));
         friend.setBirthDate(intent.getStringExtra("BirthDate"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
+        friend.setNumber(intent.getIntExtra("Number", 0));
+        //File FriendJsonFile = new File(getFilesDir(), "FriendJson" + friend.getNumber());
+        //friend.get(FriendJsonFile);
 
         ImageView profile = findViewById(R.id.ContactActivity_Profile);
         profile.setImageBitmap(friend.getProfile());
@@ -77,6 +82,7 @@ public class ContactActivity extends AppCompatActivity {
         Button settings = findViewById(R.id.ContactActivity_Settings);
         settings.setOnClickListener(v -> {
             Intent newIntent = new Intent(ContactActivity.this, ContactSettingActivity.class);
+            newIntent.putExtra("Number", friend.getNumber());
             startActivity(newIntent);
         });
     }
