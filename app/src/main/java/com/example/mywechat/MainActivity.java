@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                    String responseData = response.body().string();
+                                    String responseData = Objects.requireNonNull(response.body()).string();
                                     Log.d("ResponseHappy", responseData);
                                     try {
                                         JSONObject jsonObject_user = new JSONObject(responseData);
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                                             newfriend.setGender(jsonObject_user.getString("sex"));
                                             newfriend.setWhatsUp(jsonObject_user.getString("sign"));
 
-                                            File JsonNewfriendFile = null;
+                                            File JsonNewfriendFile;
                                             int i;
                                             for (i = 0; ; i++) {
                                                 JsonNewfriendFile = new File(getFilesDir(), "NewfriendJson" + i);
@@ -172,10 +172,6 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             }
                                             newfriend.save(JsonNewfriendFile);
-                                            Newfriend Good = new Newfriend();
-                                            Good.get(JsonNewfriendFile);
-                                            Log.d("GOOOD", Good.getNickname());
-                                            Log.d("GOOD", JsonNewfriendFile.getName());
                                         } else {
                                             runOnUiThread(() -> {
                                                 try {
@@ -282,5 +278,72 @@ public class MainActivity extends AppCompatActivity {
         user.setProfileDir("");
         final File UserJsonFile = new File(getFilesDir(), "UserJson");
         user.save(UserJsonFile);
+
+        final Request request2 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/contact")
+                .header("Cookie", user.getCookie()).get().build();
+        OkHttpClient okHttpClient2 = new OkHttpClient();
+        Call call1 = okHttpClient2.newCall(request2);
+
+        call1.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("onFailure", e.getMessage());
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = Objects.requireNonNull(response.body()).string();
+                Log.d("onResponseHIHIHI", responseData);
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    String Contacts = jsonObject.getString("contacts");
+
+                    JSONArray jsonArray = new JSONArray(Contacts);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject contact = (JSONObject) jsonArray.get(i);
+                        if (contact.getString("username").equals(user.getID())) {
+                            Friend friend = new Friend();
+                            friend.setNumber(i);
+                            friend.setContactapplyId(contact.getString("chatId"));
+                            friend.setID(contact.getString("contact"));
+
+                            Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user?uname=" + friend.getID())
+                                    .header("Cookie", user.getCookie()).get().build();
+                            OkHttpClient okHttpClient = new OkHttpClient();
+                            Call call_ = okHttpClient.newCall(request);
+
+                            call_.enqueue(new Callback() {
+                                @Override
+                                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                    Log.d("onFailure", e.getMessage());
+                                }
+
+                                @Override
+                                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                    String reponseData = Objects.requireNonNull(response.body()).string();
+                                    Log.d("onResponse", reponseData);
+                                    try {
+                                        JSONObject jsonObject1 = new JSONObject(reponseData);
+                                        if (jsonObject1.getBoolean("success")) {
+                                            friend.setBirthDate(jsonObject1.getString("birthdate"));
+                                            friend.setNickname(jsonObject1.getString("nickname"));
+                                            friend.setGender(jsonObject1.getString("sex"));
+                                            friend.setWhatsUp(jsonObject1.getString("sign"));
+                                            File JsonFriend = new File(getFilesDir(), "FriendJson" + friend.getNumber());
+                                            friend.save(JsonFriend);
+                                            //Log.d("GOOD", "GOOD");
+                                        }
+                                    } catch (JSONException e) {
+                                        Log.d("JSONException", e.getMessage());
+                                    }
+                                }
+                            });
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.d("JSONException", e.getMessage());
+                }
+            }
+        });
     }
 }
