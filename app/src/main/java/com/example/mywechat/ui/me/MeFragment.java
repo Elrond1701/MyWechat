@@ -36,6 +36,8 @@ import java.util.Objects;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -65,102 +67,25 @@ public class MeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
-        //File file = null;
-        //new Thread(new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        File file = new File(requireContext().getFilesDir(), "UserBitmap");
-        //        try {
-        //            FileOutputStream fileOutputStream = new FileOutputStream(file);
-        //            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-        //            try {
-        //                fileOutputStream.close();
-        //            } catch (IOException e) {
-        //                Toast.makeText(getActivity(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
-        //            }
-        //        } catch (FileNotFoundException e) {
-        //            Toast.makeText(getActivity(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
-        //        }
-        //    }
-        //}).start();
+        Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
+        new Thread(() -> {
+            File file = new File(requireContext().getFilesDir(), "UserProfile");
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                bitmap1.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    Toast.makeText(getActivity(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            } catch (FileNotFoundException e) {
+                Toast.makeText(getActivity(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }).start();
         user = new User();
 
         File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
-        FileInputStream in;
-        String JsonData;
-        JSONObject user_get;
-        try {
-            in = new FileInputStream(UserJsonFile);
-            byte[] bytes = new byte[in.available()];
-            in.read(bytes);
-            JsonData = new String(bytes);
-        } catch (FileNotFoundException e) {
-            Log.d("FileNotFoundERROR", e.getMessage());
-            JsonData = null;
-        } catch (IOException e) {
-            Log.d("IOERROR", e.getMessage());
-            JsonData = null;
-        }
-        if (JsonData != null) {
-            try {
-                user_get = new JSONObject(JsonData);
-            } catch (JSONException e) {
-                user_get = null;
-                Log.d("JSONERROR", e.getMessage());
-            }
-            if (user_get == null) {
-                user.setProfileDir("");
-                user.setGender("");
-                user.setNickname("");
-                user.setID("");
-                user.setBirthDate("");
-                user.setWhatsUp("");
-            } else {
-                try {
-                    String Nickname = user_get.getString("Nickname");
-                    user.setNickname(Nickname);
-                } catch (JSONException e) {
-                    Log.d("LoginActivity ERROR", e.getMessage());
-                    user.setNickname("");
-                }
-                try {
-                    String Gender = user_get.getString("Gender");
-                    user.setGender(Gender);
-                } catch (JSONException e) {
-                    Log.d("LoginActivity ERROR", e.getMessage());
-                    user.setGender("");
-                }
-                try {
-                    String WhatsUp = user_get.getString("WhatsUp");
-                    user.setWhatsUp(WhatsUp);
-                } catch (JSONException e) {
-                    Log.d("LoginActivity ERROR", e.getMessage());
-                    user.setWhatsUp("");
-                }
-                try {
-                    String BirthDate = user_get.getString("BirthDate");
-                    user.setBirthDate(BirthDate);
-                } catch (JSONException e) {
-                    Log.d("LoginActivity ERROR", e.getMessage());
-                    user.setBirthDate("");
-                }
-                try {
-                    String UserName = user_get.getString("UserName");
-                    user.setID(UserName);
-                } catch (JSONException e) {
-                    Log.d("LoginActivity ERROR", e.getMessage());
-                    user.setID("");
-                }
-                try {
-                    String Cookie = user_get.getString("Cookie");
-                    user.setCookie(Cookie);
-                } catch (JSONException e) {
-                    Log.d("JSONException", e.getMessage());
-                    user.setCookie("");
-                }
-            }
-        }
-        user.setProfileDir("UserBitmap");
+        user.get(UserJsonFile);
         user.setProfile(bitmap);
 
         FragmentContainerView myprofile = view.findViewById(R.id.MeFragment_MyProfile);
@@ -214,33 +139,63 @@ public class MeFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
+        RequestBody requestBody = new FormBody.Builder().add("nickname", user.getNickname())
+                .add("sex", user.getGender())
+                .add("birthdate", user.getBirthDate())
+                .add("sign", user.getWhatsUp()).build();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user/info")
+                .header("Cookie", user.getCookie()).post(requestBody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
 
-        new Thread(() -> {
-            RequestBody requestBody = new FormBody.Builder().add("nickname", user.getNickname())
-                    .add("sex", user.getGender())
-                    .add("birthdate", user.getBirthDate())
-                    .add("sign", user.getWhatsUp()).build();
-            final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user/info").post(requestBody).build();
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Log.d("onFailure ERROR", e.getMessage());
+            }
 
-            call.enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = Objects.requireNonNull(response.body()).string();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    if (jsonObject.getBoolean("success")) {
+                        Log.d("UserJsonFile", "success");
+                    } else {
+                        Log.d("UserJsonFile", "fail");
+                    }
+                } catch (JSONException e) {
+                    Log.d("JsonERROR", e.getMessage());
+                }
+            }
+        });
+
+        final File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
+        user.save(UserJsonFile);
+
+        File file = new File(getActivity().getFilesDir(), "UserProfile");
+        if(file != null){
+            MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+            RequestBody requestBody1 = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("file", "UserProfile", RequestBody.create(MEDIA_TYPE_PNG, file))
+                    .build();
+
+            final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar")
+                    .header("Cookie", user.getCookie()).post(requestBody1).build();
+            OkHttpClient okHttpClient1 = new OkHttpClient();
+            Call call1 = okHttpClient1.newCall(request1);
+
+            call1.enqueue(new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    requireActivity().runOnUiThread(() -> Toast.makeText(requireActivity().getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+                    Log.d("onFailure ERROR", e.getMessage());
                 }
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responseData = Objects.requireNonNull(response.body()).string();
-                    Log.d("Response:HELLO", responseData);
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                    } catch (JSONException e) {
-                        requireActivity().runOnUiThread(() -> Toast.makeText(requireContext().getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
-                    }
+                    Log.d("UP", response.body().string());
                 }
             });
-        }).start();
+        }
     }
 }

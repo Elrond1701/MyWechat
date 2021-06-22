@@ -17,10 +17,9 @@ import android.widget.Toast;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.ui.me.myprofile.change.GenderChangeActivity;
-import com.example.mywechat.ui.me.myprofile.change.IDChangeActivity;
 import com.example.mywechat.ui.me.myprofile.change.NicknameChangeActivity;
 import com.example.mywechat.ui.me.myprofile.change.ProfileChangeActivity;
-import com.example.mywechat.ui.me.myprofile.change.RegionChangeActivity;
+import com.example.mywechat.ui.me.myprofile.change.BirthDateChangeActivity;
 import com.example.mywechat.ui.me.myprofile.change.WhatsUpChangeActivity;
 
 import java.io.File;
@@ -34,17 +33,19 @@ public class MyprofileActivity extends AppCompatActivity {
     private Friend friend;
     private ImageView profile;
     private TextView nickname;
-    private TextView id;
     private TextView gender;
-    private TextView region;
     private TextView whatsup;
+    private TextView birthdate;
 
     public static final int PROFILE = 101;
     public static final int NICKNAME = 102;
-    public static final int ID = 103;
     public static final int GENDER = 104;
-    public static final int REGION = 105;
+    public static final int BIRTHDATE = 105;
     public static final int WHATSUP = 106;
+
+    public MyprofileActivity() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class MyprofileActivity extends AppCompatActivity {
         friend.setID(intent.getStringExtra("ID"));
         friend.setBirthDate(intent.getStringExtra("Region"));
         friend.setWhatsUp(intent.getStringExtra("WhatsUp"));
+        friend.setBirthDate(intent.getStringExtra("BirthDate"));
 
         profile = findViewById(R.id.MyprofileActivity_Profile);
         profile.setImageBitmap(friend.getProfile());
@@ -93,15 +95,6 @@ public class MyprofileActivity extends AppCompatActivity {
             startActivityForResult(intent, NICKNAME);
         });
 
-        id = findViewById(R.id.MyprofileActivity_PhoneNumber);
-        id.setText(friend.getID());
-        View idLayout = findViewById(R.id.MyprofileActivity_Layout3);
-        idLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(MyprofileActivity.this, IDChangeActivity.class);
-            intent.putExtra("ID", friend.getID());
-            startActivityForResult(intent, ID);
-        });
-
         gender = findViewById(R.id.MyprofileActivity_Gender);
         gender.setText(friend.getGender());
         View genderLayout = findViewById(R.id.MyprofileActivity_Layout4);
@@ -111,13 +104,13 @@ public class MyprofileActivity extends AppCompatActivity {
             startActivityForResult(intent, GENDER);
         });
 
-        region = findViewById(R.id.MyprofileActivity_Region);
-        region.setText(friend.getBirthDate());
+        birthdate = findViewById(R.id.MyprofileActivity_Region);
+        birthdate.setText(friend.getBirthDate());
         View regionLayout = findViewById(R.id.MyprofileActivity_Layout5);
         regionLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(MyprofileActivity.this, RegionChangeActivity.class);
-            intent.putExtra("Region", friend.getBirthDate());
-            startActivityForResult(intent, REGION);
+            Intent intent = new Intent(MyprofileActivity.this, BirthDateChangeActivity.class);
+            intent.putExtra("BirthDate", friend.getBirthDate());
+            startActivityForResult(intent, BIRTHDATE);
         });
 
         whatsup = findViewById(R.id.MyprofileActivity_WhatsUp);
@@ -184,20 +177,6 @@ public class MyprofileActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-            case ID:
-                switch (resultCode) {
-                    case 0:
-                        break;
-                    case 1:
-                        assert data != null;
-                        friend.setID(data.getStringExtra("ID"));
-                        id.setText(friend.getID());
-                        break;
-                    default:
-                        Toast.makeText(this, "ID Wrong set", Toast.LENGTH_LONG).show();
-                        break;
-                }
-                break;
             case GENDER:
                 switch (resultCode) {
                     case 0:
@@ -211,16 +190,16 @@ public class MyprofileActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-            case REGION:
+            case BIRTHDATE:
                 switch (resultCode) {
                     case 0:
                         break;
                     case 1:
                         friend.setBirthDate(data.getStringExtra("BirthDate"));
-                        region.setText(friend.getBirthDate());
+                        birthdate.setText(friend.getBirthDate());
                         break;
                     default:
-                        Toast.makeText(this, "Region Wrong set", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "BirthDate Wrong set", Toast.LENGTH_LONG).show();
                         break;
                 }
                 break;

@@ -4,26 +4,61 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.me.myprofile.MyprofileActivity">
+    tools:context=".ui.contacts.newfriend.AddNewfriendActivity">
 
     <LinearLayout
-        android:id="@+id/MyprofileActivity_Layout1"
+        android:id="@+id/AddNewfriendActivity_Layout0"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/AddNewfriendActivity_Username"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="25dp"
+            android:layout_marginStart="25dp" />
+
+        <TextView
+            android:id="@+id/AddNewfriendActivity_Username"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:textSize="20sp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="130dp"
+            android:layout_marginStart="130dp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/AddNewfriendActivity_Line0"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dfdfdf"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Layout0"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:id="@+id/AddNewfriendActivity_Layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/AddNewfriendActivity_Line0"
         android:layout_marginTop="25dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/MyprofileActivity_Profile"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:text="@string/AddNewfriendActivity_Profile"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="25dp"
             android:layout_marginStart="25dp" />
 
         <ImageView
-            android:id="@+id/MyprofileActivity_Profile"
+            android:id="@+id/AddNewfriendActivity_Profile"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginLeft="100dp"
@@ -33,34 +68,34 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/MyprofileActivity_Line1"
+        android:id="@+id/AddNewfriendActivity_Line1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dfdfdf"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Layout1"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Layout1"
         android:layout_marginTop="10dp" />
 
     <LinearLayout
-        android:id="@+id/MyprofileActivity_Layout2"
+        android:id="@+id/AddNewfriendActivity_Layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Line1"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Line1"
         android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/MyprofileActivity_Nickname"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:text="@string/AddNewfriendActivity_Nickname"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="25dp"
             android:layout_marginStart="25dp" />
 
         <TextView
-            android:id="@+id/MyprofileActivity_Nickname"
+            android:id="@+id/AddNewfriendActivity_Nickname"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="130dp"
             android:layout_marginStart="130dp" />
@@ -68,35 +103,35 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/MyprofileActivity_Line2"
+        android:id="@+id/AddNewfriendActivity_Line2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dfdfdf"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Layout2"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Layout2"
         android:layout_marginTop="10dp" />
 
 
     <LinearLayout
-        android:id="@+id/MyprofileActivity_Layout4"
+        android:id="@+id/AddNewfriendActivity_Layout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Line2"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Line2"
         android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/MyprofileActivity_Gender"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:text="@string/AddNewfriendActivity_Gender"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="25dp"
             android:layout_marginStart="25dp" />
 
         <TextView
-            android:id="@+id/MyprofileActivity_Gender"
+            android:id="@+id/AddNewfriendActivity_Gender"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="160dp"
             android:layout_marginStart="160dp" />
@@ -104,34 +139,34 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/MyprofileActivity_Line4"
+        android:id="@+id/AddNewfriendActivity_Line4"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dfdfdf"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Layout4"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Layout4"
         android:layout_marginTop="10dp" />
 
     <LinearLayout
-        android:id="@+id/MyprofileActivity_Layout5"
+        android:id="@+id/AddNewfriendActivity_Layout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Line4"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Line4"
         android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/MyprofileActivity_BirthDate"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:text="@string/AddNewfriendActivity_BirthDate"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="25dp"
             android:layout_marginStart="25dp" />
 
         <TextView
-            android:id="@+id/MyprofileActivity_Region"
+            android:id="@+id/AddNewfriendActivity_Region"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="100dp"
             android:layout_marginStart="100dp" />
@@ -139,33 +174,33 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/MyprofileActivity_Line5"
+        android:id="@+id/AddNewfriendActivity_Line5"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dfdfdf"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Layout5"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Layout5"
         android:layout_marginTop="10dp" />
 
     <LinearLayout
-        android:id="@+id/MyprofileActivity_Layout6"
+        android:id="@+id/AddNewfriendActivity_Layout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Line5"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Line5"
         android:layout_marginTop="10dp">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
-            android:text="@string/MyprofileActivity_WhatsUp"
-            android:textSize="25sp"
+            android:layout_height="50dp"
+            android:text="@string/AddNewfriendActivity_WhatsUp"
+            android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="25dp"
             android:layout_marginStart="25dp" />
 
         <TextView
-            android:id="@+id/MyprofileActivity_WhatsUp"
+            android:id="@+id/AddNewfriendActivity_WhatsUp"
             android:layout_width="wrap_content"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
             android:textSize="15sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="132.5dp"
@@ -174,11 +209,20 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/MyprofileActivity_Line6"
+        android:id="@+id/AddNewfriendActivity_Line6"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dfdfdf"
-        app:layout_constraintTop_toBottomOf="@id/MyprofileActivity_Layout6"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Layout6"
         android:layout_marginTop="10dp" />
+
+    <Button
+        android:id="@+id/AddNewfriendActivity_Done"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/AddNewfriendActivity_Add"
+        android:textSize="25sp"
+        app:layout_constraintTop_toBottomOf="@id/AddNewfriendActivity_Line6"
+        android:layout_marginTop="50dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

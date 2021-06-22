@@ -1,6 +1,5 @@
 package com.example.mywechat.data;
 
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -12,36 +11,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class Friend {
-    private int number;
-    private String nickname;
-    private String id;
-    private Bitmap profile;
-    private String profiledir;
-    private String gender;
-    private String birthdate;
-    private String whatsup;
-    private String contactapplyId;
+public class Newfriend extends Friend{
+    String note;
 
-
-    public Friend(){
-        number = -1;
-        nickname = null;
-        id = null;
-        profile = null;
-        profiledir = null;
-        gender = null;
-        birthdate = null;
-        whatsup = null;
-        contactapplyId = null;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public void save(File JsonFriend) {
+    public String getNote() {
+        return  note;
+    }
+
+    public void save(File JsonNewfriendFile) {
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
         try {
-            in = new FileInputStream(JsonFriend);
+            in = new FileInputStream(JsonNewfriendFile);
             byte[] bytes = new byte[in.available()];
             in.read(bytes);
             JsonData = new String(bytes);
@@ -103,6 +89,13 @@ public class Friend {
                     setID("");
                 }
                 try {
+                    String Note = user_get.getString("Note");
+                    setNote(Note);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    setNote("");
+                }
+                try {
                     String ContactapplyId = user_get.getString("ContactapplyId");
                     setContactapplyId(ContactapplyId);
                 } catch (JSONException e) {
@@ -114,10 +107,11 @@ public class Friend {
         setProfileDir("UserBitmap");
     }
 
-    public void get(File JsonFriend) {
+    public void get(File JsonNewfriendFile) {
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());
+            user_save.put("Note", getNote());
             user_save.put("Nickname", getNickname());
             user_save.put("Gender", getGender());
             user_save.put("BirthDate", getBirthDate());
@@ -129,84 +123,12 @@ public class Friend {
         }
         final FileOutputStream out;
         try {
-            out = new FileOutputStream(JsonFriend);
+            out = new FileOutputStream(JsonNewfriendFile);
             out.write(user_save.toString().getBytes());
         } catch (FileNotFoundException e) {
             Log.d("FileNotFound ERROR", e.getMessage());
         } catch (IOException e) {
             Log.d("IO ERROR", e.getMessage());
         }
-    }
-
-    public int getNumber() {
-        return number;
-    }
-
-    public void setNumber(int number) {
-        this.number = number;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getID() {
-        return id;
-    }
-
-    public void setID(String id) {
-        this.id = id;
-    }
-
-    public Bitmap getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Bitmap profile) {
-        this.profile = profile;
-    }
-
-    public String getProfileDir() {
-        return profiledir;
-    }
-
-    public void setProfileDir(String profiledir) {
-        this.profiledir = profiledir;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBirthDate() {
-        return birthdate;
-    }
-
-    public void setBirthDate(String birthdate) {
-        this.birthdate = birthdate;
-    }
-
-    public String getWhatsUp() {
-        return whatsup;
-    }
-
-    public void setWhatsUp(String whatsup) {
-        this.whatsup = whatsup;
-    }
-
-    public void setContactapplyId(String contactapplyId) {
-        this.contactapplyId = contactapplyId;
-    }
-
-    public String getContactapplyId() {
-        return contactapplyId;
     }
 }
