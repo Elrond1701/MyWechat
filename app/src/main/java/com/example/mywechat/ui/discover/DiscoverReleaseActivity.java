@@ -1,6 +1,7 @@
 package com.example.mywechat.ui.discover;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -24,8 +25,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.MainActivity;
 import com.example.mywechat.R;
+import com.example.mywechat.ui.login.LoginActivity;
+import com.example.mywechat.ui.me.myprofile.change.ProfileChangeActivity;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Cookie;
+import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class DiscoverReleaseActivity extends AppCompatActivity {
 
@@ -41,7 +62,7 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
     ImageView img_chosen2;
     ImageView img_chosen3;
     ImageView add;
-    private ArrayList<Uri> img_chosen_list;
+    private ArrayList<Bitmap> img_chosen_list;
 
     @Override
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
@@ -51,7 +72,8 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
     }
 
     private void initView(){
-        img_chosen_list = new ArrayList<Uri>();
+        img_chosen_list = new ArrayList<Bitmap>();
+        text = findViewById(R.id.discover_release_text);
         img_chosen1 = findViewById(R.id.discover_img_chosen1);
         img_chosen2 = findViewById(R.id.discover_img_chosen2);
         img_chosen3 = findViewById(R.id.discover_img_chosen3);
@@ -62,20 +84,18 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
 
         });
         discoverSend.setOnClickListener(v -> {
-
+            discoverRelease();
         });
         add.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(DiscoverReleaseActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        101);
-            }else {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/*");
-                startActivityForResult(intent, PICK_PHOTO);
+            if (ContextCompat.checkSelfPermission(DiscoverReleaseActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(DiscoverReleaseActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             }
+
+            Intent intent = new Intent(
+                    Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent, PICK_PHOTO);
         });
     }
 
@@ -102,7 +122,7 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
                             Log.i("bit", String.valueOf(bit));
 //                            img_chosen1.setVisibility(View.VISIBLE);
 //                            img_chosen1.setImageBitmap(bit);
-                            img_chosen_list.add(imageUri);
+                            img_chosen_list.add(bit);
                             if(img_chosen_list.size()==1){
                                 img_chosen1.setVisibility(View.VISIBLE);
                                 img_chosen1.setImageBitmap(bit);
@@ -125,6 +145,49 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    public void discoverRelease (){
+        RequestBody requestBody = new FormBody.Builder().add("text", text.getText().toString())
+                                                        .add("pictures", String.valueOf(img_chosen_list)).build();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").post(requestBody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());
+            }
+
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = Objects.requireNonNull(response.body()).string();
+                try {
+                    JSONObject jsonObject= new JSONObject(responseData);
+                    Log.d("Login", responseData);
+                    if (jsonObject.getBoolean("success")) {
+                        runOnUiThread(() -> {
+                            Toast.makeText(getApplicationContext(), "Release your discover!", Toast.LENGTH_LONG).show();
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            try {
+                                Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
+                            } catch (JSONException e) {
+                                Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
+                }
+            }
+        });
+    }
+
+
 
 //    @Override
 //    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

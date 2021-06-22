@@ -18,6 +18,8 @@
             android:label="Chatting"/>
         <activity android:name=".ui.discover.DiscoverReleaseActivity"
             android:label="Release Your Discover"/>
+        <activity android:name=".ui.discover.DiscoverVideoReleaseActivity"
+            android:label="Release Your Discover"/>
         <activity
             android:name=".ui.register.RegisterActivity"
             android:label="@string/ReigsterActivity_Title" />
