@@ -1,7 +1,6 @@
 package com.example.mywechat.ui.discover;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,8 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.R;
-import com.example.mywechat.data.Chat;
-import com.example.mywechat.data.Comment;
 import com.example.mywechat.data.Discover;
 import com.example.mywechat.data.Friend;
 
@@ -53,6 +49,7 @@ public class DiscoverFragment extends Fragment {
     ImageView discover_type;
     TextView discover_video;
     private String cookie;
+    private String id;
     private DiscoverViewModel discoViewModel;
     private RecyclerView recyclerView;
     private LinkedList<Discover> discovers;
@@ -120,6 +117,7 @@ public class DiscoverFragment extends Fragment {
         if (JsonData != null) {
             try {
                 user_get = new JSONObject(JsonData);
+                System.out.println(user_get);
             } catch (JSONException e) {
                 user_get = null;
                 Log.d("JSONERROR", e.getMessage());
@@ -128,6 +126,11 @@ public class DiscoverFragment extends Fragment {
                 cookie = user_get.getString("Cookie");
             } catch (JSONException e) {
                 Log.d("GET COOKIE ERROR", e.getMessage());
+            }
+            try {
+                id = user_get.getString("UserName");
+            } catch (JSONException e) {
+                Log.d("GET ID ERROR", e.getMessage());
             }
         }
         final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").header("cookie",cookie).get().build();
@@ -143,11 +146,30 @@ public class DiscoverFragment extends Fragment {
                 JSONArray jsonArray = jsonObject.getJSONArray("moments");
                 for(int i = 0; i<jsonArray.length();i++){
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    System.out.println(jsonObject1);
                     String id = jsonObject1.getString("id");
                     String username = jsonObject1.getString("username");
-                    String text = jsonObject1.getString("text");
+                    String text = "";
+                    try {
+                        text = jsonObject1.getString("text");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ArrayList<String> likeList = new ArrayList<>();
+                    try {
+                        JSONArray jsonArray2 = jsonObject1.getJSONArray("like");
+                        for( int j = 0; j<jsonArray2.length(); j++){
+                            likeList.add((String) jsonArray2.get(i));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(likeList.size());
                     Discover discover = new Discover(id, username);
+                    getCommentList(discover);
                     discover.setText(text);
+                    discover.setLikeList(likeList);
+                    System.out.println(discover.getCommentList().size());
                     discovers.add(discover);
                 }
             }
@@ -180,6 +202,39 @@ public class DiscoverFragment extends Fragment {
 //            public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 //        });
     }
+
+    public void getCommentList(Discover discover) throws IOException {
+        ArrayList<String> commentList = new ArrayList<>();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment/comment?momentId="+discover.getId()).header("cookie",cookie).get().build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+//        String responseData = call.execute().string();
+//        call.enqueue(new Callback() {
+        Response response = call.execute();
+        String responseData = response.body().string();
+        try {
+            JSONObject jsonObject = new JSONObject(responseData);
+            System.out.println(jsonObject);
+            if (jsonObject.getBoolean("success")){
+                JSONArray jsonArray = jsonObject.getJSONArray("comments");
+                for(int i = 0; i<jsonArray.length();i++){
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                    System.out.println(jsonObject1);
+//                    String id = jsonObject1.getString("id");
+                    String username = jsonObject1.getString("username");
+                    String content = jsonObject1.getString("content");;
+                    commentList.add(username+'：'+content);
+                }
+                System.out.println(commentList.size());
+                discover.setCommentList(commentList);
+            }
+
+//            return commentList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public Friend getFriend(String username) {
         Friend friend = new Friend();
@@ -252,6 +307,9 @@ public class DiscoverFragment extends Fragment {
         discoViewModel = new ViewModelProvider(this).get(DiscoverViewModel.class);
         discoViewModel.setDiscovers(discovers);
         DiscoverAdapter discoverAdapter = new DiscoverAdapter(discovers);
+        discoverAdapter.setCookie(cookie);
+        System.out.println(id);
+        discoverAdapter.setId(id);
         recyclerView.setAdapter(discoverAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);

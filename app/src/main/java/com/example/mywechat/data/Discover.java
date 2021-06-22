@@ -15,7 +15,7 @@ public class Discover {
     private String PublishedTime;
     private ArrayList<Integer> Images;
     private ArrayList<String> LikeList;
-    private ArrayList<Comment> CommentList;
+    private ArrayList<String> CommentList;
 
 //    public Discover(String Nickname, int Profile, String Text, String PublishedTime, ArrayList<Integer> Images, ArrayList<String> LikeList, ArrayList<Comment> CommentList) {
 //        this.Nickname = Nickname;
@@ -42,6 +42,16 @@ public class Discover {
 
     public void setText(String Text) {this.Text = Text;}
 
+    public void setLikeList(ArrayList<String> CommentList) {
+            this.CommentList = CommentList;
+    }
+
+    public void setCommentList(ArrayList<String> LikeList) {
+        this.LikeList = LikeList;
+    }
+
+    public String getId() { return id; }
+
     public String getNickname() { return Username; }
 
 //    public int getAvatarIcon() { return avatarIcon; }
@@ -52,7 +62,7 @@ public class Discover {
 
     public String getText() { return Text; }
 
-    public String getLikeList() {
+    public String getLikeListStr() {
         String result="";
         int Length = LikeList.size();
         for (int j = 0; j<Length; j++){
@@ -61,7 +71,16 @@ public class Discover {
                 result = result + "，";
             }
         }
-        return result;
+        return result+"觉得很赞";
     }
+
+    public ArrayList<String> getLikeList(){ return LikeList; }
+
+    public int getLikeListLen() {
+            return LikeList.size();
+    }
+
+    public ArrayList<String> getCommentList(){ return CommentList; }
+
 //    public int getImageCount() { return images.size(); }
 }

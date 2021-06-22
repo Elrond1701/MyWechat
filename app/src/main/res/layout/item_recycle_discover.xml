@@ -101,7 +101,6 @@
                         android:id="@+id/discover_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="点赞"
                         android:textSize="15sp"
                         android:layout_margin="5dp"
                         android:textColor="@color/white"
