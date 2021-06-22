@@ -106,13 +106,6 @@ public class MsgActivity extends AppCompatActivity {
     }
 
     public void getDate() {
-//        Message msg1 = new Message(1,101);
-//        msg1.setText("操他妈的");
-//        Message msg2 = new Message(1,102);
-//        msg2.setText("确实");
-//        Messages.add(msg1);
-//        Messages.add(msg2);
-
 
     }
 

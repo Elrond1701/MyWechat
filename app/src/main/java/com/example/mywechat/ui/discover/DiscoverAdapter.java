@@ -1,6 +1,7 @@
 package com.example.mywechat.ui.discover;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.example.mywechat.R;
 import com.example.mywechat.data.Discover;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -93,6 +95,55 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
         Discover discover = data.get(position);
         holder.Nickname.setText(discover.getNickname());
         holder.Text.setText(discover.getText());
+
+        ArrayList<String> commentList = new ArrayList<>();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment/comment?momentId="+discover.getId()).header("cookie",cookie).get().build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+//        String responseData = call.execute().string();
+//        call.enqueue(new Callback() {
+        Response response = null;
+        try {
+            response = call.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String responseData = null;
+        try {
+            responseData = response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            JSONObject jsonObject = new JSONObject(responseData);
+            System.out.println(jsonObject);
+            if (jsonObject.getBoolean("success")){
+                JSONArray jsonArray = jsonObject.getJSONArray("comments");
+                for(int i = 0; i<jsonArray.length();i++){
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                    System.out.println(jsonObject1);
+//                    String id = jsonObject1.getString("id");
+                    String username = jsonObject1.getString("username");
+                    String content = jsonObject1.getString("content");;
+                    commentList.add(username+'：'+content);
+                }
+            }
+//            return commentList;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (commentList.size()!=0){
+            String comment = "";
+            for(int j = 0; j < commentList.size(); j++){
+                comment = comment+commentList.get(j);
+                if (j < commentList.size()-1){
+                    comment = comment + '\n';
+                }
+            }
+            holder.CommentList.setVisibility(View.VISIBLE);
+            holder.CommentList.setText(comment);
+        }
 //        ArrayList<String> LikeList;
         if(discover.getLikeListLen()!=0){
             ArrayList<String> LikeList = discover.getLikeList();
@@ -160,12 +211,10 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             holder.InputLayout.setVisibility(View.VISIBLE);
         });
         holder.CommentSend.setOnClickListener(v -> {
-//            String CommentList = (String) holder.CommentList.getText();
-//            holder.CommentText.getText();
-//            holder.CommentList.setText((String) holder.CommentList.getText()+'\n'+holder.CommentText.getText());
-//            holder.CommentList.setVisibility(View.VISIBLE);
-//            holder.InputLayout.setVisibility(View.GONE);
+            holder.CommentList.setText((String) holder.CommentList.getText()+'\n'+id+'：'+holder.CommentText.getText());
+            holder.CommentList.setVisibility(View.VISIBLE);
             holder.InputLayout.setVisibility(View.GONE);
+            holder.CommentText.setText("");
             discoverComment(discover.getId(), (String) holder.Comment.getText());
         });
     }

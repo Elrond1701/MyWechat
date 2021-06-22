@@ -54,6 +54,7 @@ public class DiscoverFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinkedList<Discover> discovers;
     private DiscoverAdapter discoverAdapter;
+    private ArrayList<String> commentList;
 
 
     @Override
@@ -164,12 +165,14 @@ public class DiscoverFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    System.out.println(likeList.size());
                     Discover discover = new Discover(id, username);
-                    getCommentList(discover);
+//                    commentList = new ArrayList<>();
+//                    getCommentList(id);
+//                    System.out.println(commentList.size());
                     discover.setText(text);
                     discover.setLikeList(likeList);
-                    System.out.println(discover.getCommentList().size());
+//                    discover.setCommentList(commentList);
+//                    System.out.println(discover.getCommentList().size());
                     discovers.add(discover);
                 }
             }
@@ -203,9 +206,8 @@ public class DiscoverFragment extends Fragment {
 //        });
     }
 
-    public void getCommentList(Discover discover) throws IOException {
-        ArrayList<String> commentList = new ArrayList<>();
-        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment/comment?momentId="+discover.getId()).header("cookie",cookie).get().build();
+    public void getCommentList(String id) throws IOException {
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment/comment?momentId="+id).header("cookie",cookie).get().build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);
 //        String responseData = call.execute().string();
@@ -226,7 +228,6 @@ public class DiscoverFragment extends Fragment {
                     commentList.add(username+'：'+content);
                 }
                 System.out.println(commentList.size());
-                discover.setCommentList(commentList);
             }
 
 //            return commentList;

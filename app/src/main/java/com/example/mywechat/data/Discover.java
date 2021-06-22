@@ -42,11 +42,7 @@ public class Discover {
 
     public void setText(String Text) {this.Text = Text;}
 
-    public void setLikeList(ArrayList<String> CommentList) {
-            this.CommentList = CommentList;
-    }
-
-    public void setCommentList(ArrayList<String> LikeList) {
+    public void setLikeList(ArrayList<String> LikeList) {
         this.LikeList = LikeList;
     }
 

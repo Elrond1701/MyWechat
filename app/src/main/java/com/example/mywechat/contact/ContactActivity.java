@@ -75,6 +75,8 @@ public class ContactActivity extends AppCompatActivity {
             Intent newIntent = new Intent(ContactActivity.this, MsgActivity.class);
             // Add more information to intent
             newIntent.putExtra("id",friend.getID());
+            
+
 //            newIntent.putExtra("profile",friend.getProfile());
             startActivity(newIntent);
         });
