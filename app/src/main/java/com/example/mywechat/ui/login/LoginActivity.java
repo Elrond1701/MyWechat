@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
                                     intent.putExtra("UserName", "");
                                 }
                                 intent.putExtra("Password", passwordEditText.getText().toString());
-                                intent.putExtra("COOKIE", result);
+                                intent.putExtra("Cookie", result);
                                 startActivity(intent);
                             });
                         } else {

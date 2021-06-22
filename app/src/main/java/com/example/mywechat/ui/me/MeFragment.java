@@ -151,6 +151,13 @@ public class MeFragment extends Fragment {
                     Log.d("LoginActivity ERROR", e.getMessage());
                     user.setID("");
                 }
+                try {
+                    String Cookie = user_get.getString("Cookie");
+                    user.setCookie(Cookie);
+                } catch (JSONException e) {
+                    Log.d("JSONException", e.getMessage());
+                    user.setCookie("");
+                }
             }
         }
         user.setProfileDir("UserBitmap");

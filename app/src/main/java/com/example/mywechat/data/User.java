@@ -5,6 +5,7 @@ public class User extends Friend{
     public static final boolean USER = true;
     private String password;
     private String email;
+    private String cookie;
 
     public User() {
         password = null;
@@ -25,5 +26,13 @@ public class User extends Friend{
 
     public String getEmail() {
         return email;
+    }
+
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
+    }
+
+    public String getCookie() {
+        return cookie;
     }
 }
