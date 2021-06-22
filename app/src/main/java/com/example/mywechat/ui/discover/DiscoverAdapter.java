@@ -113,7 +113,6 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
         call.enqueue(new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());
             }
 
             @SuppressLint("LongLogTag")
@@ -124,17 +123,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
                     JSONObject jsonObject= new JSONObject(responseData);
                     Log.d("Login", responseData);
                     if (jsonObject.getBoolean("success")) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(getApplicationContext(), "Release your discover!", Toast.LENGTH_LONG).show();
-                        });
                     } else {
-                        runOnUiThread(() -> {
-                            try {
-                                Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
-                            } catch (JSONException e) {
-                                Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
-                            }
-                        });
                     }
                 } catch (JSONException e) {
                     Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
@@ -142,8 +131,6 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             }
         });
     }
-
-    public void discoverComment()
 
 
 
