@@ -100,4 +100,5 @@ public class MsgAdapter extends RecyclerView.Adapter<MsgAdapter.MsgViewHolder> {
     }
 
 
+
 }
