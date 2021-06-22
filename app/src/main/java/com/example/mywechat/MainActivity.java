@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -49,6 +50,7 @@ import okio.ByteString;
 
 public class MainActivity extends AppCompatActivity {
 
+//    public static User user;
     ChatsFragment chatsFragment;
     ContactsFragment contactsFragment;
     DiscoverFragment discoverFragment;
@@ -61,6 +63,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         BottomNavigationView navView = findViewById(R.id.MainActivity_NavView);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

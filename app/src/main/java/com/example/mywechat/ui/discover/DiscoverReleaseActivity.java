@@ -32,6 +32,9 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,7 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
 
     private ImageView profile;
     private Uri image;
+    String cookie;
     public static final int PICK_PHOTO = 101;
 
     Uri imageUri;
@@ -72,6 +76,35 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
     }
 
     private void initView(){
+        File UserJsonFile = new File(this.getFilesDir(), "UserJson");
+        FileInputStream in;
+        String JsonData;
+        JSONObject user_get;
+        try {
+            in = new FileInputStream(UserJsonFile);
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            JsonData = new String(bytes);
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundERROR", e.getMessage());
+            JsonData = null;
+        } catch (IOException e) {
+            Log.d("IOERROR", e.getMessage());
+            JsonData = null;
+        }
+        if (JsonData != null) {
+            try {
+                user_get = new JSONObject(JsonData);
+            } catch (JSONException e) {
+                user_get = null;
+                Log.d("JSONERROR", e.getMessage());
+            }
+            try {
+                cookie = user_get.getString("Cookie");
+            } catch (JSONException e) {
+                Log.d("GET COOKIE ERROR", e.getMessage());
+            }
+        }
         img_chosen_list = new ArrayList<Bitmap>();
         text = findViewById(R.id.discover_release_text);
         img_chosen1 = findViewById(R.id.discover_img_chosen1);
@@ -148,9 +181,10 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
 
 
     public void discoverRelease (){
+
         RequestBody requestBody = new FormBody.Builder().add("text", text.getText().toString())
-                                                        .add("pictures", String.valueOf(img_chosen_list)).build();
-        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").post(requestBody).build();
+                .add("cookie",cookie).build();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").header("cookie",cookie).post(requestBody).build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);
 
@@ -186,20 +220,4 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//        if (requestCode == GlobalVariable.GALLERY_REQUEST_CODE)
-//        {
-//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                choosePhoto();
-//            }
-//            else {
-//                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//    }
 }

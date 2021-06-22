@@ -27,15 +27,22 @@ public class Discover {
 //        this.CommentList = CommentList;
 //    }
 
-    public Discover(String Id, String Nickname, int Profile, String Text) {
+//    public Discover(String Id, String Nickname, int Profile, String Text) {
+//        this.id = Id;
+//        this.Nickname = Nickname;
+////        this.Profile = Profile;
+//        this.Text = Text;
+////        this.PublishedTime = PublishedTime;
+//    }
+
+        public Discover(String Id, String Username) {
         this.id = Id;
-        this.Nickname = Nickname;
-//        this.Profile = Profile;
-        this.Text = Text;
-//        this.PublishedTime = PublishedTime;
+        this.Username = Username;
     }
 
-    public String getNickname() { return Nickname; }
+    public void setText(String Text) {this.Text = Text;}
+
+    public String getNickname() { return Username; }
 
 //    public int getAvatarIcon() { return avatarIcon; }
 

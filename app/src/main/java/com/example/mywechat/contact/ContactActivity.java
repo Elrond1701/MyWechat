@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.mywechat.ChatActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
+import com.example.mywechat.ui.chats.MsgActivity;
 
 public class ContactActivity extends AppCompatActivity {
 
@@ -64,7 +65,12 @@ public class ContactActivity extends AppCompatActivity {
 
         Button messages = findViewById(R.id.ContactActivity_Messages);
         messages.setOnClickListener(v -> {
-            Intent newIntent = new Intent(ContactActivity.this, ChatActivity.class);
+//            Intent newIntent = new Intent(ContactActivity.this, ChatActivity.class);
+//            startActivity(newIntent);
+            Intent newIntent = new Intent(ContactActivity.this, MsgActivity.class);
+            // Add more information to intent
+            newIntent.putExtra("id",friend.getID());
+//            newIntent.putExtra("profile",friend.getProfile());
             startActivity(newIntent);
         });
 

@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.R;
+import com.example.mywechat.data.Chat;
 import com.example.mywechat.data.Comment;
 import com.example.mywechat.data.Discover;
 import com.example.mywechat.data.Friend;
@@ -30,6 +31,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -48,79 +52,167 @@ public class DiscoverFragment extends Fragment {
 //    private ChatsViewModel discoViewModel;
     ImageView discover_type;
     TextView discover_video;
+    private String cookie;
     private DiscoverViewModel discoViewModel;
     private RecyclerView recyclerView;
+    private LinkedList<Discover> discovers;
+    private DiscoverAdapter discoverAdapter;
 
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+//        discovers = new LinkedList<>();
+//        discoViewModel = new ViewModelProvider(this).get(DiscoverViewModel.class);
+//        getCookie();
+//        getData();
         super.onCreate(savedInstanceState);
     }
 
-//    public void getData() {
-//        RequestBody requestBody = new FormBody.Builder().build();
-//        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").post(requestBody).build();
-//        OkHttpClient okHttpClient = new OkHttpClient();
-//        Call call = okHttpClient.newCall(request);
-//
-//        call.enqueue(new Callback() {
-//
-//            @Override
-//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-//
+//    public void getCookie() {
+//        File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
+//        FileInputStream in;
+//        String JsonData;
+//        JSONObject user_get;
+//        try {
+//            in = new FileInputStream(UserJsonFile);
+//            byte[] bytes = new byte[in.available()];
+//            in.read(bytes);
+//            JsonData = new String(bytes);
+//        } catch (FileNotFoundException e) {
+//            Log.d("FileNotFoundERROR", e.getMessage());
+//            JsonData = null;
+//        } catch (IOException e) {
+//            Log.d("IOERROR", e.getMessage());
+//            JsonData = null;
+//        }
+//        if (JsonData != null) {
+//            try {
+//                user_get = new JSONObject(JsonData);
+//            } catch (JSONException e) {
+//                user_get = null;
+//                Log.d("JSONERROR", e.getMessage());
 //            }
-//
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//
+//            try {
+//                cookie = user_get.getString("Cookie");
+//            } catch (JSONException e) {
+//                Log.d("GET COOKIE ERROR", e.getMessage());
 //            }
-//        })
+//        }
 //    }
 //
-//    public Friend getFriend(String username) {
-//        Friend friend = new Friend();
-//        RequestBody requestBody = new FormBody.Builder().build();
-//        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").post(requestBody).build();
-//        OkHttpClient okHttpClient = new OkHttpClient();
-//        Call call = okHttpClient.newCall(request);
-//
+    public void getData() throws IOException {
+        File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
+        FileInputStream in;
+        String JsonData;
+        JSONObject user_get;
+        try {
+            in = new FileInputStream(UserJsonFile);
+            byte[] bytes = new byte[in.available()];
+            in.read(bytes);
+            JsonData = new String(bytes);
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundERROR", e.getMessage());
+            JsonData = null;
+        } catch (IOException e) {
+            Log.d("IOERROR", e.getMessage());
+            JsonData = null;
+        }
+        if (JsonData != null) {
+            try {
+                user_get = new JSONObject(JsonData);
+            } catch (JSONException e) {
+                user_get = null;
+                Log.d("JSONERROR", e.getMessage());
+            }
+            try {
+                cookie = user_get.getString("Cookie");
+            } catch (JSONException e) {
+                Log.d("GET COOKIE ERROR", e.getMessage());
+            }
+        }
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").header("cookie",cookie).get().build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+//        String responseData = call.execute().string();
 //        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());
-//            }
-//
+        Response response = call.execute();
+        String responseData = response.body().string();
+        try {
+            JSONObject jsonObject = new JSONObject(responseData);
+            if (jsonObject.getBoolean("success")){
+                JSONArray jsonArray = jsonObject.getJSONArray("moments");
+                for(int i = 0; i<jsonArray.length();i++){
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                    String id = jsonObject1.getString("id");
+                    String username = jsonObject1.getString("username");
+                    String text = jsonObject1.getString("text");
+                    Discover discover = new Discover(id, username);
+                    discover.setText(text);
+                    discovers.add(discover);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //        call.enqueue(new Callback() {
 //            @Override
 //            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 //                String responseData = Objects.requireNonNull(response.body()).string();
 //                try {
 //                    JSONObject jsonObject = new JSONObject(responseData);
-//                    Log.d("Login", responseData);
-//                    if (jsonObject.getBoolean("success")) {
-//                        runOnUiThread(() -> {
-//                            friend.setNickname(jsonObject.getString("nickname"));
-//                            friend.setProfile();
-//                        });
-//                    } else {
-//                        runOnUiThread(() -> {
-//                            try {
-//                                Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
-//                            } catch (JSONException e) {
-//                                Log.d("LoginActivity ERROR", e.getMessage());
-//                            }
-//                        });
+//                    if (jsonObject.getBoolean("success")){
+//                        JSONArray jsonArray = jsonObject.getJSONArray("moments");
+//                        for(int i = 0; i<jsonArray.length();i++){
+//                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                            String id = jsonObject1.getString("id");
+//                            String username = jsonObject1.getString("username");
+//                            String text = jsonObject1.getString("text");
+//                            Discover discover = new Discover(id, username);
+//                            discover.setText(text);
+//                            discovers.add(discover);
+//                        }
 //                    }
 //                } catch (JSONException e) {
-//                    Log.d("LoginActivity ERROR", e.getMessage());
+//                    e.printStackTrace();
 //                }
 //            }
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) { }
 //        });
-//        return friend;
-//    }
+    }
 
-//    public ArrayList<Comment> get(String moment){
-//
-//    }
+    public Friend getFriend(String username) {
+        Friend friend = new Friend();
+        RequestBody requestBody = new FormBody.Builder().build();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").post(requestBody).build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Call call = okHttpClient.newCall(request);
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseData = Objects.requireNonNull(response.body()).string();
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData);
+                    Log.d("Login", responseData);
+                    if (jsonObject.getBoolean("success")) {
+
+                    } else {
+
+                    }
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                }
+            }
+        });
+        return friend;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -129,9 +221,13 @@ public class DiscoverFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        LinkedList<Discover> discovers=new LinkedList<>();
+        discovers = new LinkedList<>();
         discoViewModel = new ViewModelProvider(this).get(DiscoverViewModel.class);
-        discoViewModel.setDiscovers(discovers);
+        try {
+            getData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         discover_type = view.findViewById(R.id.discover_type_choose);
         discover_type.setOnClickListener(v -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -150,24 +246,12 @@ public class DiscoverFragment extends Fragment {
                             dialog.dismiss();
                         }
                     });
-//            builder.setSingleChoiceItems(new String[]{"图文动态", "视频动态"}, 0,
-//                    (dialog, which) -> {
-//                        switch (which) {
-//                            case 0: {
-//                                Intent intent = new Intent(getActivity(), DiscoverReleaseActivity.class);
-//                                getActivity().startActivity(intent);
-//                            }
-//                            case 1: {
-//                                Intent intent = new Intent(getActivity(), DiscoverVideoReleaseActivity.class);
-//                                getActivity().startActivity(intent);
-//                            }
-//                        }
-//                        dialog.dismiss();
-//                        });
             builder.show();
         });
         recyclerView = view.findViewById(R.id.discover_recyclerview);
-        DiscoverAdapter discoverAdapter = new DiscoverAdapter(discoViewModel.getDiscovers());
+        discoViewModel = new ViewModelProvider(this).get(DiscoverViewModel.class);
+        discoViewModel.setDiscovers(discovers);
+        DiscoverAdapter discoverAdapter = new DiscoverAdapter(discovers);
         recyclerView.setAdapter(discoverAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);
