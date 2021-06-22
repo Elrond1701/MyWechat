@@ -65,14 +65,14 @@
     <!-- Strings related to NewfriendActivity -->
     <string name="NewfriendActivity_Title">Add New Friend</string>
     <string name="NewfriendActivity_Button">SEARCH FRIEND</string>
+    <string name="NewfriendActivity_See">WHO WANT TO ADD YOU</string>
 
     <!-- Strings related to MyprofileActivity -->
     <string name="MyprofileActivity_Title">My Profile</string>
     <string name="MyprofileActivity_Profile">Profile Photo</string>
     <string name="MyprofileActivity_Nickname">Nickname</string>
-    <string name="MyprofileActivity_PhoneNumber">My WeChat ID</string>
     <string name="MyprofileActivity_Gender">Gender</string>
-    <string name="MyprofileActivity_Region">Region</string>
+    <string name="MyprofileActivity_BirthDate">BirthDate</string>
     <string name="MyprofileActivity_WhatsUp">What\'s Up</string>
 
     <!-- Strings related to ProfileChangeActivity -->
@@ -97,11 +97,32 @@
     <string name="GenderChangeActivity_Female">Female</string>
     <string name="GenderChangeActivity_Invisible">Invisible</string>
 
-    <!-- Strings related to RegionChangeActivity -->
-    <string name="RegionChangeActivity_Title">Change Your Region</string>
-    <string name="RegionChangeActivity_Done">Done</string>
+    <!-- Strings related to BirthDateChangeActivity -->
+    <string name="BirthDateChangeActivity_Title">Change Your BirthDate</string>
+    <string name="BirthDateChangeActivity_Done">Done</string>
 
     <!-- Strings related to WhatsUpChangeActivity -->
     <string name="WhatsUpChangeActivity_Title">Set What\'s up</string>
     <string name="WhatsUpChangeActivity_Done">Done</string>
+
+    <!-- Strings related to AddNewfriendActivity -->
+    <string name="AddNewfriendActivity_Title">New friend</string>
+    <string name="AddNewfriendActivity_Username">Username</string>
+    <string name="AddNewfriendActivity_Profile">Profile Photo</string>
+    <string name="AddNewfriendActivity_Nickname">Nickname</string>
+    <string name="AddNewfriendActivity_Gender">Gender</string>
+    <string name="AddNewfriendActivity_BirthDate">BirthDate</string>
+    <string name="AddNewfriendActivity_WhatsUp">What\'s Up</string>
+    <string name="AddNewfriendActivity_Add">Add</string>
+
+    <!-- Strings related to AcceptNewfriendActivity -->
+    <string name="AcceptNewfriendActivity_Title">New friend</string>
+    <string name="AcceptNewfriendActivity_Username">Username</string>
+    <string name="AcceptNewfriendActivity_Profile">Profile Photo</string>
+    <string name="AcceptNewfriendActivity_Nickname">Nickname</string>
+    <string name="AcceptNewfriendActivity_Gender">Gender</string>
+    <string name="AcceptNewfriendActivity_BirthDate">BirthDate</string>
+    <string name="AcceptNewfriendActivity_WhatsUp">What\'s Up</string>
+    <string name="AcceptNewfriendActivity_Accept">Accept</string>
+    <string name="AcceptNewfriendActivity_Reject">Reject</string>
 </resources>

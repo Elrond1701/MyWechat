@@ -11,24 +11,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class User extends Friend{
+public class Newfriend extends Friend{
+    String note;
 
-    public static final boolean USER = true;
-    private String password;
-    private String email;
-    private String cookie;
-
-    public User() {
-        password = null;
-        email = null;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public void get(File UserJsonFile) {
+    public String getNote() {
+        return  note;
+    }
+
+    public void save(File JsonNewfriendFile) {
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
         try {
-            in = new FileInputStream(UserJsonFile);
+            in = new FileInputStream(JsonNewfriendFile);
             byte[] bytes = new byte[in.available()];
             in.read(bytes);
             JsonData = new String(bytes);
@@ -90,63 +89,46 @@ public class User extends Friend{
                     setID("");
                 }
                 try {
-                    String Cookie = user_get.getString("Cookie");
-                    setCookie(Cookie);
+                    String Note = user_get.getString("Note");
+                    setNote(Note);
                 } catch (JSONException e) {
-                    Log.d("JSONException", e.getMessage());
-                    setCookie("");
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    setNote("");
+                }
+                try {
+                    String ContactapplyId = user_get.getString("ContactapplyId");
+                    setContactapplyId(ContactapplyId);
+                } catch (JSONException e) {
+                    Log.d("LoginActivity ERROR", e.getMessage());
+                    setContactapplyId("");
                 }
             }
         }
         setProfileDir("UserBitmap");
     }
 
-    public void save(File UserJsonFile) {
+    public void get(File JsonNewfriendFile) {
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());
-            user_save.put("Password", getPassword());
+            user_save.put("Note", getNote());
             user_save.put("Nickname", getNickname());
             user_save.put("Gender", getGender());
             user_save.put("BirthDate", getBirthDate());
             user_save.put("WhatsUp", getWhatsUp());
             user_save.put("ProfileDir", getProfileDir());
-            user_save.put("Cookie", getCookie());
+            user_save.put("ContactapplyId", getContactapplyId());
         } catch (JSONException e) {
             Log.d("User Save ERROR", e.getMessage());
         }
         final FileOutputStream out;
         try {
-            out = new FileOutputStream(UserJsonFile);
+            out = new FileOutputStream(JsonNewfriendFile);
             out.write(user_save.toString().getBytes());
         } catch (FileNotFoundException e) {
             Log.d("FileNotFound ERROR", e.getMessage());
         } catch (IOException e) {
             Log.d("IO ERROR", e.getMessage());
         }
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setCookie(String cookie) {
-        this.cookie = cookie;
-    }
-
-    public String getCookie() {
-        return cookie;
     }
 }

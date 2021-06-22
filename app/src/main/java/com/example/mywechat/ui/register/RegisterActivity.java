@@ -3,6 +3,7 @@ package com.example.mywechat.ui.register;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        final Intent intent = getIntent();
+        intent = getIntent();
 
         final EditText usernameEditText = findViewById(R.id.RegisterActivity_Username);
         final EditText passwordEditText = findViewById(R.id.RegisterActivity_Password);
@@ -132,5 +134,14 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.setResult(0, intent);
+            this.finish(); // back button
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

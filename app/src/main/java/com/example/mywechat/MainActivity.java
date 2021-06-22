@@ -13,15 +13,21 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.mywechat.data.Friend;
+import com.example.mywechat.data.Newfriend;
 import com.example.mywechat.data.User;
 import com.example.mywechat.ui.chats.ChatsFragment;
 import com.example.mywechat.ui.contacts.ContactsFragment;
+import com.example.mywechat.ui.contacts.newfriend.AcceptNewfriendActivity;
+import com.example.mywechat.ui.contacts.newfriend.AddNewfriendActivity;
+import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
 import com.example.mywechat.ui.discover.DiscoverFragment;
 import com.example.mywechat.ui.me.MeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -110,8 +116,68 @@ public class MainActivity extends AppCompatActivity {
             public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
                 super.onMessage(webSocket, text);
                 try {
-                    JSONObject jsonObject = new JSONObject(text);
-                    Log.d("onMessage", jsonObject.toString());
+                    JSONArray jsonArray = new JSONArray(text);
+                    JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+                    if (jsonObject.getString("contactApply") != null) {
+                        Newfriend newfriend = new Newfriend();
+                        String contactApply = jsonObject.getString("contactApply");
+                        JSONObject contactApplyData = new JSONObject(contactApply);
+                        if (contactApplyData.getString("contact").equals(user.getID())) {
+                            newfriend.setContactapplyId(contactApplyData.getString("id"));
+                            newfriend.setNote(contactApplyData.getString("note"));
+                            newfriend.setID(contactApplyData.getString("username"));
+
+                            final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user?uname=" + newfriend.getID())
+                                    .header("Cookie", user.getCookie()).get().build();
+                            OkHttpClient okHttpClient = new OkHttpClient();
+                            Call call = okHttpClient.newCall(request);
+
+                            call.enqueue(new Callback() {
+                                @Override
+                                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                    runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+                                }
+
+                                @Override
+                                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                    String responseData = response.body().string();
+                                    Log.d("ResponseHappy", responseData);
+                                    try {
+                                        JSONObject jsonObject_user = new JSONObject(responseData);
+                                        if (jsonObject_user.getBoolean("success")) {
+                                            newfriend.setBirthDate(jsonObject_user.getString("birthdate"));
+                                            newfriend.setID(jsonObject_user.getString("username"));
+                                            newfriend.setNickname(jsonObject_user.getString("nickname"));
+                                            newfriend.setGender(jsonObject_user.getString("sex"));
+                                            newfriend.setWhatsUp(jsonObject_user.getString("sign"));
+
+                                            File JsonNewfriendFile = null;
+                                            int i;
+                                            for (i = 0; ; i++) {
+                                                JsonNewfriendFile = new File(getFilesDir(), "NewfriendJson" + i);
+                                                if (!JsonNewfriendFile.exists()) {
+                                                    break;
+                                                }
+                                            }
+                                            newfriend.save(JsonNewfriendFile);
+                                        } else {
+                                            runOnUiThread(() -> {
+                                                try {
+                                                    Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject_user.getString("msg"), Toast.LENGTH_LONG).show();
+                                                } catch (JSONException e) {
+                                                    Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        }
+                                    } catch (JSONException e) {
+                                        runOnUiThread(() -> Toast.makeText(getApplicationContext(), "ERROR:" + e.getMessage(), Toast.LENGTH_LONG).show());
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                    Log.d("onMessage", jsonArray.toString());
                 } catch (JSONException e) {
                     Log.d("onMessage", e.getMessage());
                 }
@@ -179,28 +245,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         user.setProfileDir("");
-        JSONObject user_save = new JSONObject();
-        try {
-            user_save.put("UserName", user.getID());
-            user_save.put("Password", user.getPassword());
-            user_save.put("Nickname", user.getNickname());
-            user_save.put("Gender", user.getGender());
-            user_save.put("BirthDate", user.getBirthDate());
-            user_save.put("WhatsUp", user.getWhatsUp());
-            user_save.put("ProfileDir", user.getProfileDir());
-            user_save.put("Cookie", user.getCookie());
-        } catch (JSONException e) {
-            Log.d("User Save ERROR", e.getMessage());
-        }
         final File UserJsonFile = new File(getFilesDir(), "UserJson");
-        final FileOutputStream out;
-        try {
-            out = new FileOutputStream(UserJsonFile);
-            out.write(user_save.toString().getBytes());
-        } catch (FileNotFoundException e) {
-            Log.d("FileNotFound ERROR", e.getMessage());
-        } catch (IOException e) {
-            Log.d("IO ERROR", e.getMessage());
-        }
+        user.save(UserJsonFile);
     }
 }

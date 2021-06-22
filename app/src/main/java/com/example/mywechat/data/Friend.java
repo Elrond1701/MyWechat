@@ -11,6 +11,7 @@ public class Friend {
     private String gender;
     private String birthdate;
     private String whatsup;
+    private String contactapplyId;
 
 
     public Friend(){
@@ -22,6 +23,7 @@ public class Friend {
         gender = null;
         birthdate = null;
         whatsup = null;
+        contactapplyId = null;
     }
 
     public int getNumber() {
@@ -86,5 +88,13 @@ public class Friend {
 
     public void setWhatsUp(String whatsup) {
         this.whatsup = whatsup;
+    }
+
+    public void setContactapplyId(String contactapplyId) {
+        this.contactapplyId = contactapplyId;
+    }
+
+    public String getContactapplyId() {
+        return contactapplyId;
     }
 }

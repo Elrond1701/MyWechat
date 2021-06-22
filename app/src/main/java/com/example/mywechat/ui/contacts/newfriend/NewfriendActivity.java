@@ -1,6 +1,8 @@
 package com.example.mywechat.ui.contacts.newfriend;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -9,11 +11,17 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mywechat.R;
+import com.example.mywechat.data.Friend;
+import com.example.mywechat.data.Newfriend;
+import com.example.mywechat.data.User;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -27,6 +35,7 @@ import okhttp3.Response;
 public class NewfriendActivity extends AppCompatActivity {
 
     private EditText editText;
+    private Friend friend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +61,13 @@ public class NewfriendActivity extends AppCompatActivity {
     }
 
     public void searchFriend(android.view.View View) {
-        String Username = editText.toString();
-        RequestBody requestBody = new FormBody.Builder().add("uname", Username).build();
-        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user").post(requestBody).build();
+        User user = new User();
+        File UserJsonFile = new File(getFilesDir(), "UserJson");
+        user.get(UserJsonFile);
+
+        String Username = editText.getText().toString();
+        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user?uname=" + Username)
+                .header("Cookie", user.getCookie()).get().build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);
 
@@ -67,10 +80,23 @@ public class NewfriendActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responseData = response.body().string();
+                Log.d("ResponseHappy", responseData);
                 try {
                     JSONObject jsonObject = new JSONObject(responseData);
                     if (jsonObject.getBoolean("success")) {
-
+                        friend = new Friend();
+                        friend.setBirthDate(jsonObject.getString("birthdate"));
+                        friend.setID(jsonObject.getString("username"));
+                        friend.setNickname(jsonObject.getString("nickname"));
+                        friend.setGender(jsonObject.getString("sex"));
+                        friend.setWhatsUp(jsonObject.getString("sign"));
+                        Intent intent = new Intent(NewfriendActivity.this, AddNewfriendActivity.class);
+                        intent.putExtra("BirthDate", friend.getBirthDate());
+                        intent.putExtra("ID", friend.getID());
+                        intent.putExtra("Nickname", friend.getNickname());
+                        intent.putExtra("Gender", friend.getGender());
+                        intent.putExtra("WhatsUp", friend.getWhatsUp());
+                        startActivity(intent);
                     } else {
                         runOnUiThread(() -> {
                             try {
@@ -85,6 +111,11 @@ public class NewfriendActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void addYou(android.view.View View) {
+        Intent intent = new Intent(NewfriendActivity.this, AddyouActivity.class);
+        startActivity(intent);
     }
 
 }

@@ -15,11 +15,12 @@ import com.example.mywechat.contact.ContactActivity;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Group;
+import com.example.mywechat.data.Newfriend;
 
 import java.util.LinkedList;
 
-public class NewfriendAdapter extends RecyclerView.Adapter<com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder> {
-    private final LinkedList<Friend> data;
+public class NewfriendAdapter extends RecyclerView.Adapter<NewfriendAdapter.NewfriendViewHolder> {
+    private final LinkedList<Newfriend> data;
     private Context parent;
 
     public static class NewfriendViewHolder extends RecyclerView.ViewHolder {
@@ -33,7 +34,7 @@ public class NewfriendAdapter extends RecyclerView.Adapter<com.example.mywechat.
         }
     }
 
-    public NewfriendAdapter(LinkedList<Friend> data) {
+    public NewfriendAdapter(LinkedList<Newfriend> data) {
         this.data = data;
     }
 
@@ -43,13 +44,13 @@ public class NewfriendAdapter extends RecyclerView.Adapter<com.example.mywechat.
 
     @NonNull
     @Override
-    public com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NewfriendAdapter.NewfriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycle_group, parent,false);
-        return new com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder(itemView);
+        return new NewfriendAdapter.NewfriendViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull com.example.mywechat.ui.contacts.groups.GroupAdapter.GroupViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NewfriendAdapter.NewfriendViewHolder holder, int position) {
         Friend friend = data.get(position);
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(parent, ContactActivity.class);

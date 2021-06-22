@@ -14,10 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyWechat">
-        <activity android:name=".ui.chats.MsgActivity"
-            android:label="Chatting"/>
-        <activity android:name=".ui.discover.DiscoverReleaseActivity"
-            android:label="Release Your Discover"/>
+        <activity android:name=".ui.contacts.newfriend.AddyouActivity"></activity>
+        <activity android:name=".ui.contacts.newfriend.AcceptNewfriendActivity" />
+        <activity android:name=".ui.contacts.newfriend.AddNewfriendActivity" />
+        <activity
+            android:name=".ui.chats.MsgActivity"
+            android:label="Chatting" />
+        <activity
+            android:name=".ui.discover.DiscoverReleaseActivity"
+            android:label="Release Your Discover" />
         <activity
             android:name=".ui.register.RegisterActivity"
             android:label="@string/ReigsterActivity_Title" />
@@ -28,14 +33,11 @@
             android:name=".ui.me.myprofile.change.WhatsUpChangeActivity"
             android:label="@string/WhatsUpChangeActivity_Title" />
         <activity
-            android:name=".ui.me.myprofile.change.RegionChangeActivity"
-            android:label="@string/RegionChangeActivity_Title" />
+            android:name=".ui.me.myprofile.change.BirthDateChangeActivity"
+            android:label="@string/BirthDateChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.GenderChangeActivity"
             android:label="@string/GenderChangeActivity_Title" />
-        <activity
-            android:name=".ui.me.myprofile.change.IDChangeActivity"
-            android:label="@string/IDChangeActivity_Title" />
         <activity
             android:name=".ui.me.myprofile.change.NicknameChangeActivity"
             android:label="@string/NicknameChangeActivity_Title" />
@@ -59,9 +61,6 @@
             android:label="" />
         <activity
             android:name=".DiscoverActivity"
-            android:label="" />
-        <activity
-            android:name=".MsgActivity"
             android:label="" />
         <activity
             android:name=".MainActivity"
