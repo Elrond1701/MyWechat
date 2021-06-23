@@ -1,15 +1,6 @@
 package com.example.mywechat.ui.me.myprofile.change;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
-import android.annotation.TargetApi;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -17,15 +8,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.DocumentsContract;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.mywechat.R;
+import com.example.mywechat.data.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,7 +37,8 @@ public class ProfileChangeActivity extends AppCompatActivity {
 
     private ImageView profile;
 
-    private Uri image;
+    User user;
+
     public static final int TAKE_CAMERA = 101;
     public static final int PICK_PHOTO = 102;
 
@@ -54,6 +53,9 @@ public class ProfileChangeActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        user = new User();
+        user.get(getFilesDir());
+
         intent = getIntent();
         profile = findViewById(R.id.ProfileChangeActivity_Profile);
         Bitmap bitmap = null;
@@ -65,6 +67,52 @@ public class ProfileChangeActivity extends AppCompatActivity {
             Toast.makeText(this, "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         profile.setImageBitmap(bitmap);
+
+        new Thread(() -> {
+            Bitmap new_bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
+            File file1 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath(),
+                    "avatar1.png");
+            try {
+                FileOutputStream out = new FileOutputStream(file1);
+                new_bitmap1.compress(Bitmap.CompressFormat.PNG, 100, out);
+                Log.d("GOOD", "GOOD");
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    Log.d("IOException", e.getMessage());
+                }
+            } catch (FileNotFoundException e) {
+                Log.d("FileNotFoundException", e.getMessage());
+            }
+
+            Intent intent1 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri1 = Uri.fromFile(file1);
+            intent1.setData(uri1);
+            sendBroadcast(intent1);
+
+            Bitmap new_bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.avatar2);
+            File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath(),
+                    "avatar2.png");
+            try {
+                FileOutputStream out = new FileOutputStream(file2);
+                new_bitmap2.compress(Bitmap.CompressFormat.PNG, 100, out);
+                Log.d("GOOD", "GOOD");
+                try {
+                    out.flush();
+                    out.close();
+                } catch (IOException e) {
+                    Log.d("IOException", e.getMessage());
+                }
+            } catch (FileNotFoundException e) {
+                Log.d("FileNotFoundException", e.getMessage());
+            }
+
+            Intent intent2 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri uri2 = Uri.fromFile(file2);
+            intent.setData(uri2);
+            sendBroadcast(intent2);
+        }).start();
 
         Button album = findViewById(R.id.ProfileChangeActivity_Album);
         album.setOnClickListener(v -> {
@@ -82,19 +130,7 @@ public class ProfileChangeActivity extends AppCompatActivity {
 
         Button camera = findViewById(R.id.ProfileChangeActivity_Camera);
         camera.setOnClickListener(v -> {
-            File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
-            try {
-                if (outputImage.exists()) {
-                    outputImage.delete();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            image = FileProvider.getUriForFile(ProfileChangeActivity.this, "com.feige.pickphoto.fileprovider", outputImage);
 
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, image);
-            startActivityForResult(intent, TAKE_CAMERA);
         });
     }
 
@@ -116,6 +152,7 @@ public class ProfileChangeActivity extends AppCompatActivity {
                 break;
             case PICK_PHOTO:
                 if (resultCode == RESULT_OK) {
+                    assert data != null;
                     Uri uri = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -129,18 +166,8 @@ public class ProfileChangeActivity extends AppCompatActivity {
                     Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
 
                     new Thread(() -> {
-                        try {
-                            File file = new File(ProfileChangeActivity.this.getFilesDir(), "UserBitmap");
-                            FileOutputStream fileOutputStream = new FileOutputStream(file);
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
-                            try {
-                                fileOutputStream.close();
-                            } catch (IOException e) {
-                                Toast.makeText(ProfileChangeActivity.this, "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        } catch (FileNotFoundException e) {
-                            Toast.makeText(ProfileChangeActivity.this, "Profile Wrong get" + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
+                        user.setProfile(bitmap);
+                        user.save(getFilesDir());
                     }).start();
                     profile.setImageBitmap(bitmap);
                 }

@@ -1,10 +1,12 @@
 package com.example.mywechat.ui.contacts.newfriend;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -30,6 +32,25 @@ public class AddyouActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        prepare();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        prepare();
+    }
+
+    private void prepare() {
         LinkedList<Newfriend> newfriends = new LinkedList<>();
         File JsonNewfriendFile = null;
         int i;
@@ -54,14 +75,5 @@ public class AddyouActivity extends AppCompatActivity {
         recyclerView.setAdapter(newfriendAdapter);
         LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         recyclerView.setLayoutManager(linearlayoutmanager);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            this.finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

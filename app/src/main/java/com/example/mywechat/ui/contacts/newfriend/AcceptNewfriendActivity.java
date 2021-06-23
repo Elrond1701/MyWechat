@@ -1,6 +1,8 @@
 package com.example.mywechat.ui.contacts.newfriend;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -79,10 +81,10 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
         gender.setText(newfriend.getGender());
         birthdate.setText(newfriend.getBirthDate());
         whatsup.setText(newfriend.getWhatsUp());
+        profile.setImageBitmap(newfriend.getProfile());
 
-        File UserJsonFile = new File(getFilesDir(), "UserJson");
         user = new User();
-        user.get(UserJsonFile);
+        user.get(getFilesDir());
 
         accept = findViewById(R.id.AcceptNewfriendActivity_Accept);
         accept.setOnClickListener(v -> {

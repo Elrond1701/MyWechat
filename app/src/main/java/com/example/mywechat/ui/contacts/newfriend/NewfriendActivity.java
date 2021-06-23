@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,6 +35,9 @@ public class NewfriendActivity extends AppCompatActivity {
     private EditText editText;
     private Friend friend;
 
+    public static final int ADDNEWFRIEND = 101;
+    public static final int ADDYOU = 102;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +49,26 @@ public class NewfriendActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        prepare();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        prepare();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void prepare() {
         editText = findViewById(R.id.NewfriendActivity_EditText);
 
         Button button = findViewById(R.id.NewfriendActivity_Button);
@@ -83,7 +107,7 @@ public class NewfriendActivity extends AppCompatActivity {
                             intent.putExtra("Nickname", friend.getNickname());
                             intent.putExtra("Gender", friend.getGender());
                             intent.putExtra("WhatsUp", friend.getWhatsUp());
-                            startActivity(intent);
+                            startActivityForResult(intent, ADDNEWFRIEND);
                         } else {
                             runOnUiThread(() -> {
                                 try {
@@ -103,17 +127,8 @@ public class NewfriendActivity extends AppCompatActivity {
         Button see = findViewById(R.id.NewfriendActivity_See);
         see.setOnClickListener(v -> {
             Intent intent = new Intent(NewfriendActivity.this, AddyouActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, ADDYOU);
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home) {
-                this.finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 }

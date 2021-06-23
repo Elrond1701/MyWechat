@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mywechat.R;
+import com.example.mywechat.data.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,25 +30,19 @@ public class MyprofileFragment extends Fragment {
 
 
     ImageView profile;
-    String ProfileDir;
     ImageView gender;
-    String Gender;
     TextView nickname;
-    String Nickname;
     TextView id;
-    String ID;
+
+    User user;
 
     public MyprofileFragment() {
         // Required empty public constructor
     }
 
-    public static MyprofileFragment newInstance(String profiledir, String nickname, String gender, String id) {
+    public static MyprofileFragment newInstance() {
         MyprofileFragment fragment = new MyprofileFragment();
         Bundle args = new Bundle();
-        args.putString("ProfileDir", profiledir);
-        args.putString("Nickname", nickname);
-        args.putString("Gender", gender);
-        args.putString("ID", id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,10 +57,6 @@ public class MyprofileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Bundle bundle = getArguments();
-        ProfileDir = bundle.getString("UserProfile");
-        Gender = bundle.getString("Gender");
-        Nickname = bundle.getString("Nickname");
-        ID = bundle.getString("ID");
         return inflater.inflate(R.layout.fragment_myprofile, container, false);
     }
 
@@ -73,28 +64,27 @@ public class MyprofileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        profile = requireActivity().findViewById(R.id.MyprofileFragment_Profile);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
-        File file = new File(requireContext().getFilesDir(), ProfileDir);
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);
-            bitmap = BitmapFactory.decodeStream(fileInputStream);
-        } catch (FileNotFoundException e) {
-            Toast.makeText(getContext(), "FileNotFoundException" + e.getMessage(), Toast.LENGTH_LONG).show();
+        user = new User();
+        user.get(requireActivity().getFilesDir());
+        if (user.getProfile() == null) {
+            Log.d("BAD", "BAD");
+        } else {
+            profile = requireActivity().findViewById(R.id.MyprofileFragment_Profile);
+            profile.setImageBitmap(user.getProfile());
+            Log.d("GOOD", "GOOD");
         }
-        profile.setImageBitmap(bitmap);
 
         gender = requireActivity().findViewById(R.id.MyprofileFragment_Gender);
-        if (Gender.equals("male")) {
+        if (user.getGender().equals("male")) {
             gender.setImageResource(R.drawable.ic_male_blue_25dp);
-        } else if (Gender.equals("female")) {
+        } else if (user.getGender().equals("female")) {
             gender.setImageResource(R.drawable.ic_female_blue_25dp);
         }
 
         nickname = requireActivity().findViewById(R.id.MyprofileFragment_Nickname);
-        nickname.setText(Nickname);
+        nickname.setText(user.getNickname());
 
         id = requireActivity().findViewById(R.id.MyprofileFragment_PhoneNumber);
-        id.setText(ID);
+        id.setText(user.getID());
     }
 }

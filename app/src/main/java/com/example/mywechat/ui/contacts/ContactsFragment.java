@@ -39,6 +39,11 @@ public class ContactsFragment extends Fragment {
 
     private ContactsViewModel contactsViewModel;
 
+    public static final int GROUPCHAT = 101;
+    public static final int NEWFRIEND = 102;
+
+    View newfriend;
+    View groupchat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +52,46 @@ public class ContactsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        prepare_data();
+
+        return inflater.inflate(R.layout.fragment_contacts, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        newfriend = requireActivity().findViewById(R.id.ContactsFragment_Newfriend);
+        newfriend.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), NewfriendActivity.class);
+            startActivityForResult(intent, NEWFRIEND);
+        });
+
+        groupchat = requireActivity().findViewById(R.id.ContactsFragment_Groupchats);
+        groupchat.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), GroupsActivity.class);
+            startActivityForResult(intent, GROUPCHAT);
+        });
+
+        RecyclerView recyclerView = requireActivity().findViewById(R.id.contacts_recylerview);
+
+        ContactAdapter contactAdapter = new ContactAdapter(contactsViewModel.getFriends());
+        contactAdapter.setParent(getActivity());
+        recyclerView.setAdapter(contactAdapter);
+        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        recyclerView.setLayoutManager(linearlayoutmanager);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    private void prepare_data() {
         contactsViewModel =
                 new ViewModelProvider(this).get(ContactsViewModel.class);
 
@@ -67,35 +112,11 @@ public class ContactsFragment extends Fragment {
             }
         }
         contactsViewModel.setFriends(friends);
-
-        return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        View newfriend = view.findViewById(R.id.ContactsFragment_Newfriend);
-        newfriend.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), NewfriendActivity.class);
-            startActivity(intent);
-        });
-
-        View groupchat = view.findViewById(R.id.ContactsFragment_Groupchats);
-        groupchat.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), GroupsActivity.class);
-            startActivity(intent);
-        });
-
-        RecyclerView recyclerView = view.findViewById(R.id.contacts_recylerview);
-
-        ContactAdapter contactAdapter = new ContactAdapter(contactsViewModel.getFriends());
-        contactAdapter.setParent(getActivity());
-        recyclerView.setAdapter(contactAdapter);
-        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
-        recyclerView.setLayoutManager(linearlayoutmanager);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onResume() {
+        super.onResume();
+        prepare_data();
     }
 }

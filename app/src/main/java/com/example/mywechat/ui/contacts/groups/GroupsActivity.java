@@ -76,7 +76,7 @@ public class GroupsActivity extends AppCompatActivity {
         Group newGroup = new Group();
         newGroup.setNumber(number);
         newGroup.setName("Group");
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
         newGroup.setProfile(bitmap);
         groups.add(newGroup);
     }

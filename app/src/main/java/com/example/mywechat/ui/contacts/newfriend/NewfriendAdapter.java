@@ -54,7 +54,7 @@ public class NewfriendAdapter extends RecyclerView.Adapter<NewfriendAdapter.Newf
     public void onBindViewHolder(@NonNull NewfriendAdapter.NewfriendViewHolder holder, int position) {
         Newfriend newfriend = data.get(position);
         holder.NickName.setText(newfriend.getNickname());
-        //holder.Profile.setImageBitmap(newfriend.getProfile());
+        holder.Profile.setImageBitmap(newfriend.getProfile());
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(parent, AcceptNewfriendActivity.class);
             intent.putExtra("number", position);

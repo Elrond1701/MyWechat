@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Newfriend;
 import com.example.mywechat.data.User;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.TimerTask;
 
@@ -171,12 +173,29 @@ public class MainActivity extends AppCompatActivity {
                                             File JsonNewfriendFile;
                                             for (int i = 0; ; i++) {
                                                 JsonNewfriendFile = new File(getFilesDir(), "NewfriendJson" + i);
-                                                newfriend.setNumber(i);
+                                                newfriend.setNumber(0);
                                                 if (!JsonNewfriendFile.exists()) {
+                                                    Log.d("BREAK", "BREAK");
                                                     break;
                                                 }
                                             }
+
+                                            Bitmap bitmap = null;
+                                            OkHttpClient okHttpClientMAP = new OkHttpClient();
+                                            Request requestMAP = new Request.Builder()
+                                                    .url("https://test.extern.azusa.one:7543/target/avatar/" + newfriend.getID() + ".png")
+                                                    .build();
+                                            Response responseMAP = okHttpClientMAP.newCall(requestMAP).execute();
+                                            byte[] bytes = Objects.requireNonNull(responseMAP.body()).bytes();
+                                            Log.d("GOOD", newfriend.getID());
+                                            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                            if (bitmap != null) {
+                                                newfriend.setProfile(bitmap);
+                                            }
+                                            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
+                                            newfriend.setProfile(bitmap);
                                             newfriend.save(getFilesDir());
+                                            Log.d("HELLO", "HELLO");
                                         } else {
                                             runOnUiThread(() -> {
                                                 try {
@@ -284,9 +303,21 @@ public class MainActivity extends AppCompatActivity {
             assert body != null;
             InputStream in = body.byteStream();
 
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
+            Bitmap bitmap = null;
+            OkHttpClient okHttpClientMAP = new OkHttpClient();
+            Request requestMAP = new Request.Builder()
+                    .url("https://test.extern.azusa.one:7543/target/avatar/" + user.getID() + ".png")
+                    .build();
+            Response responseMAP = okHttpClientMAP.newCall(requestMAP).execute();
+            byte[] bytes = Objects.requireNonNull(responseMAP.body()).bytes();
+            Log.d("GOOD", bytes.toString());
+            Log.d("GOOD", user.getID());
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            if (bitmap != null) {
+                user.setProfile(bitmap);
+            }
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
             user.setProfile(bitmap);
-            user.setProfileDir("UserProfile");
             user.save(getFilesDir());
         } catch (IOException e) {
             Log.d("IOException", e.getMessage());

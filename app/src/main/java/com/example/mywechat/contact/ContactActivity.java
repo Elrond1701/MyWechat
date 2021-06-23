@@ -33,7 +33,7 @@ public class ContactActivity extends AppCompatActivity {
         }
 
         Intent intent = getIntent();
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.myjpg);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
         Friend friend = new Friend();
         friend.setNickname(intent.getStringExtra("Nickname"));
         friend.setID(intent.getStringExtra("ID"));

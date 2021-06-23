@@ -40,6 +40,7 @@ public class User extends Friend{
             in.read(bytes);
             JsonData = new String(bytes);
         } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundException", e.getMessage());
             JsonData = null;
         } catch (IOException e) {
             Log.d("IOERROR", e.getMessage());
@@ -111,6 +112,7 @@ public class User extends Friend{
             try {
                 FileInputStream in1 = new FileInputStream(UserProfileFile);
                 setProfile(BitmapFactory.decodeStream(in1));
+                Log.d("Profile", "GET");
             } catch (FileNotFoundException e) {
                 Log.d("FileNotFoundException", e.getMessage());
             }
@@ -139,6 +141,7 @@ public class User extends Friend{
         try {
             out = new FileOutputStream(UserJsonFile);
             out.write(user_save.toString().getBytes());
+            Log.d("JSONFile", "SAVE");
         } catch (FileNotFoundException e) {
             Log.d("FileNotFound ERROR", e.getMessage());
         } catch (IOException e) {
@@ -147,20 +150,18 @@ public class User extends Friend{
 
         File UserProfileFile = new File(FilesDir, "UserProfile");
 
-        new Thread(() -> {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(UserProfileFile);
+            getProfile().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             try {
-                FileOutputStream fileOutputStream = new FileOutputStream(UserProfileFile);
-                getProfile().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-                try {
-                    fileOutputStream.close();
-                    Log.d("Profile", "SAVE");
-                } catch (IOException e) {
-                    Log.d("IOException", e.getMessage());
-                }
-            } catch (FileNotFoundException e) {
-                Log.d("FileNotFoundException", e.getMessage());
+                fileOutputStream.close();
+                Log.d("Profile", "SAVE");
+            } catch (IOException e) {
+                Log.d("IOException", e.getMessage());
             }
-        }).start();
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundException", e.getMessage());
+        }
     }
 
     public void delete(File FilesDir) {
