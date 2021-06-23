@@ -11,7 +11,7 @@ import java.util.List;
 public class chatList {
     public List<Chat> getChatList(SQLiteDatabase db){
         List<Chat> res = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT Nickname,charId,LastSpeak,LastSpeakTime,isGroupchat FROM chatlist ORDER BY LastSpeakTime",null);
+        Cursor cursor = db.rawQuery("SELECT Nickname,chatId,LastSpeak,LastSpeakTime,isGroupchat FROM chatlist ORDER BY LastSpeakTime",null);
         if (cursor != null){
             while (cursor.moveToNext()){
                 res.add(new Chat(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getInt(4)));

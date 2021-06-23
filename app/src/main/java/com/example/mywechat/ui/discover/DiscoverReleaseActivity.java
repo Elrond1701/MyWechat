@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -36,6 +37,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +49,8 @@ import okhttp3.Cookie;
 import okhttp3.FormBody;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -63,8 +68,6 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
     TextView discoverSend;
     EditText text;
     ImageView img_chosen1;
-    ImageView img_chosen2;
-    ImageView img_chosen3;
     ImageView add;
     private ArrayList<Bitmap> img_chosen_list;
 
@@ -108,8 +111,6 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
         img_chosen_list = new ArrayList<Bitmap>();
         text = findViewById(R.id.discover_release_text);
         img_chosen1 = findViewById(R.id.discover_img_chosen1);
-        img_chosen2 = findViewById(R.id.discover_img_chosen2);
-        img_chosen3 = findViewById(R.id.discover_img_chosen3);
         discoverCancel = findViewById(R.id.discover_release_cancel);
         discoverSend = findViewById(R.id.discover_release_send);
         add = findViewById(R.id.discover_img_add);
@@ -117,7 +118,11 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
 
         });
         discoverSend.setOnClickListener(v -> {
-            discoverRelease();
+            try {
+                discoverReleaseImg();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         });
         add.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(DiscoverReleaseActivity.this,
@@ -155,20 +160,21 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
                             Log.i("bit", String.valueOf(bit));
 //                            img_chosen1.setVisibility(View.VISIBLE);
 //                            img_chosen1.setImageBitmap(bit);
-                            img_chosen_list.add(bit);
-                            if(img_chosen_list.size()==1){
-                                img_chosen1.setVisibility(View.VISIBLE);
-                                img_chosen1.setImageBitmap(bit);
-                            }
-                            else if(img_chosen_list.size()==2){
-                                img_chosen2.setVisibility(View.VISIBLE);
-                                img_chosen2.setImageBitmap(bit);
-                            }
-                            else if(img_chosen_list.size()==3){
-                                img_chosen3.setVisibility(View.VISIBLE);
-                                img_chosen3.setImageBitmap(bit);
-                                add.setVisibility(View.GONE);
-                            }
+//                            img_chosen_list.add(bit);
+//                            if(img_chosen_list.size()==1){
+                            img_chosen1.setVisibility(View.VISIBLE);
+                            img_chosen1.setImageBitmap(bit);
+                            add.setVisibility(View.GONE);
+//                            }
+//                            else if(img_chosen_list.size()==2){
+//                                img_chosen2.setVisibility(View.VISIBLE);
+//                                img_chosen2.setImageBitmap(bit);
+//                            }
+//                            else if(img_chosen_list.size()==3){
+//                                img_chosen3.setVisibility(View.VISIBLE);
+//                                img_chosen3.setImageBitmap(bit);
+//                                add.setVisibility(View.GONE);
+//                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -180,10 +186,64 @@ public class DiscoverReleaseActivity extends AppCompatActivity {
     }
 
 
-    public void discoverRelease (){
+//    public void discoverRelease (){
+//
+//        RequestBody requestBody = new FormBody.Builder().add("text", text.getText().toString()).build();
+//        final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").header("cookie",cookie).post(requestBody).build();
+//        OkHttpClient okHttpClient = new OkHttpClient();
+//        Call call = okHttpClient.newCall(request);
+//
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show());
+//            }
+//
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+//                String responseData = Objects.requireNonNull(response.body()).string();
+//                try {
+//                    JSONObject jsonObject= new JSONObject(responseData);
+//                    Log.d("Login", responseData);
+//                    if (jsonObject.getBoolean("success")) {
+//                        runOnUiThread(() -> {
+//                            Toast.makeText(getApplicationContext(), "Release your discover!", Toast.LENGTH_LONG).show();
+//                        });
+//                    } else {
+//                        runOnUiThread(() -> {
+//                            try {
+//                                Toast.makeText(getApplicationContext(), "ERROR:" + jsonObject.getString("msg"), Toast.LENGTH_LONG).show();
+//                            } catch (JSONException e) {
+//                                Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
+//                            }
+//                        });
+//                    }
+//                } catch (JSONException e) {
+//                    Log.d("DiscoverReleaseActivity ERROR", e.getMessage());
+//                }
+//            }
+//        });
+//    }
 
-        RequestBody requestBody = new FormBody.Builder().add("text", text.getText().toString())
-                .add("cookie",cookie).build();
+    public void discoverReleaseImg () throws URISyntaxException {
+
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor actualimagecursor = managedQuery(imageUri,proj,null,null,null);
+        int index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        actualimagecursor.moveToFirst();
+        String img_path = actualimagecursor.getString(index);
+        File file = new File(img_path);
+//        System.out.println(file);
+//        File file = new File(this.getFilesDir(),"UserProfile");
+//        File file = new File(new URI(imageUri.toString()));
+        MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("text", text.getText().toString())
+                .addFormDataPart("pictures","file",RequestBody.create(MEDIA_TYPE_PNG,file))
+                .build();
+        System.out.println(requestBody);
+//        RequestBody requestBody = new FormBody.Builder().add("text", text.getText().toString()).build();
         final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment").header("cookie",cookie).post(requestBody).build();
         OkHttpClient okHttpClient = new OkHttpClient();
         Call call = okHttpClient.newCall(request);

@@ -2,6 +2,7 @@ package com.example.mywechat.ui.discover;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,10 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Discover;
 
@@ -55,6 +58,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
         TextView CommentList;
         EditText CommentText;
         ImageView CommentSend;
+        ImageView Img;
+        VideoView Video;
 
         public DiscoverViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -69,6 +74,8 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             CommentList = itemView.findViewById(R.id.discover_comment_list);
             CommentText = itemView.findViewById(R.id.comment_input);
             CommentSend = itemView.findViewById(R.id.comment_send);
+            Img = itemView.findViewById(R.id.discover_image);
+            Video = itemView.findViewById(R.id.discover_video);
         }
     }
 
@@ -95,6 +102,20 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
         Discover discover = data.get(position);
         holder.Nickname.setText(discover.getNickname());
         holder.Text.setText(discover.getText());
+//        System.out.println(discover.getImg());
+        if (discover.getImg()!=""){
+//            System.out.println("https://test.extern.azusa.one:7543/target/"+discover.getImg());
+            Glide.with(parent)
+                    .load("https://test.extern.azusa.one:7543/target/"+discover.getImg())
+                    .into(holder.Img);
+            holder.Img.setVisibility(View.VISIBLE);
+        }
+        if (discover.getVideo()!=""){
+            System.out.println("https://test.extern.azusa.one:7543/target/"+discover.getVideo());
+            holder.Video.setVideoPath("https://test.extern.azusa.one:7543/target/"+discover.getVideo());
+            holder.Video.start();
+            holder.Video.setVisibility(View.VISIBLE);
+        }
 
         ArrayList<String> commentList = new ArrayList<>();
         final Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/moment/comment?momentId="+discover.getId()).header("cookie",cookie).get().build();
@@ -185,6 +206,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
                 }
                 if(flag){
                     LikeList.remove(index);
+                    holder.Like.setText("点赞");
                 }
                 else {
                     LikeList.add(id);
@@ -215,7 +237,7 @@ public class DiscoverAdapter extends RecyclerView.Adapter<DiscoverAdapter.Discov
             holder.CommentList.setVisibility(View.VISIBLE);
             holder.InputLayout.setVisibility(View.GONE);
             holder.CommentText.setText("");
-            discoverComment(discover.getId(), (String) holder.Comment.getText());
+            discoverComment(discover.getId(), holder.CommentText.getText().toString());
         });
     }
 

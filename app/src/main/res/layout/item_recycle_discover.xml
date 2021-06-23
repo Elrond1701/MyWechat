@@ -47,34 +47,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/discover_img1"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="gone"/>
-
-                <ImageView
-                    android:id="@+id/discover_img2"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="gone"/>
-
-                <ImageView
-                    android:id="@+id/discover_img3"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:visibility="gone"/>
-
-            </LinearLayout>
+            <ImageView
+                android:id="@+id/discover_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:visibility="gone"/>
 
             <VideoView
                 android:id="@+id/discover_video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
                 android:visibility="gone"/>
 
             <RelativeLayout

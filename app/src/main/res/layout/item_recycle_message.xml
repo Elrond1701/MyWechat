@@ -38,14 +38,18 @@
 
         <ImageView
             android:id="@+id/chat_msg_photo_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
             android:visibility="gone" />
 
         <VideoView
             android:id="@+id/chat_msg_video_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
             android:visibility="gone"/>
 
     </LinearLayout>
@@ -76,16 +80,18 @@
 
         <ImageView
             android:id="@+id/chat_msg_photo_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_marginRight="10dp"
             android:visibility="gone"/>
 
         <VideoView
             android:id="@+id/chat_msg_video_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
             android:visibility="gone"/>
 
         <ImageView

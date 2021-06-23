@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.example.mywechat.ui.contacts.newfriend.AddNewfriendActivity;
 import com.example.mywechat.ui.contacts.newfriend.NewfriendActivity;
 import com.example.mywechat.ui.discover.DiscoverFragment;
 import com.example.mywechat.ui.me.MeFragment;
+import com.example.mywechat.util.CommonDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.jetbrains.annotations.NotNull;
@@ -83,9 +85,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        db = openOrCreateDatabase("test", Context.MODE_PRIVATE,null);
-        String sql="CREATE TABLE IF NOT EXISTS chatlist (Nickname VARCHAR(32),LastSpeak VARCHAR(1024),LastSpeakTime VARCHAR(1024),chatId VARCHAR(128), isGroupChat Integer)";
-        db.execSQL(sql);
+        CommonDatabase commonDatabase = new CommonDatabase(this,"chatlist",null,1);
+        db = commonDatabase.getWritableDatabase();
 
         intent = getIntent();
         User user = new User();

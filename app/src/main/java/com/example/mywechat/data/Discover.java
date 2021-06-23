@@ -1,7 +1,5 @@
 package com.example.mywechat.data;
 
-import android.provider.ContactsContract;
-
 import java.lang.String;
 import java.util.ArrayList;
 
@@ -12,8 +10,9 @@ public class Discover {
     private String Username;
     private String Nickname;
     private String Text;
+    private String Img;
+    private String Video;
     private String PublishedTime;
-    private ArrayList<Integer> Images;
     private ArrayList<String> LikeList;
     private ArrayList<String> CommentList;
 
@@ -49,6 +48,14 @@ public class Discover {
     public String getId() { return id; }
 
     public String getNickname() { return Username; }
+
+    public void setImg(String Img) {this.Img = Img;}
+
+    public String getImg() {return Img;}
+
+    public void setVideo(String Video) {this.Video = Video;}
+
+    public String getVideo() {return Video;}
 
 //    public int getAvatarIcon() { return avatarIcon; }
 

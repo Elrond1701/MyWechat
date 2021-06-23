@@ -165,12 +165,37 @@ public class DiscoverFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    String Img="";
+                    try {
+                        JSONArray jsonArray2 = jsonObject1.getJSONArray("pictures");
+//                        for( int j = 0; j<jsonArray2.length(); j++){
+//                            Img = (String) jsonArray2.get(i);
+//                        }
+                        Img = (String) jsonArray2.get(0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    String Video="";
+                    try {
+                        JSONArray jsonArray3 = jsonObject1.getJSONArray("videos");
+//                        for( int j = 0; j<jsonArray2.length(); j++){
+//                            Img = (String) jsonArray2.get(i);
+//                        }
+                        Video = (String) jsonArray3.get(0);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Discover discover = new Discover(id, username);
 //                    commentList = new ArrayList<>();
 //                    getCommentList(id);
 //                    System.out.println(commentList.size());
                     discover.setText(text);
                     discover.setLikeList(likeList);
+//                    System.out.println(Img);
+//                    Img=Img.replace("")
+                    discover.setImg(Img);
+                    discover.setVideo(Video);
+                    System.out.println(Img);
 //                    discover.setCommentList(commentList);
 //                    System.out.println(discover.getCommentList().size());
                     discovers.add(discover);
@@ -309,10 +334,10 @@ public class DiscoverFragment extends Fragment {
         discoViewModel.setDiscovers(discovers);
         DiscoverAdapter discoverAdapter = new DiscoverAdapter(discovers);
         discoverAdapter.setCookie(cookie);
-        System.out.println(id);
+        discoverAdapter.setParent(getActivity());
         discoverAdapter.setId(id);
         recyclerView.setAdapter(discoverAdapter);
-        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
+        LinearLayoutManager linearlayoutmanager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, true);
         recyclerView.setLayoutManager(linearlayoutmanager);
     }
 }

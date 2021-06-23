@@ -1,5 +1,6 @@
 package com.example.mywechat.ui.chats;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mywechat.util.CommonDatabase;
 import com.example.mywechat.util.chatList;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Chat;
@@ -37,6 +39,14 @@ public class ChatsFragment extends Fragment {
 //        chats.add(chat1);
 //        chats.add(chat2);
 //        chats = chatList.getChatList();
+        CommonDatabase commonDatabase = new CommonDatabase(getActivity(),"chatlist",null,1);
+        SQLiteDatabase db = commonDatabase.getReadableDatabase();
+        chatList = new chatList();
+        if (chatList.getChatList(db) != null){
+            for (Chat chat :chatList.getChatList(db)){
+                chats.add(chat);
+            }
+        }
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         chatsViewModel.setChats(chats);
     }
