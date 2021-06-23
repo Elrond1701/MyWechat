@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mywechat.util.CommonDatabase;
-import com.example.mywechat.util.chatList;
+//import com.example.mywechat.util.chatList;
 import com.example.mywechat.R;
 import com.example.mywechat.data.Chat;
-import com.example.mywechat.util.chatList;
+//import com.example.mywechat.util.chatList;
 
 import java.util.LinkedList;
 
@@ -27,26 +27,26 @@ public class ChatsFragment extends Fragment {
 
     private ChatsViewModel chatsViewModel;
     private RecyclerView recyclerView;
-    private chatList chatList;
+//    private chatList chatList;
     private LinkedList<Chat> chats;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         chats = new LinkedList<>();
-//        Chat chat1 = new Chat("FXL",1,"Hello World!","10:00");
-//        Chat chat2 = new Chat("XLF",1,"So tired!","9:00");
-//        chats.add(chat1);
-//        chats.add(chat2);
+        Chat chat1 = new Chat("Elrond4","随便说点什么","14:31");
+        Chat chat2 = new Chat("Elrond1","不知道说点什么","13:30");
+        chats.add(chat1);
+        chats.add(chat2);
 //        chats = chatList.getChatList();
-        CommonDatabase commonDatabase = new CommonDatabase(getActivity(),"chatlist",null,1);
-        SQLiteDatabase db = commonDatabase.getReadableDatabase();
-        chatList = new chatList();
-        if (chatList.getChatList(db) != null){
-            for (Chat chat :chatList.getChatList(db)){
-                chats.add(chat);
-            }
-        }
+//        CommonDatabase commonDatabase = new CommonDatabase(getActivity(),"chatlist",null,1);
+//        SQLiteDatabase db = commonDatabase.getReadableDatabase();
+//        chatList = new chatList();
+//        if (chatList.getChatList(db) != null){
+//            for (Chat chat :chatList.getChatList(db)){
+//                chats.add(chat);
+//            }
+//        }
         chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         chatsViewModel.setChats(chats);
     }
