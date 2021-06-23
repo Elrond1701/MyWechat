@@ -61,7 +61,7 @@ public class AddyouActivity extends AppCompatActivity {
                 newfriend.setNumber(i);
                 newfriend.get(getFilesDir());
                 Log.d(Integer.toString(i), JsonNewfriendFile.getName());
-                //Log.d(Integer.toString(i), newfriend.getNickname());
+                Log.d(Integer.toString(i), newfriend.getNickname());
                 newfriends.add(newfriend);
             } else {
                 break;

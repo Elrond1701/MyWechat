@@ -2,6 +2,8 @@ package com.example.mywechat.ui.contacts.newfriend;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +55,8 @@ public class NewfriendAdapter extends RecyclerView.Adapter<NewfriendAdapter.Newf
     @Override
     public void onBindViewHolder(@NonNull NewfriendAdapter.NewfriendViewHolder holder, int position) {
         Newfriend newfriend = data.get(position);
+        newfriend.setNumber(position);
+        newfriend.get(parent.getFilesDir());
         holder.NickName.setText(newfriend.getNickname());
         holder.Profile.setImageBitmap(newfriend.getProfile());
         holder.itemView.setOnClickListener(v -> {

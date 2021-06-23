@@ -189,10 +189,8 @@ public class MainActivity extends AppCompatActivity {
                                             byte[] bytes = Objects.requireNonNull(responseMAP.body()).bytes();
                                             Log.d("GOOD", newfriend.getID());
                                             bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                                            if (bitmap != null) {
-                                                newfriend.setProfile(bitmap);
-                                            }
-                                            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
+                                            newfriend.setProfile(bitmap);
+                                            Log.d("ABC", "ABD");
                                             newfriend.setProfile(bitmap);
                                             newfriend.save(getFilesDir());
                                             Log.d("HELLO", "HELLO");

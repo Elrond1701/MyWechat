@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -86,6 +88,28 @@ public class AddNewfriendActivity extends AppCompatActivity {
         gender.setText(friend.getGender());
         birthdate.setText(friend.getBirthDate());
         whatsup.setText(friend.getWhatsUp());
+
+        Bitmap bitmap = null;
+        OkHttpClient okHttpClientMAP = new OkHttpClient();
+        Request requestMAP = new Request.Builder()
+                .url("https://test.extern.azusa.one:7543/target/avatar/" + friend.getID() + ".png")
+                .build();
+        Response responseMAP = null;
+        Log.d("HELLO", "WORLD");
+        try {
+            responseMAP = okHttpClientMAP.newCall(requestMAP).execute();
+            byte[] bytes = Objects.requireNonNull(responseMAP.body()).bytes();
+            Log.d("GOOD", friend.getID());
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            if (bitmap != null) {
+                friend.setProfile(bitmap);
+                Log.d("ABC", "ABD");
+            }
+            profile.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            Log.d("IOException", e.getMessage());
+        }
+
 
         done = findViewById(R.id.AddNewfriendActivity_Done);
         done.setOnClickListener(v -> {

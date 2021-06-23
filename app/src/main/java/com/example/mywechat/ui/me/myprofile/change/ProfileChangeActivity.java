@@ -75,10 +75,10 @@ public class ProfileChangeActivity extends AppCompatActivity {
             try {
                 FileOutputStream out = new FileOutputStream(file1);
                 new_bitmap1.compress(Bitmap.CompressFormat.PNG, 100, out);
-                Log.d("GOOD", "GOOD");
                 try {
                     out.flush();
                     out.close();
+                    Log.d("GOOD", "GOOD");
                 } catch (IOException e) {
                     Log.d("IOException", e.getMessage());
                 }
@@ -90,17 +90,19 @@ public class ProfileChangeActivity extends AppCompatActivity {
             Uri uri1 = Uri.fromFile(file1);
             intent1.setData(uri1);
             sendBroadcast(intent1);
+        }).start();
 
+        new Thread(() -> {
             Bitmap new_bitmap2 = BitmapFactory.decodeResource(getResources(), R.drawable.avatar2);
             File file2 = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath(),
                     "avatar2.png");
             try {
                 FileOutputStream out = new FileOutputStream(file2);
                 new_bitmap2.compress(Bitmap.CompressFormat.PNG, 100, out);
-                Log.d("GOOD", "GOOD");
                 try {
                     out.flush();
                     out.close();
+                    Log.d("Better", "Better");
                 } catch (IOException e) {
                     Log.d("IOException", e.getMessage());
                 }
