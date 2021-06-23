@@ -71,9 +71,8 @@ public class AddNewfriendActivity extends AppCompatActivity {
         friend.setID(intent.getStringExtra("ID"));
         friend.setBirthDate(intent.getStringExtra("BirthDate"));
 
-        File UserJsonFile = new File(getFilesDir(), "UserJson");
         user = new User();
-        user.get(UserJsonFile);
+        user.get(getFilesDir());
 
         username = findViewById(R.id.AddNewfriendActivity_Username);
         profile = findViewById(R.id.AddNewfriendActivity_Profile);

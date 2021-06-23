@@ -1,15 +1,14 @@
 package com.example.mywechat.contact;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mywechat.R;
 import com.example.mywechat.data.Friend;
@@ -21,6 +20,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -45,14 +45,12 @@ public class ContactSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_setting);
 
         user = new User();
-        File UserJsonFile = new File(getFilesDir(), "UserJson");
-        user.get(UserJsonFile);
+        user.get(getFilesDir());
 
         intent = getIntent();
         friend = new Friend();
         friend.setNumber(intent.getIntExtra("Number", 0));
-        File JsonFriend = new File(getFilesDir(), "FriendJson" + friend.getNumber());
-        friend.get(JsonFriend);
+        friend.get(getFilesDir());
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -78,7 +76,7 @@ public class ContactSettingActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responseData = response.body().string();
+                    String responseData = Objects.requireNonNull(response.body()).string();
                     Log.d("onResponse", responseData);
 
                     try {

@@ -37,9 +37,10 @@ public class AddyouActivity extends AppCompatActivity {
             JsonNewfriendFile = new File(getFilesDir(), "NewfriendJson" + i);
             if (JsonNewfriendFile.exists()) {
                 Newfriend newfriend = new Newfriend();
-                newfriend.get(JsonNewfriendFile);
+                newfriend.setNumber(i);
+                newfriend.get(getFilesDir());
                 Log.d(Integer.toString(i), JsonNewfriendFile.getName());
-                Log.d(Integer.toString(i), newfriend.getNickname());
+                //Log.d(Integer.toString(i), newfriend.getNickname());
                 newfriends.add(newfriend);
             } else {
                 break;

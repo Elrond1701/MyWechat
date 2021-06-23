@@ -22,7 +22,8 @@ public class Newfriend extends Friend{
         return  note;
     }
 
-    public void get(File JsonNewfriendFile) {
+    public void get(File FilesDir) {
+        File JsonNewfriendFile = new File(FilesDir, "NewFriendJson" + getNumber());
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
@@ -32,7 +33,7 @@ public class Newfriend extends Friend{
             in.read(bytes);
             JsonData = new String(bytes);
         } catch (FileNotFoundException e) {
-            Log.d("FileNotFoundERROR", e.getMessage());
+            Log.d("FileNotFoundERROR*", e.getMessage());
             JsonData = null;
         } catch (IOException e) {
             Log.d("IOERROR", e.getMessage());
@@ -107,7 +108,8 @@ public class Newfriend extends Friend{
         setProfileDir("UserBitmap");
     }
 
-    public void save(File JsonNewfriendFile) {
+    public void save(File FilesDir) {
+        File JsonNewfriendFile = new File(FilesDir, "NewfriendJson" + getNumber());
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());

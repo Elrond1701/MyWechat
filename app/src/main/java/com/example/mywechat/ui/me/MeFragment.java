@@ -116,7 +116,7 @@ public class MeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101) {
             if (resultCode == 0) {
-                Bitmap bitmap = BitmapFactory.decodeFile(requireContext().getFilesDir().toString() + "/UserBitmap");
+                Bitmap bitmap = BitmapFactory.decodeFile(requireContext().getFilesDir().toString() + "/UserProfile");
                 user.setProfile(bitmap);
                 assert data != null;
                 user.setNickname(data.getStringExtra("Nickname"));

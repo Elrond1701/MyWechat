@@ -23,6 +23,7 @@ import com.example.mywechat.R;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 
 public class MyprofileFragment extends Fragment {
 
@@ -61,7 +62,7 @@ public class MyprofileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Bundle bundle = getArguments();
-        ProfileDir = bundle.getString("ProfileDir");
+        ProfileDir = bundle.getString("UserProfile");
         Gender = bundle.getString("Gender");
         Nickname = bundle.getString("Nickname");
         ID = bundle.getString("ID");
@@ -72,9 +73,9 @@ public class MyprofileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        profile = getActivity().findViewById(R.id.MyprofileFragment_Profile);
+        profile = requireActivity().findViewById(R.id.MyprofileFragment_Profile);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
-        File file = new File(getContext().getFilesDir(), ProfileDir);
+        File file = new File(requireContext().getFilesDir(), ProfileDir);
         try {
             FileInputStream fileInputStream = new FileInputStream(file);
             bitmap = BitmapFactory.decodeStream(fileInputStream);
@@ -83,17 +84,17 @@ public class MyprofileFragment extends Fragment {
         }
         profile.setImageBitmap(bitmap);
 
-        gender = getActivity().findViewById(R.id.MyprofileFragment_Gender);
+        gender = requireActivity().findViewById(R.id.MyprofileFragment_Gender);
         if (Gender.equals("male")) {
             gender.setImageResource(R.drawable.ic_male_blue_25dp);
         } else if (Gender.equals("female")) {
             gender.setImageResource(R.drawable.ic_female_blue_25dp);
         }
 
-        nickname = getActivity().findViewById(R.id.MyprofileFragment_Nickname);
+        nickname = requireActivity().findViewById(R.id.MyprofileFragment_Nickname);
         nickname.setText(Nickname);
 
-        id = getActivity().findViewById(R.id.MyprofileFragment_PhoneNumber);
+        id = requireActivity().findViewById(R.id.MyprofileFragment_PhoneNumber);
         id.setText(ID);
     }
 }

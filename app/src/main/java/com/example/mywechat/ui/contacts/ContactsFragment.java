@@ -28,6 +28,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -50,13 +51,14 @@ public class ContactsFragment extends Fragment {
                 new ViewModelProvider(this).get(ContactsViewModel.class);
 
         LinkedList<Friend> friends = new LinkedList<>();
-        File JsonFriendFile = null;
+        File JsonFriendFile;
         int i;
         for (i = 0; ; i++) {
-            JsonFriendFile = new File(getActivity().getFilesDir(), "FriendJson" + i);
+            JsonFriendFile = new File(requireActivity().getFilesDir(), "FriendJson" + i);
             if (JsonFriendFile.exists()) {
-                Friend friend = new Newfriend();
-                friend.get(JsonFriendFile);
+                Friend friend = new Friend();
+                friend.setNumber(i);
+                friend.get(requireActivity().getFilesDir());
                 Log.d(Integer.toString(i), JsonFriendFile.getName());
                 Log.d(Integer.toString(i), friend.getNickname());
                 friends.add(friend);

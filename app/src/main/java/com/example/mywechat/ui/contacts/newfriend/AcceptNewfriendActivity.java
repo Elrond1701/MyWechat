@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -69,9 +70,9 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
         birthdate = findViewById(R.id.AcceptNewfriendActivity_Region);
         whatsup = findViewById(R.id.AcceptNewfriendActivity_WhatsUp);
 
-        File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
         newfriend = new Newfriend();
-        newfriend.get(NewfriendJsonFile);
+        newfriend.setNumber(number);
+        newfriend.get(getFilesDir());
 
         username.setText(newfriend.getID());
         nickname.setText(newfriend.getNickname());
@@ -102,7 +103,7 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responseData = response.body().string();
+                    String responseData = Objects.requireNonNull(response.body()).string();
                     Log.d("onResponse", responseData);
                     File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
                     if (NewfriendJsonFile.exists()) {
@@ -150,7 +151,7 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responseData = response.body().string();
+                    String responseData = Objects.requireNonNull(response.body()).string();
                     Log.d("onResponse", responseData);
                     File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
                     if (NewfriendJsonFile.exists()) {
