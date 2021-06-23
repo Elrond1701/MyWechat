@@ -1,5 +1,7 @@
 package com.example.mywechat.data;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -22,7 +24,8 @@ public class Newfriend extends Friend{
         return  note;
     }
 
-    public void get(File JsonNewfriendFile) {
+    public void get(File FilesDir) {
+        File JsonNewfriendFile = new File(FilesDir, "NewfriendJson" + getNumber());
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
@@ -104,11 +107,25 @@ public class Newfriend extends Friend{
                 }
             }
         }
-        setProfileDir("UserBitmap");
+
+        setProfileDir("NewfriendProfile" + getNumber());
+
+        File UserProfileFile = new File(FilesDir, "NewfriendProfile" + getNumber());
+        if (UserProfileFile.exists()) {
+            try {
+                FileInputStream in1 = new FileInputStream(UserProfileFile);
+                setProfile(BitmapFactory.decodeStream(in1));
+                Log.d("Profile", "GET");
+            } catch (FileNotFoundException e) {
+                Log.d("FileNotFoundException", e.getMessage());
+            }
+        }
     }
 
-    public void save(File JsonNewfriendFile) {
+    public void save(File FilesDir) {
+        File JsonNewfriendFile = new File(FilesDir, "NewfriendJson" + getNumber());
         JSONObject user_save = new JSONObject();
+        Log.d("SAVE", "SAVE");
         try {
             user_save.put("UserName", getID());
             user_save.put("Note", getNote());
@@ -125,10 +142,26 @@ public class Newfriend extends Friend{
         try {
             out = new FileOutputStream(JsonNewfriendFile);
             out.write(user_save.toString().getBytes());
+            Log.d("JSONFile", "SAVE");
         } catch (FileNotFoundException e) {
             Log.d("FileNotFound ERROR", e.getMessage());
         } catch (IOException e) {
             Log.d("IO ERROR", e.getMessage());
+        }
+
+        File UserProfileFile = new File(FilesDir, "Newfriend" + getNumber());
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(UserProfileFile);
+            getProfile().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            try {
+                fileOutputStream.close();
+                Log.d("Profile", "SAVE");
+            } catch (IOException e) {
+                Log.d("IOException", e.getMessage());
+            }
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundException", e.getMessage());
         }
     }
 }

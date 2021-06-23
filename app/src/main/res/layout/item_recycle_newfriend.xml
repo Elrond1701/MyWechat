@@ -21,7 +21,7 @@
 
             <ImageView
                 android:id="@+id/item_recycle_newfriend_Profile"
-                android:src="@drawable/myjpg"
+                android:src="@drawable/avatar1"
                 android:layout_width="60dp"
                 android:layout_height="60dp"/>
             <View

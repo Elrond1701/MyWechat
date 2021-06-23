@@ -4,7 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -16,6 +17,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
 import com.example.mywechat.data.Friend;
 import com.example.mywechat.data.Newfriend;
 import com.example.mywechat.data.User;
@@ -39,8 +41,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.TimerTask;
 
@@ -53,6 +57,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
@@ -118,7 +123,8 @@ public class MainActivity extends AppCompatActivity {
                 super.onFailure(webSocket, t, response);
                 runOnUiThread(() -> {
                     try {
-                        Log.d("onFailure", response.body().string());
+                        assert response != null;
+                        Log.d("onFailure", Objects.requireNonNull(response.body()).string());
                     } catch (IOException e) {
                         Log.d("onFailure", e.getMessage());
                     }
@@ -131,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONArray jsonArray = new JSONArray(text);
                     JSONObject jsonObject = (JSONObject) jsonArray.get(0);
-                    if (jsonObject.getString("messageType").equals("contact_apply")) {
+                    if (jsonObject.getString("messageType").equals("CONTACT_APPLY")) {
                         Newfriend newfriend = new Newfriend();
                         String contactApply = jsonObject.getString("contactApply");
                         JSONObject contactApplyData = new JSONObject(contactApply);
@@ -165,14 +171,29 @@ public class MainActivity extends AppCompatActivity {
                                             newfriend.setWhatsUp(jsonObject_user.getString("sign"));
 
                                             File JsonNewfriendFile;
-                                            int i;
-                                            for (i = 0; ; i++) {
+                                            for (int i = 0; ; i++) {
                                                 JsonNewfriendFile = new File(getFilesDir(), "NewfriendJson" + i);
+                                                newfriend.setNumber(0);
                                                 if (!JsonNewfriendFile.exists()) {
+                                                    Log.d("BREAK", "BREAK");
                                                     break;
                                                 }
                                             }
-                                            newfriend.save(JsonNewfriendFile);
+
+                                            Bitmap bitmap = null;
+                                            OkHttpClient okHttpClientMAP = new OkHttpClient();
+                                            Request requestMAP = new Request.Builder()
+                                                    .url("https://test.extern.azusa.one:7543/target/avatar/" + newfriend.getID() + ".png")
+                                                    .build();
+                                            Response responseMAP = okHttpClientMAP.newCall(requestMAP).execute();
+                                            byte[] bytes = Objects.requireNonNull(responseMAP.body()).bytes();
+                                            Log.d("GOOD", newfriend.getID());
+                                            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                            newfriend.setProfile(bitmap);
+                                            Log.d("ABC", "ABD");
+                                            newfriend.setProfile(bitmap);
+                                            newfriend.save(getFilesDir());
+                                            Log.d("HELLO", "HELLO");
                                         } else {
                                             runOnUiThread(() -> {
                                                 try {
@@ -200,13 +221,8 @@ public class MainActivity extends AppCompatActivity {
                         contentValues.put("LastSpeakTime", message.getString("time"));
                         contentValues.put("chatId", chatId);
                         String groupchatName = jsonObject.getString("groupchatName");
-                        if (groupchatName == null) {
-                            contentValues.put("Nickname", message.getString("speaker"));
-                            contentValues.put("isGroupChat", 0);
-                        } else {
-                            contentValues.put("Nickname", groupchatName);
-                            contentValues.put("isGroupChat", 1);
-                        }
+                        contentValues.put("Nickname", groupchatName);
+                        contentValues.put("isGroupChat", 1);
                         db.insert("chatlist", null, contentValues);
                     }
                     Log.d("onMessage", jsonArray.toString());
@@ -237,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar")
+        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/avatar")
                 .header("Cookie", user.getCookie()).get().build();
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Call call = okHttpClient1.newCall(request1);
@@ -276,9 +292,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        user.setProfileDir("");
-        final File UserJsonFile = new File(getFilesDir(), "UserJson");
-        user.save(UserJsonFile);
+        Request request3 = new Request.Builder()
+                .url("https://test.extern.azusa.one:7543/avatar/" + user.getID() + ".png")
+                .build();
+        OkHttpClient okHttpClient3 = new OkHttpClient();
+        try {
+            ResponseBody body = okHttpClient3.newCall(request3).execute().body();
+            assert body != null;
+            InputStream in = body.byteStream();
+
+            Bitmap bitmap = null;
+            OkHttpClient okHttpClientMAP = new OkHttpClient();
+            Request requestMAP = new Request.Builder()
+                    .url("https://test.extern.azusa.one:7543/target/avatar/" + user.getID() + ".png")
+                    .build();
+            Response responseMAP = okHttpClientMAP.newCall(requestMAP).execute();
+            byte[] bytes = Objects.requireNonNull(responseMAP.body()).bytes();
+            Log.d("GOOD", bytes.toString());
+            Log.d("GOOD", user.getID());
+            bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            if (bitmap != null) {
+                user.setProfile(bitmap);
+            }
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
+            user.setProfile(bitmap);
+            user.save(getFilesDir());
+        } catch (IOException e) {
+            Log.d("IOException", e.getMessage());
+        }
 
         final Request request2 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/contact")
                 .header("Cookie", user.getCookie()).get().build();
@@ -300,6 +341,20 @@ public class MainActivity extends AppCompatActivity {
                     String Contacts = jsonObject.getString("contacts");
 
                     JSONArray jsonArray = new JSONArray(Contacts);
+
+                    for (int i = 0; ; i++) {
+                        File JsonFriend = new File(getFilesDir(), "FriendJson" + i);
+                        File ProfileFriend = new File(getFilesDir(), "FriendProfile" + i);
+                        if (JsonFriend.exists()) {
+                            JsonFriend.delete();
+                            if (ProfileFriend.exists()) {
+                                ProfileFriend.delete();
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject contact = (JSONObject) jsonArray.get(i);
                         if (contact.getString("username").equals(user.getID())) {
@@ -311,9 +366,9 @@ public class MainActivity extends AppCompatActivity {
                             Request request = new Request.Builder().url("https://test.extern.azusa.one:7541/user?uname=" + friend.getID())
                                     .header("Cookie", user.getCookie()).get().build();
                             OkHttpClient okHttpClient = new OkHttpClient();
-                            Call call_ = okHttpClient.newCall(request);
+                            Call call_1 = okHttpClient.newCall(request);
 
-                            call_.enqueue(new Callback() {
+                            call_1.enqueue(new Callback() {
                                 @Override
                                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
                                     Log.d("onFailure", e.getMessage());
@@ -330,9 +385,8 @@ public class MainActivity extends AppCompatActivity {
                                             friend.setNickname(jsonObject1.getString("nickname"));
                                             friend.setGender(jsonObject1.getString("sex"));
                                             friend.setWhatsUp(jsonObject1.getString("sign"));
-                                            File JsonFriend = new File(getFilesDir(), "FriendJson" + friend.getNumber());
-                                            friend.save(JsonFriend);
-                                            //Log.d("GOOD", "GOOD");
+                                            friend.setProfileDir("UserProfile");
+                                            friend.save(getFilesDir());
                                         }
                                     } catch (JSONException e) {
                                         Log.d("JSONException", e.getMessage());

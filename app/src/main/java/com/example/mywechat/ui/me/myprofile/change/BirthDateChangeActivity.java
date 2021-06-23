@@ -1,8 +1,5 @@
 package com.example.mywechat.ui.me.myprofile.change;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mywechat.R;
 
@@ -61,8 +60,8 @@ public class BirthDateChangeActivity extends AppCompatActivity {
         int year = 1970;
         for (int i = 0; i < birthdate.length(); i++) {
             if (birthdate.substring(i, i + 1).equals("/")) {
-                Log.d("Hello", "Hello");
-                year = Integer.parseInt(birthdate.substring(0, i - 1));
+                year = Integer.parseInt(birthdate.substring(0, i));
+                Log.d(Integer.toString(year), "GOOD");
                 break;
             }
         }
@@ -77,10 +76,11 @@ public class BirthDateChangeActivity extends AppCompatActivity {
             if (birthdate.substring(i, i + 1).equals("/")) {
                 count++;
                 if (count == 1) {
-                    pre = i;
+                    pre = i + 1;
                 }
                 else if (count == 2) {
-                    month = Integer.parseInt(birthdate.substring(pre, i - 1));
+                    month = Integer.parseInt(birthdate.substring(pre, i));
+                    Log.d(Integer.toString(month), "GOOD");
                     break;
                 }
             }
@@ -95,7 +95,8 @@ public class BirthDateChangeActivity extends AppCompatActivity {
             if (birthdate.substring(i, i + 1).equals("/")) {
                 count++;
                 if (count == 2) {
-                    day = Integer.parseInt(birthdate.substring(i + 1, birthdate.length() - 1));
+                    day = Integer.parseInt(birthdate.substring(i + 1, birthdate.length()));
+                    Log.d(Integer.toString(day), "GOOD");
                     break;
                 }
             }

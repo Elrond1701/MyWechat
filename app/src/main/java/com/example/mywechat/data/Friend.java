@@ -36,17 +36,19 @@ public class Friend {
         contactapplyId = null;
     }
 
-    public void get(File JsonFriend) {
+    public void get(File FilesDir) {
+        File JsonFriend = new File(FilesDir, "FriendJson" + getNumber());
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
         try {
+            Log.d("GOOD", "GOOD");
             in = new FileInputStream(JsonFriend);
             byte[] bytes = new byte[in.available()];
             in.read(bytes);
             JsonData = new String(bytes);
         } catch (FileNotFoundException e) {
-            Log.d("FileNotFoundERROR", e.getMessage());
+            Log.d("FileNotFoundException", e.getMessage());
             JsonData = null;
         } catch (IOException e) {
             Log.d("IOERROR", e.getMessage());
@@ -114,7 +116,8 @@ public class Friend {
         setProfileDir("UserBitmap");
     }
 
-    public void save(File JsonFriend) {
+    public void save(File FilesDir) {
+        File JsonFriend = new File(FilesDir, "FriendJson" + getNumber());
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());
@@ -135,6 +138,13 @@ public class Friend {
             Log.d("FileNotFound ERROR", e.getMessage());
         } catch (IOException e) {
             Log.d("IO ERROR", e.getMessage());
+        }
+    }
+
+    public void delete(File FilesDir) {
+        File JsonFriend = new File(FilesDir, "FriendJson" + getNumber());
+        if (JsonFriend.exists()) {
+            JsonFriend.delete();
         }
     }
 

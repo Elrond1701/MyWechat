@@ -66,10 +66,9 @@ public class MeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unnamed);
         Bitmap bitmap1 = BitmapFactory.decodeResource(getResources(), R.drawable.avatar1);
         new Thread(() -> {
-            File file = new File(requireContext().getFilesDir(), "UserProfile");
+            File file = new File(requireContext().getFilesDir(), "BitmapProfile");
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 bitmap1.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
@@ -83,15 +82,11 @@ public class MeFragment extends Fragment {
             }
         }).start();
         user = new User();
-
-        File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
-        user.get(UserJsonFile);
-        user.setProfile(bitmap);
+        user.get(requireActivity().getFilesDir());
 
         FragmentContainerView myprofile = view.findViewById(R.id.MeFragment_MyProfile);
         requireActivity().getSupportFragmentManager().beginTransaction().add(R.id.MeFragment_MyProfile,
-                MyprofileFragment.newInstance(user.getProfileDir(), user.getNickname(), user.getGender(),
-                        user.getID())).commit();
+                MyprofileFragment.newInstance()).commit();
 
         myprofile.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), MyprofileActivity.class);
@@ -116,17 +111,9 @@ public class MeFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101) {
             if (resultCode == 0) {
-                Bitmap bitmap = BitmapFactory.decodeFile(requireContext().getFilesDir().toString() + "/UserBitmap");
-                user.setProfile(bitmap);
-                assert data != null;
-                user.setNickname(data.getStringExtra("Nickname"));
-                user.setID(data.getStringExtra("ID"));
-                user.setGender(data.getStringExtra("Gender"));
-                user.setBirthDate(data.getStringExtra("BirthDate"));
-                user.setWhatsUp(data.getStringExtra("WhatsUp"));
+                user.get(requireActivity().getFilesDir());
                 requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.MeFragment_MyProfile,
-                        MyprofileFragment.newInstance(user.getProfileDir(), user.getNickname(),
-                                user.getGender(), user.getID())).commit();
+                        MyprofileFragment.newInstance()).commit();
             } else {
                 Toast.makeText(getActivity(), "Myprofile Wrong set", Toast.LENGTH_LONG).show();
             }
@@ -170,17 +157,16 @@ public class MeFragment extends Fragment {
             }
         });
 
-        final File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
-        user.save(UserJsonFile);
+        user.save(requireActivity().getFilesDir());
 
-        File file = new File(getActivity().getFilesDir(), "UserProfile");
-        if(file != null){
+        File file = new File(requireActivity().getFilesDir(), "UserProfile");
+        if(file.exists()){
             MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
             RequestBody requestBody1 = new MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("file", "UserProfile", RequestBody.create(MEDIA_TYPE_PNG, file))
                     .build();
 
-            final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar")
+            final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/avatar")
                     .header("Cookie", user.getCookie()).post(requestBody1).build();
             OkHttpClient okHttpClient1 = new OkHttpClient();
             Call call1 = okHttpClient1.newCall(request1);
@@ -193,7 +179,16 @@ public class MeFragment extends Fragment {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    Log.d("UP", response.body().string());
+                    String responseData = Objects.requireNonNull(response.body()).string();
+                    Log.d("onResponse", responseData);
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        if (jsonObject.getBoolean("success")) {
+                            Log.d("UP", jsonObject.toString());
+                        }
+                    } catch (JSONException e) {
+                        Log.d("JSONException", e.getMessage());
+                    }
                 }
             });
         }

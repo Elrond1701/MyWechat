@@ -1,6 +1,11 @@
 package com.example.mywechat.data;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.mywechat.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class User extends Friend{
 
@@ -23,7 +29,8 @@ public class User extends Friend{
         email = null;
     }
 
-    public void get(File UserJsonFile) {
+    public void get(File FilesDir) {
+        File UserJsonFile = new File(FilesDir, "UserJson");
         FileInputStream in;
         String JsonData;
         JSONObject user_get;
@@ -33,7 +40,7 @@ public class User extends Friend{
             in.read(bytes);
             JsonData = new String(bytes);
         } catch (FileNotFoundException e) {
-            Log.d("FileNotFoundERROR", e.getMessage());
+            Log.d("FileNotFoundException", e.getMessage());
             JsonData = null;
         } catch (IOException e) {
             Log.d("IOERROR", e.getMessage());
@@ -98,10 +105,22 @@ public class User extends Friend{
                 }
             }
         }
-        setProfileDir("UserBitmap");
+        setProfileDir("UserProfile");
+
+        File UserProfileFile = new File(FilesDir, "UserProfile");
+        if (UserProfileFile.exists()) {
+            try {
+                FileInputStream in1 = new FileInputStream(UserProfileFile);
+                setProfile(BitmapFactory.decodeStream(in1));
+                Log.d("Profile", "GET");
+            } catch (FileNotFoundException e) {
+                Log.d("FileNotFoundException", e.getMessage());
+            }
+        }
+
     }
 
-    public void save(File UserJsonFile) {
+    public void save(File FilesDir) {
         JSONObject user_save = new JSONObject();
         try {
             user_save.put("UserName", getID());
@@ -112,17 +131,48 @@ public class User extends Friend{
             user_save.put("WhatsUp", getWhatsUp());
             user_save.put("ProfileDir", getProfileDir());
             user_save.put("Cookie", getCookie());
+            user_save.put("ProfileDir", getProfileDir());
         } catch (JSONException e) {
             Log.d("User Save ERROR", e.getMessage());
         }
+
+        File UserJsonFile = new File(FilesDir, "UserJson");
         final FileOutputStream out;
         try {
             out = new FileOutputStream(UserJsonFile);
             out.write(user_save.toString().getBytes());
+            Log.d("JSONFile", "SAVE");
         } catch (FileNotFoundException e) {
             Log.d("FileNotFound ERROR", e.getMessage());
         } catch (IOException e) {
             Log.d("IO ERROR", e.getMessage());
+        }
+
+        File UserProfileFile = new File(FilesDir, "UserProfile");
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(UserProfileFile);
+            getProfile().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+            try {
+                fileOutputStream.close();
+                Log.d("Profile", "SAVE");
+            } catch (IOException e) {
+                Log.d("IOException", e.getMessage());
+            }
+        } catch (FileNotFoundException e) {
+            Log.d("FileNotFoundException", e.getMessage());
+        }
+    }
+
+    public void delete(File FilesDir) {
+        File UserJsonFile = new File(FilesDir, "UserJson");
+        if (UserJsonFile.exists()) {
+            UserJsonFile.delete();
+        }
+
+        File UserProfileFile = new File(FilesDir, "UserProfile");
+        if (UserProfileFile.exists()) {
+            UserProfileFile.delete();
         }
     }
 

@@ -1,6 +1,8 @@
 package com.example.mywechat.ui.contacts.newfriend;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -69,19 +72,19 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
         birthdate = findViewById(R.id.AcceptNewfriendActivity_Region);
         whatsup = findViewById(R.id.AcceptNewfriendActivity_WhatsUp);
 
-        File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
         newfriend = new Newfriend();
-        newfriend.get(NewfriendJsonFile);
+        newfriend.setNumber(number);
+        newfriend.get(getFilesDir());
 
         username.setText(newfriend.getID());
         nickname.setText(newfriend.getNickname());
         gender.setText(newfriend.getGender());
         birthdate.setText(newfriend.getBirthDate());
         whatsup.setText(newfriend.getWhatsUp());
+        profile.setImageBitmap(newfriend.getProfile());
 
-        File UserJsonFile = new File(getFilesDir(), "UserJson");
         user = new User();
-        user.get(UserJsonFile);
+        user.get(getFilesDir());
 
         accept = findViewById(R.id.AcceptNewfriendActivity_Accept);
         accept.setOnClickListener(v -> {
@@ -102,11 +105,11 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responseData = response.body().string();
+                    String responseData = Objects.requireNonNull(response.body()).string();
                     Log.d("onResponse", responseData);
                     File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
                     if (NewfriendJsonFile.exists()) {
-                        deleteFile(NewfriendJsonFile.toString());
+                        NewfriendJsonFile.delete();
                     }
 
                     File FriendJsonFile = null;
@@ -150,11 +153,11 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String responseData = response.body().string();
+                    String responseData = Objects.requireNonNull(response.body()).string();
                     Log.d("onResponse", responseData);
                     File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
                     if (NewfriendJsonFile.exists()) {
-                        deleteFile(NewfriendJsonFile.toString());
+                        NewfriendJsonFile.delete();
                     }
                 }
             });

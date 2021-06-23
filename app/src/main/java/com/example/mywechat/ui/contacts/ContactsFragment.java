@@ -28,6 +28,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Objects;
@@ -38,6 +39,11 @@ public class ContactsFragment extends Fragment {
 
     private ContactsViewModel contactsViewModel;
 
+    public static final int GROUPCHAT = 101;
+    public static final int NEWFRIEND = 102;
+
+    View newfriend;
+    View groupchat;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,44 +52,26 @@ public class ContactsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        contactsViewModel =
-                new ViewModelProvider(this).get(ContactsViewModel.class);
-
-        LinkedList<Friend> friends = new LinkedList<>();
-        File JsonFriendFile = null;
-        int i;
-        for (i = 0; ; i++) {
-            JsonFriendFile = new File(getActivity().getFilesDir(), "FriendJson" + i);
-            if (JsonFriendFile.exists()) {
-                Friend friend = new Newfriend();
-                friend.get(JsonFriendFile);
-                Log.d(Integer.toString(i), JsonFriendFile.getName());
-                Log.d(Integer.toString(i), friend.getNickname());
-                friends.add(friend);
-            } else {
-                break;
-            }
-        }
-        contactsViewModel.setFriends(friends);
+        prepare_data();
 
         return inflater.inflate(R.layout.fragment_contacts, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        View newfriend = view.findViewById(R.id.ContactsFragment_Newfriend);
+        newfriend = requireActivity().findViewById(R.id.ContactsFragment_Newfriend);
         newfriend.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), NewfriendActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, NEWFRIEND);
         });
 
-        View groupchat = view.findViewById(R.id.ContactsFragment_Groupchats);
+        groupchat = requireActivity().findViewById(R.id.ContactsFragment_Groupchats);
         groupchat.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), GroupsActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, GROUPCHAT);
         });
 
-        RecyclerView recyclerView = view.findViewById(R.id.contacts_recylerview);
+        RecyclerView recyclerView = requireActivity().findViewById(R.id.contacts_recylerview);
 
         ContactAdapter contactAdapter = new ContactAdapter(contactsViewModel.getFriends());
         contactAdapter.setParent(getActivity());
@@ -95,5 +83,40 @@ public class ContactsFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
+
+    private void prepare_data() {
+        contactsViewModel =
+                new ViewModelProvider(this).get(ContactsViewModel.class);
+
+        LinkedList<Friend> friends = new LinkedList<>();
+        File JsonFriendFile;
+        int i;
+        for (i = 0; ; i++) {
+            JsonFriendFile = new File(requireActivity().getFilesDir(), "FriendJson" + i);
+            if (JsonFriendFile.exists()) {
+                Friend friend = new Friend();
+                friend.setNumber(i);
+                friend.get(requireActivity().getFilesDir());
+                Log.d(Integer.toString(i), JsonFriendFile.getName());
+                Log.d(Integer.toString(i), friend.getNickname());
+                friends.add(friend);
+            } else {
+                break;
+            }
+        }
+        contactsViewModel.setFriends(friends);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        prepare_data();
     }
 }
