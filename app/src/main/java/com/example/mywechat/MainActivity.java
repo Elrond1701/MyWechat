@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             }
                                             newfriend.save(JsonNewfriendFile);
+                                            Log.d("HELLO", "save");
                                         } else {
                                             runOnUiThread(() -> {
                                                 try {
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar")
+        final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/avatar")
                 .header("Cookie", user.getCookie()).get().build();
         OkHttpClient okHttpClient1 = new OkHttpClient();
         Call call = okHttpClient1.newCall(request1);

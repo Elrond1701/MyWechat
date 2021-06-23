@@ -170,17 +170,17 @@ public class MeFragment extends Fragment {
             }
         });
 
-        final File UserJsonFile = new File(getActivity().getFilesDir(), "UserJson");
+        final File UserJsonFile = new File(requireActivity().getFilesDir(), "UserJson");
         user.save(UserJsonFile);
 
-        File file = new File(getActivity().getFilesDir(), "UserProfile");
-        if(file != null){
+        File file = new File(requireActivity().getFilesDir(), "UserProfile");
+        if(file.exists()){
             MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
             RequestBody requestBody1 = new MultipartBody.Builder().setType(MultipartBody.FORM)
                     .addFormDataPart("file", "UserProfile", RequestBody.create(MEDIA_TYPE_PNG, file))
                     .build();
 
-            final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/advatar")
+            final Request request1 = new Request.Builder().url("https://test.extern.azusa.one:7541/user/avatar")
                     .header("Cookie", user.getCookie()).post(requestBody1).build();
             OkHttpClient okHttpClient1 = new OkHttpClient();
             Call call1 = okHttpClient1.newCall(request1);
@@ -193,7 +193,16 @@ public class MeFragment extends Fragment {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    Log.d("UP", response.body().string());
+                    String responseData = Objects.requireNonNull(response.body()).string();
+                    Log.d("onResponse", responseData);
+                    try {
+                        JSONObject jsonObject = new JSONObject(responseData);
+                        if (jsonObject.getBoolean("success")) {
+                            Log.d("UP", jsonObject.toString());
+                        }
+                    } catch (JSONException e) {
+                        Log.d("JSONException", e.getMessage());
+                    }
                 }
             });
         }
