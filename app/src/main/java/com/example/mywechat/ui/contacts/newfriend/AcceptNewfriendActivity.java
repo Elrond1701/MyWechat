@@ -106,7 +106,7 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
                     Log.d("onResponse", responseData);
                     File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
                     if (NewfriendJsonFile.exists()) {
-                        deleteFile(NewfriendJsonFile.toString());
+                        NewfriendJsonFile.delete();
                     }
 
                     File FriendJsonFile = null;
@@ -154,7 +154,7 @@ public class AcceptNewfriendActivity extends AppCompatActivity {
                     Log.d("onResponse", responseData);
                     File NewfriendJsonFile = new File(getFilesDir(), "NewfriendJson" + number);
                     if (NewfriendJsonFile.exists()) {
-                        deleteFile(NewfriendJsonFile.toString());
+                        NewfriendJsonFile.delete();
                     }
                 }
             });

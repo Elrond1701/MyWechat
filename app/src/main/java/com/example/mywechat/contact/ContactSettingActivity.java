@@ -87,7 +87,7 @@ public class ContactSettingActivity extends AppCompatActivity {
                             runOnUiThread(() -> Toast.makeText(getApplicationContext(), "Delete Success!", Toast.LENGTH_LONG).show());
                             File FrienddeleteJson = new File(getFilesDir(), "FriendJson" + friend.getNumber());
                             if (FrienddeleteJson.exists()) {
-                                deleteFile(FrienddeleteJson.toString());
+                                FrienddeleteJson.delete();
                             }
                         }
                     } catch (JSONException e) {

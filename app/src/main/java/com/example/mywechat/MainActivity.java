@@ -128,9 +128,11 @@ public class MainActivity extends AppCompatActivity {
             public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
                 super.onMessage(webSocket, text);
                 try {
+                    Log.d("HAPPY", text);
                     JSONArray jsonArray = new JSONArray(text);
                     JSONObject jsonObject = (JSONObject) jsonArray.get(0);
-                    if (jsonObject.getString("messageType").equals("contact_apply")) {
+                    if (jsonObject.getString("messageType").equals("CONTACT_APPLY")) {
+                        Log.d("HAPPY", "1234");
                         Newfriend newfriend = new Newfriend();
                         String contactApply = jsonObject.getString("contactApply");
                         JSONObject contactApplyData = new JSONObject(contactApply);
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                                     .header("Cookie", user.getCookie()).get().build();
                             OkHttpClient okHttpClient = new OkHttpClient();
                             Call call = okHttpClient.newCall(request);
+                            Log.d("HELLO", "TRY");
 
                             call.enqueue(new Callback() {
                                 @Override
